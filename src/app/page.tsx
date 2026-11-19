@@ -32,11 +32,11 @@ export default function HomePage() {
           MOVEMENT 1: THE EXECUTIVE HERO
           Warm Paper Canvas (#ECE8DF) with Interactive Order Console Sheet (#FFFFFF)
       ========================================================================= */}
-      <section className="relative pt-10 pb-16 md:pt-14 md:pb-22 border-b border-border-rule overflow-hidden">
+      <section className="relative pt-12 pb-20 md:pt-16 md:pb-28 border-b border-border-rule overflow-hidden">
         {/* Subtle Ambient Radial Light with breathing animation */}
         <div className="absolute top-0 right-1/4 w-[650px] h-[450px] bg-gradient-to-b from-[#E2DBD0]/70 to-transparent rounded-full blur-3xl pointer-events-none -z-10 animate-glow-breathe" />
 
-        <div className="max-w-[1280px] mx-auto px-6 space-y-10">
+        <div className="max-w-[1280px] mx-auto px-6 space-y-12">
           
           {/* Header Narrative & Positioning */}
           <div className="max-w-3xl space-y-4">
@@ -82,7 +82,7 @@ export default function HomePage() {
           MOVEMENT 2: THE OPERATIONAL PAIN & 8-SILO CHALLENGE
           Verbatim Practitioner Transcripts + 8 Isolated Silos Teaser
       ========================================================================= */}
-      <section className="py-18 md:py-24 border-b border-border-rule">
+      <section className="py-20 md:py-28 border-b border-border-rule">
         <div className="max-w-[1280px] mx-auto px-6 space-y-12">
           
           <div className="max-w-2xl">
@@ -286,7 +286,7 @@ export default function HomePage() {
           MOVEMENT 3: THE CFO HARD TRUTH (MEGA-STAT CALLOUT)
           Whitespace on warm parchment with interactive metric switch & Waterfall
       ========================================================================= */}
-      <section id="hard-truth" className="py-14 sm:py-20 md:py-24 border-b border-border-rule bg-surface-recessed/40 overflow-hidden relative scroll-mt-24">
+      <section id="hard-truth" className="py-20 md:py-28 border-b border-border-rule bg-surface-recessed/40 overflow-hidden relative scroll-mt-24">
         <ScrollReveal direction="up" blur={true} scale={true} className="max-w-[1280px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
@@ -601,7 +601,7 @@ export default function HomePage() {
           MOVEMENT 5: OPERATIONAL PEDIGREE, AUDIT GAP LIST & PILOT CLOSE
           Founder Provenance + Physical Realities + Commercial Commitment
       ========================================================================= */}
-      <section className="py-18 md:py-24 border-b border-border-rule">
+      <section className="py-20 md:py-28 border-b border-border-rule">
         <div className="max-w-[1280px] mx-auto px-6 space-y-16">
           
           {/* Founder Origin Narrative */}

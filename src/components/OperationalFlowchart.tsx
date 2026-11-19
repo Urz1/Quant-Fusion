@@ -236,8 +236,125 @@ export function OperationalFlowchart() {
             </div>
           </div>
 
-          {/* Architectural SVG Canvas (Responsive Container with Scroll Cue) */}
-          <div className="relative rounded border border-border-rule bg-[#FAF8F5] overflow-x-auto shadow-inner select-none">
+          {/* Mobile Adaptive Architecture Feed (md:hidden: clean vertical timeline, zero horizontal SVG scrolling) */}
+          <div className="md:hidden space-y-3">
+            {mode === "status_quo" ? (
+              <div className="space-y-3">
+                <div className="p-3.5 rounded bg-friction-wash/60 border border-friction-crimson/30 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono">
+                    <span className="font-bold text-friction-crimson uppercase tracking-wider flex items-center gap-1.5">
+                      <AlertTriangle size={13} />
+                      <span>40-Step Sequential Friction</span>
+                    </span>
+                    <span className="text-friction-crimson font-bold">5–8 Days Elapsed</span>
+                  </div>
+                  <p className="text-[12px] text-ink-primary leading-snug">
+                    Without Quant Fusion, order commitments are stalled by disconnected spreadsheets, batch sync delays, and manual phone tag across 8 departments.
+                  </p>
+                </div>
+
+                {/* Vertical Stack of 8 Department Nodes */}
+                <div className="space-y-2">
+                  {DEPARTMENT_SILOS.map((silo) => {
+                    const isSelected = selectedSilo.id === silo.id;
+                    const IconComponent = silo.icon;
+                    return (
+                      <div
+                        key={silo.id}
+                        onClick={() => setSelectedSilo(silo)}
+                        className={`p-3.5 rounded-lg border transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-surface-sheet border-btn-cta ring-1 ring-btn-cta/30 shadow-xs"
+                            : "bg-surface-canvas border-border-rule hover:border-ink-muted/50"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-[10px] text-ink-muted font-bold">
+                              {silo.siloNumber}
+                            </span>
+                            <span className="font-bold text-[13px] text-ink-primary">
+                              {silo.name}
+                            </span>
+                          </div>
+                          <IconComponent size={14} className={isSelected ? "text-btn-cta" : "text-ink-muted"} />
+                        </div>
+
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-border-rule/60 text-[11px] font-mono">
+                          <span className="text-ink-muted truncate max-w-[180px]">
+                            {silo.system}
+                          </span>
+                          <span className="text-friction-crimson font-bold">
+                            ~{silo.hoursWastedPerMonth}h/mo wasted
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="p-3.5 rounded bg-emerald-50/80 border border-emerald-600/30 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono">
+                    <span className="font-bold text-btn-cta uppercase tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck size={13} className="text-emerald-600" />
+                      <span>Unified In-Memory Layer</span>
+                    </span>
+                    <span className="text-btn-cta font-bold">0.8s Stamped</span>
+                  </div>
+                  <p className="text-[12px] text-ink-primary leading-snug">
+                    Quant Fusion reads all 8 streams in parallel over read-only TLS 1.3 pipes, eliminating phone tag and locking ship dates deterministically.
+                  </p>
+                </div>
+
+                {/* Unified Feeds Grid */}
+                <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                  {DEPARTMENT_SILOS.map((silo) => {
+                    const isSelected = selectedSilo.id === silo.id;
+                    return (
+                      <div
+                        key={silo.id}
+                        onClick={() => setSelectedSilo(silo)}
+                        className={`p-2.5 rounded border transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-surface-sheet border-btn-cta ring-1 ring-btn-cta/30 shadow-xs"
+                            : "bg-surface-canvas border-border-rule"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-ink-muted font-bold">{silo.siloNumber}</span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        </div>
+                        <div className="font-bold text-ink-primary truncate mt-1 text-[12px]">
+                          {silo.short}
+                        </div>
+                        <div className="text-[9px] text-btn-cta truncate mt-0.5">
+                          Synced (0.8s)
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Verified Output Card */}
+                <div className="p-4 rounded-lg bg-emerald-900 text-white space-y-1.5 text-center shadow-md">
+                  <div className="text-[10px] font-mono text-emerald-300 uppercase tracking-widest font-semibold">
+                    Verified Single Ship Date Generated
+                  </div>
+                  <div className="font-serif text-[24px] font-bold tracking-tight text-white">
+                    Nov 24, 2026
+                  </div>
+                  <div className="text-[11px] font-mono text-emerald-200">
+                    Deterministic ATP • SOX 404 Cryptographic Log
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Architectural SVG Canvas (Desktop: 1020px Vector Blueprint) */}
+          <div className="hidden md:block relative rounded border border-border-rule bg-[#FAF8F5] overflow-x-auto shadow-inner select-none">
             
             {/* Ambient Decision Layer Overlay Banner for Mode B */}
             {mode === "quant_fusion" && (
@@ -658,8 +775,8 @@ export function OperationalFlowchart() {
             </svg>
           </div>
 
-          {/* Interactive Department Silo Selector Chips */}
-          <div className="space-y-2 pt-2">
+          {/* Interactive Department Silo Selector Chips (Desktop Viewport) */}
+          <div className="hidden md:block space-y-2 pt-2">
             <div className="flex items-center justify-between text-[11px] font-mono text-ink-muted">
               <span className="uppercase tracking-wider">Click Any Department Silo Below to Inspect Operational Bottlenecks:</span>
               <span className="text-btn-cta font-medium">Selected: {selectedSilo.name}</span>
