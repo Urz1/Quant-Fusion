@@ -1,6 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Robot3DCanvas = dynamic(
+  () => import("@/components/Robot3DCanvas").then((mod) => mod.Robot3DCanvas),
+  { ssr: false }
+);
 
 interface LivelyRobotProps {
   size?: "sm" | "md" | "lg" | "xl" | "mascot";
@@ -30,6 +36,7 @@ export function LivelyRobot({
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(showSpeechBubble);
+  const [is3DReady, setIs3DReady] = useState(false);
 
   // Dimension mapping
   const dimensionMap = {
@@ -295,106 +302,185 @@ export function LivelyRobot({
         </div>
       )}
 
+      {/* Real WebGL 3D Mesh Layer for Large Mascot & XL with Full 360° Orbit */}
+      {isLargeMascot && (
+        <div
+          className={`absolute inset-0 z-10 transition-opacity duration-300 ${
+            is3DReady ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <Robot3DCanvas
+            size={size}
+            isStreaming={isStreaming}
+            interactive={interactive}
+            forceWave={forceWave}
+            trackCursor={trackCursor}
+            onClick={onClick}
+            onReady={() => setIs3DReady(true)}
+          />
+        </div>
+      )}
+
+      {/* Instant 0ms Vector Placeholder (Kept active for small sizes and initial load) */}
       <svg
-        viewBox="0 0 64 64"
+        viewBox="0 0 64 66"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full overflow-visible drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)]"
+        className={`w-full h-full overflow-visible drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)] transition-opacity duration-300 ${
+          is3DReady && isLargeMascot ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
       >
         <defs>
-          {/* Dynamic 3D Spherical Head Gradient (shifts highlight with cursor) */}
+          {/* Dynamic 3D Spherical Head Gradient with Specular Keylight */}
           <radialGradient
             id="headSphere3D"
             cx={`${lightX}`}
             cy={`${lightY}`}
-            r="26"
+            r="28"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="#475569" />
-            <stop offset="28%" stopColor="#334155" />
-            <stop offset="65%" stopColor="#1E293B" />
-            <stop offset="100%" stopColor="#0B0F19" />
+            <stop offset="0%" stopColor="#94A3B8" />
+            <stop offset="14%" stopColor="#64748B" />
+            <stop offset="36%" stopColor="#334155" />
+            <stop offset="70%" stopColor="#1E293B" />
+            <stop offset="92%" stopColor="#0F172A" />
+            <stop offset="100%" stopColor="#050811" />
+          </radialGradient>
+
+          {/* 3D Head Specular Glare Gradient */}
+          <radialGradient id="headGlossGrad" cx="0.4" cy="0.3" r="0.6">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
+            <stop offset="35%" stopColor="#CBD5E1" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#94A3B8" stopOpacity="0" />
           </radialGradient>
 
           {/* 3D Head Rim Specular Reflection */}
           <linearGradient id="headRimGrad" x1="16" y1="12" x2="48" y2="35" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#94A3B8" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#475569" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#0F172A" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#CBD5E1" stopOpacity="0.9" />
+            <stop offset="45%" stopColor="#64748B" stopOpacity="0.3" />
+            <stop offset="85%" stopColor="#0F172A" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.45" />
           </linearGradient>
 
-          {/* 3D Visor Bezel Chamfer */}
-          <linearGradient id="visorBezelGrad" x1="18" y1="15" x2="46" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1E293B" />
-            <stop offset="100%" stopColor="#0A0F1D" />
+          {/* 3D Visor Outer Bezel Chamfer */}
+          <linearGradient id="visorBezelGrad" x1="17" y1="14" x2="47" y2="33" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#475569" />
+            <stop offset="30%" stopColor="#1E293B" />
+            <stop offset="80%" stopColor="#0B0F19" />
+            <stop offset="100%" stopColor="#1E293B" />
           </linearGradient>
 
-          {/* Deep Visor Screen Glass */}
-          <linearGradient id="visorGlassGrad" x1="20" y1="16" x2="44" y2="31" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#030712" />
-            <stop offset="60%" stopColor="#0F172A" />
-            <stop offset="100%" stopColor="#020617" />
+          {/* Deep Visor Screen Glass Cavity */}
+          <radialGradient id="visorCavityGrad" cx="32" cy="23" r="14" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#0A111E" />
+            <stop offset="65%" stopColor="#040812" />
+            <stop offset="100%" stopColor="#010307" />
+          </radialGradient>
+
+          {/* 3D Convex Glass Dome Reflection (Curved Acrylic Bubble) */}
+          <linearGradient id="visorGlassGloss" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.75" />
+            <stop offset="40%" stopColor="#E0F2FE" stopOpacity="0.28" />
+            <stop offset="80%" stopColor="#38BDF8" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
           </linearGradient>
 
-          {/* 3D Torso Capsule Gradient */}
+          {/* 3D Torso Capsule Spherical Gradient */}
           <radialGradient
             id="torsoSphere3D"
             cx={`${torsoLightX}`}
             cy={`${torsoLightY}`}
-            r="24"
+            r="26"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stopColor="#475569" />
-            <stop offset="35%" stopColor="#334155" />
-            <stop offset="75%" stopColor="#1E293B" />
-            <stop offset="100%" stopColor="#080D1A" />
+            <stop offset="0%" stopColor="#94A3B8" />
+            <stop offset="16%" stopColor="#64748B" />
+            <stop offset="42%" stopColor="#334155" />
+            <stop offset="76%" stopColor="#1E293B" />
+            <stop offset="94%" stopColor="#0D1322" />
+            <stop offset="100%" stopColor="#04070F" />
           </radialGradient>
 
-          {/* Metallic Ear Dials */}
-          <linearGradient id="dialGrad" x1="0" y1="0" x2="0" y2="1">
+          {/* Metallic Ball Joint Gradient */}
+          <radialGradient id="ballJointGrad" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stopColor="#94A3B8" />
+            <stop offset="40%" stopColor="#475569" />
+            <stop offset="85%" stopColor="#1E293B" />
+            <stop offset="100%" stopColor="#0B0F19" />
+          </radialGradient>
+
+          {/* Cylindrical Dial Metallic Gradients */}
+          <linearGradient id="dialGradLeft" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#64748B" />
-            <stop offset="50%" stopColor="#334155" />
+            <stop offset="35%" stopColor="#94A3B8" />
+            <stop offset="70%" stopColor="#334155" />
             <stop offset="100%" stopColor="#0F172A" />
           </linearGradient>
+          <linearGradient id="dialGradRight" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0F172A" />
+            <stop offset="30%" stopColor="#334155" />
+            <stop offset="65%" stopColor="#94A3B8" />
+            <stop offset="100%" stopColor="#64748B" />
+          </linearGradient>
+
+          {/* Thruster Bell Metallic Nozzle Gradient */}
+          <linearGradient id="thrusterNozzleGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#64748B" />
+            <stop offset="40%" stopColor="#334155" />
+            <stop offset="85%" stopColor="#1E293B" />
+            <stop offset="100%" stopColor="#0A0F1D" />
+          </linearGradient>
+
+          {/* Soft Diffused Floor Shadow Filter */}
+          <filter id="softFloorShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3.2" />
+          </filter>
+          <filter id="tightCoreShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" />
+          </filter>
 
           {/* Emerald Eye Glow Filter */}
-          <filter id="eyeGlow3D" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="1.8" result="blur" />
+          <filter id="eyeGlow3D" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.6" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
 
           {/* Antenna Flare Glow */}
           <filter id="beaconGlow3D" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feGaussianBlur stdDeviation="3.2" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
 
-          {/* Volumetric Thruster Glow */}
-          <filter id="thrusterGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="2.5" result="blur" />
+          {/* Volumetric Thruster Plasma Glow */}
+          <filter id="thrusterGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2.8" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
 
-        {/* Ambient Ground Shadow (2-tier volumetric projection) */}
-        <ellipse
-          cx="32"
-          cy="61.5"
-          rx="17"
-          ry="3.8"
-          fill="#020617"
-          opacity="0.3"
-          className="robot-shadow-core"
-        />
-        <ellipse
-          cx="32"
-          cy="61.5"
-          rx="10"
-          ry="2.2"
-          fill="#000000"
-          opacity="0.5"
-          className="robot-shadow-core"
-        />
+        {/* Ambient Ground Contact Shadow (Multi-tier blurred Gaussian projection) */}
+        <g className="robot-shadow-core">
+          {/* Broad soft ambient shadow */}
+          <ellipse
+            cx="32"
+            cy="62.5"
+            rx="18"
+            ry="4.2"
+            fill="#020617"
+            opacity="0.35"
+            filter="url(#softFloorShadow)"
+          />
+          {/* Concentrated tight contact core shadow */}
+          <ellipse
+            cx="32"
+            cy="62.5"
+            rx="10"
+            ry="2.4"
+            fill="#000000"
+            opacity="0.55"
+            filter="url(#tightCoreShadow)"
+          />
+        </g>
 
         {/* Floating Root Body Group with 3D Parallax */}
         <g className="robot-floating-3d">
@@ -407,15 +493,20 @@ export function LivelyRobot({
               transition: "transform 0.08s ease-out",
             }}
           >
-            {/* Tapered Stem */}
+            {/* Cylindrical Turret Socket Base with Bevel */}
+            <ellipse cx="32" cy="12.5" rx="3.5" ry="1.4" fill="#1E293B" stroke="#0F172A" strokeWidth="0.5" />
+            <ellipse cx="32" cy="12" rx="2.8" ry="1" fill="#475569" />
+            <ellipse cx="32" cy="11.8" rx="1.8" ry="0.6" fill="#0B0F19" />
+
+            {/* Tapered Chrome Stem with Side Highlight */}
             <path
-              d="M 31 14 L 31.5 6 L 32.5 6 L 33 14 Z"
-              fill="#475569"
+              d="M 31.2 12 L 31.6 5.5 L 32.4 5.5 L 32.8 12 Z"
+              fill="#64748B"
               stroke="#1E293B"
-              strokeWidth="0.6"
+              strokeWidth="0.4"
             />
-            {/* Metallic collar ring */}
-            <rect x="30" y="12" width="4" height="2" rx="0.8" fill="#64748B" stroke="#334155" strokeWidth="0.4" />
+            {/* Stem Specular Highlight */}
+            <line x1="31.8" y1="11.5" x2="31.8" y2="6" stroke="#E2E8F0" strokeWidth="0.5" strokeLinecap="round" />
 
             {/* Radar ripple rings when actively streaming */}
             {isStreaming && (
@@ -430,7 +521,7 @@ export function LivelyRobot({
               />
             )}
 
-            {/* Glowing 3D Beacon Tip */}
+            {/* Glowing 3D Beacon Tip with Spherical Shading */}
             <circle
               cx="32"
               cy="4.5"
@@ -439,7 +530,9 @@ export function LivelyRobot({
               filter="url(#beaconGlow3D)"
               className="robot-antenna-tip"
             />
-            <circle cx="30.8" cy="3.2" r="1.5" fill="#ECFDF5" />
+            {/* Spherical Inner Core Highlight */}
+            <circle cx="31.2" cy="3.6" r="2.2" fill="#34D399" />
+            <circle cx="30.6" cy="3" r="1.1" fill="#FFFFFF" />
           </g>
 
           {/* ================= 3D INTERACTIVE HEAD CHASSIS ================= */}
@@ -454,7 +547,7 @@ export function LivelyRobot({
             {leftBevelWidth > 0 && (
               <path
                 d={`M 15 13 C 14 13, ${15 - leftBevelWidth} 17, ${15 - leftBevelWidth} 24 C ${15 - leftBevelWidth} 31, 14 35, 15 35 Z`}
-                fill="#0B0F19"
+                fill="#070B14"
                 stroke="#1E293B"
                 strokeWidth="0.8"
               />
@@ -462,13 +555,13 @@ export function LivelyRobot({
             {rightBevelWidth > 0 && (
               <path
                 d={`M 49 13 C 50 13, ${49 + rightBevelWidth} 17, ${49 + rightBevelWidth} 24 C ${49 + rightBevelWidth} 31, 50 35, 49 35 Z`}
-                fill="#0B0F19"
+                fill="#070B14"
                 stroke="#1E293B"
                 strokeWidth="0.8"
               />
             )}
 
-            {/* 3D Outer Head Shell (Volumetric Capsule) */}
+            {/* 3D Outer Head Shell (Volumetric Capsule with Spherical Normal Gradient) */}
             <rect
               x="15"
               y="12"
@@ -480,71 +573,94 @@ export function LivelyRobot({
               strokeWidth="1.4"
             />
 
-            {/* 3D Specular Top-Light Curvature Glare */}
-            <path
-              d="M 20 14.5 Q 32 12.8 44 14.5"
-              stroke="#CBD5E1"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              opacity="0.6"
-            />
-            {/* Bottom ambient light bounce */}
-            <path
-              d="M 21 33.5 Q 32 35 43 33.5"
-              stroke="#38BDF8"
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-
-            {/* 3D Cylindrical Ear Dials */}
-            {/* Left Ear */}
-            <g transform="translate(11.5, 17.5)">
-              <rect x="0" y="0" width="4.5" height="10" rx="2" fill="url(#dialGrad)" stroke="#1E293B" strokeWidth="0.8" />
-              <line x1="1.5" y1="2" x2="1.5" y2="8" stroke="#94A3B8" strokeWidth="0.8" strokeLinecap="round" />
-            </g>
-            {/* Right Ear */}
-            <g transform="translate(48, 17.5)">
-              <rect x="0" y="0" width="4.5" height="10" rx="2" fill="url(#dialGrad)" stroke="#1E293B" strokeWidth="0.8" />
-              <line x1="3" y1="2" x2="3" y2="8" stroke="#94A3B8" strokeWidth="0.8" strokeLinecap="round" />
-            </g>
-
-            {/* 3D Recessed Visor Bezel Ring */}
-            <rect
-              x="18"
-              y="15.5"
-              width="28"
-              height="16"
+            {/* Volumetric Top-Left Specular Gloss Spot */}
+            <ellipse
+              cx="25"
+              cy="15"
               rx="6"
-              fill="url(#visorBezelGrad)"
-              stroke="#334155"
-              strokeWidth="1"
+              ry="2"
+              transform="rotate(-8 25 15)"
+              fill="url(#headGlossGrad)"
+              opacity="0.8"
             />
 
-            {/* Deep Glass Chamber */}
-            <rect
-              x="19.2"
-              y="16.7"
-              width="25.6"
-              height="13.6"
-              rx="4.8"
-              fill="url(#visorGlassGrad)"
-            />
-
-            {/* 3D Glass Dome Convex Glare (Moves with counter-parallax) */}
+            {/* Top Curvature Rim Light Reflection */}
             <path
-              d="M 21 18 C 27 16.8, 37 16.8, 43 18"
-              stroke="#38BDF8"
+              d="M 21 13.8 Q 32 12.6 43 13.8"
+              stroke="#F1F5F9"
               strokeWidth="1.1"
               strokeLinecap="round"
-              opacity="0.55"
-              style={{
-                transform: `translateX(${-eyeShiftX * 0.4}px)`,
-                transition: "transform 0.1s ease-out",
-              }}
+              opacity="0.75"
             />
 
-            {/* ================= 3D HOLOGRAPHIC DIGITAL EYES ================= */}
+            {/* Bottom ambient thruster bounce light */}
+            <path
+              d="M 21 34 Q 32 35.5 43 34"
+              stroke="#38BDF8"
+              strokeWidth="0.9"
+              strokeLinecap="round"
+              opacity="0.45"
+            />
+
+            {/* ================= 3D CYLINDRICAL EAR DIALS ================= */}
+            {/* Left Ear Assembly */}
+            <g transform="translate(10.5, 17)">
+              {/* Ear base connector cylinder */}
+              <rect x="1" y="1" width="4.5" height="10" rx="1.5" fill="url(#dialGradLeft)" stroke="#0F172A" strokeWidth="0.7" />
+              {/* Outer circular dial plate */}
+              <ellipse cx="1.5" cy="6" rx="1.4" ry="4.5" fill="#475569" stroke="#64748B" strokeWidth="0.6" />
+              <ellipse cx="1.5" cy="6" rx="0.7" ry="2.2" fill="#1E293B" />
+              {/* Accent indicator line */}
+              <line x1="2.8" y1="2.5" x2="2.8" y2="9.5" stroke="#CBD5E1" strokeWidth="0.7" strokeLinecap="round" />
+            </g>
+
+            {/* Right Ear Assembly */}
+            <g transform="translate(48, 17)">
+              {/* Ear base connector cylinder */}
+              <rect x="0" y="1" width="4.5" height="10" rx="1.5" fill="url(#dialGradRight)" stroke="#0F172A" strokeWidth="0.7" />
+              {/* Outer circular dial plate */}
+              <ellipse cx="4.5" cy="6" rx="1.4" ry="4.5" fill="#475569" stroke="#64748B" strokeWidth="0.6" />
+              <ellipse cx="4.5" cy="6" rx="0.7" ry="2.2" fill="#1E293B" />
+              {/* Accent indicator line */}
+              <line x1="1.8" y1="2.5" x2="1.8" y2="9.5" stroke="#CBD5E1" strokeWidth="0.7" strokeLinecap="round" />
+            </g>
+
+            {/* ================= 3D RECESSED VISOR HELMET ================= */}
+            {/* 1. Visor Outer Bezel Chamfer Frame */}
+            <rect
+              x="17.5"
+              y="15"
+              width="29"
+              height="17"
+              rx="6.5"
+              fill="url(#visorBezelGrad)"
+              stroke="#0B0F19"
+              strokeWidth="0.8"
+            />
+
+            {/* 2. Deep Cavity Chamber (Recessed Inner Void) */}
+            <rect
+              x="18.8"
+              y="16.2"
+              width="26.4"
+              height="14.6"
+              rx="5.2"
+              fill="url(#visorCavityGrad)"
+              stroke="#000000"
+              strokeWidth="1.2"
+            />
+
+            {/* Ambient internal eye bounce glow inside chamber */}
+            <ellipse
+              cx={`${32 + eyeShiftX * 0.6}`}
+              cy={`${23.5 + eyeShiftY * 0.6}`}
+              rx="10"
+              ry="5"
+              fill="#10B981"
+              opacity="0.12"
+            />
+
+            {/* 3. Recessed Glowing Holographic Digital Eyes */}
             <g
               className="robot-blinking-eyes"
               style={{
@@ -556,52 +672,96 @@ export function LivelyRobot({
                 /* Cheerful Arc Eyes (^ _ ^) */
                 <g filter="url(#eyeGlow3D)">
                   <path
-                    d="M 22.5 24.5 Q 25.5 20.8 28.5 24.5"
+                    d="M 22.5 24.5 Q 25.5 20.2 28.5 24.5"
                     stroke="#10B981"
-                    strokeWidth="2.5"
+                    strokeWidth="2.6"
                     strokeLinecap="round"
                     fill="none"
                   />
                   <path
-                    d="M 35.5 24.5 Q 38.5 20.8 41.5 24.5"
+                    d="M 35.5 24.5 Q 38.5 20.2 41.5 24.5"
                     stroke="#10B981"
-                    strokeWidth="2.5"
+                    strokeWidth="2.6"
                     strokeLinecap="round"
                     fill="none"
                   />
                 </g>
               ) : (
-                /* High-Intensity 3D Emerald Pupils */
+                /* High-Intensity 3D Emerald Pupils with Specular Center Glow */
                 <g filter="url(#eyeGlow3D)">
                   {/* Left Eye */}
-                  <rect x="23" y="20.5" width="5.8" height="6.4" rx="2.6" fill="#10B981" />
-                  <circle cx="24.4" cy="22" r="1.3" fill="#FFFFFF" />
-                  <circle cx="27" cy="25" r="0.7" fill="#6EE7B7" opacity="0.8" />
+                  <rect x="23" y="20.2" width="5.8" height="6.6" rx="2.8" fill="#10B981" />
+                  <rect x="23.6" y="20.8" width="4.6" height="5.4" rx="2.2" fill="#34D399" />
+                  <circle cx="24.6" cy="21.8" r="1.3" fill="#FFFFFF" />
+                  <circle cx="27" cy="25" r="0.7" fill="#A7F3D0" opacity="0.9" />
 
                   {/* Right Eye */}
-                  <rect x="35.2" y="20.5" width="5.8" height="6.4" rx="2.6" fill="#10B981" />
-                  <circle cx="36.6" cy="22" r="1.3" fill="#FFFFFF" />
-                  <circle cx="39.2" cy="25" r="0.7" fill="#6EE7B7" opacity="0.8" />
+                  <rect x="35.2" y="20.2" width="5.8" height="6.6" rx="2.8" fill="#10B981" />
+                  <rect x="35.8" y="20.8" width="4.6" height="5.4" rx="2.2" fill="#34D399" />
+                  <circle cx="36.8" cy="21.8" r="1.3" fill="#FFFFFF" />
+                  <circle cx="39.2" cy="25" r="0.7" fill="#A7F3D0" opacity="0.9" />
                 </g>
               )}
+
+              {/* Digital LED Status Smile */}
+              <path
+                d="M 28 28.6 Q 32 31.4 36 28.6"
+                stroke="#34D399"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                fill="none"
+                filter="url(#eyeGlow3D)"
+              />
             </g>
 
-            {/* LED Status Indicator / Smile */}
+            {/* 4. CONVEX ACRYLIC / GLASS DOME REFLECTIONS (Rendered on top of eyes for authentic 3D depth) */}
+            {/* Curved Upper Dome Specular Arc */}
             <path
-              d="M 28 28.5 Q 32 31.2 36 28.5"
-              stroke="#34D399"
-              strokeWidth="1.4"
+              d="M 20 17.2 C 24 16.2, 40 16.2, 44 17.2 C 43 21.5, 21 21.5, 20 17.2 Z"
+              fill="url(#visorGlassGloss)"
+              style={{
+                transform: `translateX(${-eyeShiftX * 0.4}px)`,
+                transition: "transform 0.08s ease-out",
+              }}
+            />
+
+            {/* Convex Glass Specular Highlight Streak */}
+            <ellipse
+              cx={`${23.8 - eyeShiftX * 0.3}`}
+              cy="18.2"
+              rx="3.8"
+              ry="1.3"
+              transform="rotate(-12 23.8 18.2)"
+              fill="#FFFFFF"
+              opacity="0.8"
+            />
+
+            {/* Subtle Lower Glass Convex Bounce Reflection */}
+            <path
+              d="M 21.5 29.5 Q 32 31.2 42.5 29.5"
+              stroke="#38BDF8"
+              strokeWidth="0.8"
               strokeLinecap="round"
-              fill="none"
-              filter="url(#eyeGlow3D)"
+              opacity="0.45"
+            />
+
+            {/* Ambient Occlusion Chin Crease */}
+            <path
+              d="M 20 34.5 Q 32 36.5 44 34.5"
+              stroke="#030712"
+              strokeWidth="1.2"
+              strokeLinecap="round"
             />
           </g>
 
-          {/* ================= 3D METALLIC NECK JOINT ================= */}
-          <g transform="translate(28, 34.5)">
-            <rect x="0" y="0" width="8" height="3" rx="1.5" fill="#334155" stroke="#1E293B" strokeWidth="0.8" />
-            <circle cx="4" cy="1.5" r="1" fill="#64748B" />
+          {/* ================= 3D METALLIC NECK JOINT & CAST SHADOW ================= */}
+          <g transform="translate(27, 34.2)">
+            {/* Dark titanium ribbed neck cylinder */}
+            <rect x="0" y="0" width="10" height="3.6" rx="1.8" fill="#1E293B" stroke="#0B0F19" strokeWidth="0.8" />
+            <circle cx="5" cy="1.8" r="1.1" fill="#64748B" />
           </g>
+          {/* Ambient occlusion shadow cast by head onto upper torso */}
+          <ellipse cx="32" cy="37.4" rx="11" ry="2.2" fill="#020617" opacity="0.8" />
 
           {/* ================= 3D ROBOT TORSO ================= */}
           <g
@@ -611,114 +771,175 @@ export function LivelyRobot({
               transition: "transform 0.1s ease-out",
             }}
           >
-            {/* Torso Capsule with 3D Depth */}
+            {/* Torso Capsule with 3D Spherical Volume */}
             <rect
-              x="17"
+              x="16.5"
               y="37"
-              width="30"
-              height="19"
-              rx="7.5"
+              width="31"
+              height="19.5"
+              rx="8"
               fill="url(#torsoSphere3D)"
-              stroke="#475569"
-              strokeWidth="1.4"
+              stroke="#334155"
+              strokeWidth="1.2"
             />
 
-            {/* Torso Top Highlight */}
+            {/* Torso Top Curvature Highlight */}
             <path
-              d="M 21 38.5 Q 32 37.5 43 38.5"
-              stroke="#94A3B8"
-              strokeWidth="1"
+              d="M 21 38.6 Q 32 37.4 43 38.6"
+              stroke="#E2E8F0"
+              strokeWidth="1.1"
               strokeLinecap="round"
-              opacity="0.5"
+              opacity="0.65"
             />
 
-            {/* Recessed Chest Telemetry Console */}
+            {/* Torso Specular Glare Dot */}
+            <ellipse
+              cx="25"
+              cy="39.5"
+              rx="5"
+              ry="1.8"
+              transform="rotate(-8 25 39.5)"
+              fill="url(#headGlossGrad)"
+              opacity="0.6"
+            />
+
+            {/* Recessed Chest Telemetry Console with Metallic Bezel */}
             <rect
-              x="21.5"
-              y="40"
-              width="21"
+              x="21"
+              y="40.5"
+              width="22"
               height="12"
               rx="3.5"
-              fill="#060A12"
+              fill="#050811"
               stroke="#1E293B"
               strokeWidth="1"
             />
 
-            {/* Chest Status Gauges */}
-            <rect x="23.5" y="42.5" width="8" height="2" rx="1" fill="#10B981" />
-            <rect x="23.5" y="46" width="13" height="2" rx="1" fill="#0EA5E9" />
+            {/* Inner Monitor Shadow */}
+            <rect
+              x="21.8"
+              y="41.3"
+              width="20.4"
+              height="10.4"
+              rx="2.6"
+              fill="#02040A"
+            />
+
+            {/* Chest Status Gauges with Glowing LEDs */}
+            <rect x="23.5" y="42.8" width="8" height="2" rx="1" fill="#10B981" />
+            <rect x="23.5" y="46.2" width="13" height="2" rx="1" fill="#0EA5E9" />
             <circle
               cx="39.5"
-              cy="43.5"
+              cy="43.8"
               r="1.6"
               fill={isStreaming ? "#10B981" : "#F59E0B"}
               className={isStreaming ? "animate-pulse" : ""}
             />
 
-            {/* Live Telemetry Pulse Line */}
+            {/* Live Telemetry Heartbeat Waveform */}
             <path
-              d="M 23.5 49.5 L 27.5 49.5 L 29 48 L 30.5 51 L 32 49.5 L 39.5 49.5"
+              d="M 23.5 49.6 L 27.5 49.6 L 29 48.2 L 30.5 51.2 L 32 49.6 L 39.5 49.6"
               stroke="#38BDF8"
               strokeWidth="0.9"
               strokeLinecap="round"
               strokeLinejoin="round"
-              opacity="0.75"
+              opacity="0.85"
               fill="none"
             />
 
             {/* ================= 3D LEFT ARM & SHOULDER ================= */}
-            <circle cx="16" cy="40.5" r="2.8" fill="#475569" stroke="#1E293B" strokeWidth="0.8" />
+            {/* Shaded 3D Ball Joint Shoulder */}
+            <circle cx="15.5" cy="41" r="3.2" fill="url(#ballJointGrad)" stroke="#0F172A" strokeWidth="0.8" />
+            <circle cx="14.8" cy="40.2" r="1" fill="#CBD5E1" opacity="0.8" />
+
+            {/* Cylindrical Bicep Segment with Shading */}
             <path
-              d="M 15.5 41 C 12 44, 11 48, 13 52.5"
+              d="M 15 41.5 C 11.5 44.5, 10.5 48.5, 12.8 53"
               stroke="#334155"
-              strokeWidth="3.2"
+              strokeWidth="3.4"
               strokeLinecap="round"
               fill="none"
             />
-            {/* Left Hand Mitten with metallic sensor */}
-            <circle cx="13" cy="53.5" r="2.6" fill="#64748B" stroke="#1E293B" strokeWidth="0.8" />
-            <circle cx="12.5" cy="53" r="0.8" fill="#CBD5E1" />
+            <path
+              d="M 15 41.5 C 11.5 44.5, 10.5 48.5, 12.8 53"
+              stroke="#64748B"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              fill="none"
+              opacity="0.6"
+            />
+            {/* Left Hand Mitten Sphere with Specular Highlight */}
+            <circle cx="12.8" cy="53.8" r="2.8" fill="url(#ballJointGrad)" stroke="#0F172A" strokeWidth="0.8" />
+            <circle cx="12.2" cy="53" r="1.1" fill="#E2E8F0" opacity="0.85" />
+            <circle cx="13.2" cy="54.2" r="0.9" fill="#10B981" />
 
             {/* ================= 3D RIGHT ARM (ARTICULATED WAVING) ================= */}
-            <circle cx="48" cy="40.5" r="2.8" fill="#475569" stroke="#1E293B" strokeWidth="0.8" />
+            {/* Shaded 3D Ball Joint Shoulder */}
+            <circle cx="48.5" cy="41" r="3.2" fill="url(#ballJointGrad)" stroke="#0F172A" strokeWidth="0.8" />
+            <circle cx="47.8" cy="40.2" r="1" fill="#CBD5E1" opacity="0.8" />
+
             <g className="robot-arm-waving">
               <path
-                d="M 48 40.5 C 54 42, 55 45, 54 50"
+                d="M 48.5 41 C 54.5 42.5, 55.5 45.5, 54.5 50.5"
                 stroke="#334155"
-                strokeWidth="3.2"
+                strokeWidth="3.4"
                 strokeLinecap="round"
                 fill="none"
               />
+              <path
+                d="M 48.5 41 C 54.5 42.5, 55.5 45.5, 54.5 50.5"
+                stroke="#64748B"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                fill="none"
+                opacity="0.6"
+              />
               {/* Waving Mitten with Emerald Sensor Dot */}
-              <circle cx="54" cy="51" r="2.8" fill="#10B981" stroke="#059669" strokeWidth="0.8" />
-              <circle cx="53.4" cy="50.2" r="1.1" fill="#FFFFFF" />
+              <circle cx="54.5" cy="51.5" r="3" fill="#10B981" stroke="#047857" strokeWidth="0.9" />
+              <circle cx="53.8" cy="50.6" r="1.2" fill="#FFFFFF" />
             </g>
 
             {/* ================= 3D ANTI-GRAVITY HOVER THRUSTERS ================= */}
-            <rect x="22.5" y="55.5" width="7" height="3.5" rx="1.75" fill="#334155" stroke="#1E293B" strokeWidth="0.8" />
-            <rect x="34.5" y="55.5" width="7" height="3.5" rx="1.75" fill="#334155" stroke="#1E293B" strokeWidth="0.8" />
+            {/* Left Thruster Metallic Bell */}
+            <path
+              d="M 21.5 56 L 20.8 59.2 Q 25.5 60.6 30.2 59.2 L 29.5 56 Z"
+              fill="url(#thrusterNozzleGrad)"
+              stroke="#0F172A"
+              strokeWidth="0.8"
+            />
+            <ellipse cx="25.5" cy="59.2" rx="4.5" ry="1.4" fill="#0A0F1D" stroke="#334155" strokeWidth="0.6" />
+
+            {/* Right Thruster Metallic Bell */}
+            <path
+              d="M 34.5 56 L 33.8 59.2 Q 38.5 60.6 43.2 59.2 L 42.5 56 Z"
+              fill="url(#thrusterNozzleGrad)"
+              stroke="#0F172A"
+              strokeWidth="0.8"
+            />
+            <ellipse cx="38.5" cy="59.2" rx="4.5" ry="1.4" fill="#0A0F1D" stroke="#334155" strokeWidth="0.6" />
             
-            {/* Volumetric Plasma Halo Rings */}
+            {/* Volumetric Plasma Halo Flames (British Racing Emerald / Mint Plasma) */}
             <ellipse
-              cx="26"
-              cy="59.5"
-              rx="3"
-              ry="1.3"
-              fill="#38BDF8"
+              cx="25.5"
+              cy="61.2"
+              rx="3.2"
+              ry="1.8"
+              fill="#10B981"
               filter="url(#thrusterGlow)"
               className="robot-thruster-glow"
             />
             <ellipse
-              cx="38"
-              cy="59.5"
-              rx="3"
-              ry="1.3"
-              fill="#38BDF8"
+              cx="38.5"
+              cy="61.2"
+              rx="3.2"
+              ry="1.8"
+              fill="#10B981"
               filter="url(#thrusterGlow)"
               className="robot-thruster-glow"
             />
-            <ellipse cx="26" cy="59.5" rx="1.2" ry="0.6" fill="#FFFFFF" />
-            <ellipse cx="38" cy="59.5" rx="1.2" ry="0.6" fill="#FFFFFF" />
+            {/* White-Hot Plasma Center Jet */}
+            <ellipse cx="25.5" cy="60.8" rx="1.5" ry="0.8" fill="#FFFFFF" />
+            <ellipse cx="38.5" cy="60.8" rx="1.5" ry="0.8" fill="#FFFFFF" />
           </g>
         </g>
       </svg>

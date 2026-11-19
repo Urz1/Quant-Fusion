@@ -8,6 +8,10 @@ import {
   AlertTriangle, 
   CheckCircle2, 
   ArrowRight, 
+  ArrowDown,
+  ChevronDown,
+  ChevronUp,
+  Check,
   FileText, 
   Users, 
   Package, 
@@ -129,17 +133,53 @@ export const DEPARTMENT_SILOS: DepartmentSilo[] = [
   },
 ];
 
+const SILO_MOBILE_DETAILS: Record<string, { frictionTag: string; transitionText?: string }> = {
+  sales: {
+    frictionTag: "Screen Toggling (5+ Windows)",
+    transitionText: "Step 2: Check Physical Inventory in WMS",
+  },
+  warehouse: {
+    frictionTag: "WMS Sync Lag (4h Batch Delay)",
+    transitionText: "Step 3: Check Open Vendor Purchase Orders",
+  },
+  sourcing: {
+    frictionTag: "40+ Vendor Spreadsheets",
+    transitionText: "Step 4: Check Inbound Freight Documentation",
+  },
+  logistics: {
+    frictionTag: "Unlinked PDF BOLs",
+    transitionText: "Step 5: Query Carrier Ocean / Railhead Telemetry",
+  },
+  carriers: {
+    frictionTag: "+48h Port Dwell Delay",
+    transitionText: "Step 6: Routing to Factory Line or Supplier",
+  },
+  factory: {
+    frictionTag: "Blind Assembly Queue",
+    transitionText: "Step 7: Sourcing Tier-1 Supplier Feeds",
+  },
+  suppliers: {
+    frictionTag: "Vendor Phone Tag (24-48h Lag)",
+    transitionText: "Step 8: Revenue Billing & Chargeback Review",
+  },
+  finance: {
+    frictionTag: "Revenue At Risk (3% OTIF Fines)",
+    transitionText: "Manual Commitment Stamped",
+  },
+};
+
 export function OperationalFlowchart() {
   const [mode, setMode] = useState<FlowchartMode>("status_quo");
   const [selectedSilo, setSelectedSilo] = useState<DepartmentSilo>(DEPARTMENT_SILOS[0]);
+  const [mobileExpandedSiloId, setMobileExpandedSiloId] = useState<string | null>("warehouse");
 
   return (
-    <div className="bg-surface-sheet rounded-lg p-5 sm:p-7 md:p-8 border border-border-rule shadow-sheet space-y-6">
+    <div className="bg-surface-sheet rounded-xl p-6 sm:p-8 lg:p-10 border border-border-rule shadow-sheet space-y-8 sm:space-y-10">
       
       {/* =======================================================================
           TOP BAR: CONSOLE HEADER & 3-WAY VIEW SWITCHER
       ======================================================================= */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-5 border-b border-border-rule gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-6 border-b border-border-rule gap-5">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-mono text-[11px] font-bold text-friction-crimson uppercase tracking-wider">
@@ -236,125 +276,13 @@ export function OperationalFlowchart() {
             </div>
           </div>
 
-          {/* Mobile Adaptive Architecture Feed (md:hidden: clean vertical timeline, zero horizontal SVG scrolling) */}
-          <div className="md:hidden space-y-3">
-            {mode === "status_quo" ? (
-              <div className="space-y-3">
-                <div className="p-3.5 rounded bg-friction-wash/60 border border-friction-crimson/30 space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className="font-bold text-friction-crimson uppercase tracking-wider flex items-center gap-1.5">
-                      <AlertTriangle size={13} />
-                      <span>40-Step Sequential Friction</span>
-                    </span>
-                    <span className="text-friction-crimson font-bold">5–8 Days Elapsed</span>
-                  </div>
-                  <p className="text-[12px] text-ink-primary leading-snug">
-                    Without Quant Fusion, order commitments are stalled by disconnected spreadsheets, batch sync delays, and manual phone tag across 8 departments.
-                  </p>
-                </div>
-
-                {/* Vertical Stack of 8 Department Nodes */}
-                <div className="space-y-2">
-                  {DEPARTMENT_SILOS.map((silo) => {
-                    const isSelected = selectedSilo.id === silo.id;
-                    const IconComponent = silo.icon;
-                    return (
-                      <div
-                        key={silo.id}
-                        onClick={() => setSelectedSilo(silo)}
-                        className={`p-3.5 rounded-lg border transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-surface-sheet border-btn-cta ring-1 ring-btn-cta/30 shadow-xs"
-                            : "bg-surface-canvas border-border-rule hover:border-ink-muted/50"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-[10px] text-ink-muted font-bold">
-                              {silo.siloNumber}
-                            </span>
-                            <span className="font-bold text-[13px] text-ink-primary">
-                              {silo.name}
-                            </span>
-                          </div>
-                          <IconComponent size={14} className={isSelected ? "text-btn-cta" : "text-ink-muted"} />
-                        </div>
-
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-border-rule/60 text-[11px] font-mono">
-                          <span className="text-ink-muted truncate max-w-[180px]">
-                            {silo.system}
-                          </span>
-                          <span className="text-friction-crimson font-bold">
-                            ~{silo.hoursWastedPerMonth}h/mo wasted
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="p-3.5 rounded bg-emerald-50/80 border border-emerald-600/30 space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className="font-bold text-btn-cta uppercase tracking-wider flex items-center gap-1.5">
-                      <ShieldCheck size={13} className="text-emerald-600" />
-                      <span>Unified In-Memory Layer</span>
-                    </span>
-                    <span className="text-btn-cta font-bold">0.8s Stamped</span>
-                  </div>
-                  <p className="text-[12px] text-ink-primary leading-snug">
-                    Quant Fusion reads all 8 streams in parallel over read-only TLS 1.3 pipes, eliminating phone tag and locking ship dates deterministically.
-                  </p>
-                </div>
-
-                {/* Unified Feeds Grid */}
-                <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
-                  {DEPARTMENT_SILOS.map((silo) => {
-                    const isSelected = selectedSilo.id === silo.id;
-                    return (
-                      <div
-                        key={silo.id}
-                        onClick={() => setSelectedSilo(silo)}
-                        className={`p-2.5 rounded border transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-surface-sheet border-btn-cta ring-1 ring-btn-cta/30 shadow-xs"
-                            : "bg-surface-canvas border-border-rule"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] text-ink-muted font-bold">{silo.siloNumber}</span>
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        </div>
-                        <div className="font-bold text-ink-primary truncate mt-1 text-[12px]">
-                          {silo.short}
-                        </div>
-                        <div className="text-[9px] text-btn-cta truncate mt-0.5">
-                          Synced (0.8s)
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Verified Output Card */}
-                <div className="p-4 rounded-lg bg-emerald-900 text-white space-y-1.5 text-center shadow-md">
-                  <div className="text-[10px] font-mono text-emerald-300 uppercase tracking-widest font-semibold">
-                    Verified Single Ship Date Generated
-                  </div>
-                  <div className="font-serif text-[24px] font-bold tracking-tight text-white">
-                    Nov 24, 2026
-                  </div>
-                  <div className="text-[11px] font-mono text-emerald-200">
-                    Deterministic ATP • SOX 404 Cryptographic Log
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Architectural SVG Canvas (Desktop: 1020px Vector Blueprint) */}
-          <div className="hidden md:block relative rounded border border-border-rule bg-[#FAF8F5] overflow-x-auto shadow-inner select-none">
+          {/* ===================================================================
+              DESKTOP VIEW (hidden lg:block):
+              Full 8-Swimlane Architectural Blueprint Canvas + Selector Chips
+          =================================================================== */}
+          <div className="hidden lg:block space-y-6">
+            {/* Architectural SVG Canvas */}
+            <div className="relative rounded-xl border border-border-rule bg-[#FAF8F5] overflow-x-auto shadow-inner select-none">
             
             {/* Ambient Decision Layer Overlay Banner for Mode B */}
             {mode === "quant_fusion" && (
@@ -775,8 +703,8 @@ export function OperationalFlowchart() {
             </svg>
           </div>
 
-          {/* Interactive Department Silo Selector Chips (Desktop Viewport) */}
-          <div className="hidden md:block space-y-2 pt-2">
+          {/* Interactive Department Silo Selector Chips */}
+          <div className="space-y-2 pt-2">
             <div className="flex items-center justify-between text-[11px] font-mono text-ink-muted">
               <span className="uppercase tracking-wider">Click Any Department Silo Below to Inspect Operational Bottlenecks:</span>
               <span className="text-btn-cta font-medium">Selected: {selectedSilo.name}</span>
@@ -851,6 +779,278 @@ export function OperationalFlowchart() {
               </div>
             </div>
 
+          </div>
+          </div>
+
+          {/* ===================================================================
+              MOBILE & TABLET VIEW (block lg:hidden):
+              RESPONSIVE VERTICAL INTERACTIVE PIPELINE
+              Eliminates horizontal scrolling; presents an effortless vertical scan.
+          =================================================================== */}
+          <div className="block lg:hidden space-y-6">
+            {mode === "status_quo" ? (
+              /* --- STATUS QUO: VERTICAL 8-STAGE FRICTION PIPELINE --- */
+              <div className="space-y-4">
+                {/* Mobile Stage 0: Customer Ingest */}
+                <div className="p-4 rounded-xl bg-surface-canvas border border-ink-primary/20 shadow-xs space-y-1 text-center">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-friction-crimson font-bold block">
+                    Trigger Event
+                  </span>
+                  <div className="font-serif text-[17px] font-bold text-ink-primary">
+                    Customer Sales Order Ingest
+                  </div>
+                  <div className="font-mono text-[11px] text-ink-secondary">
+                    PO #34018 Line Item • “When will my order ship?”
+                  </div>
+                </div>
+
+                {/* Connector Arrow */}
+                <div className="flex justify-center items-center py-1 text-friction-crimson">
+                  <ArrowDown size={18} className="animate-bounce" />
+                </div>
+
+                {/* 8 Vertical Stage Cards */}
+                <div className="space-y-3 relative before:absolute before:top-2 before:bottom-2 before:left-[19px] before:w-[2px] before:bg-friction-crimson/30 before:border-l before:border-dashed before:border-friction-crimson">
+                  {DEPARTMENT_SILOS.map((silo) => {
+                    const isExpanded = mobileExpandedSiloId === silo.id;
+                    const details = SILO_MOBILE_DETAILS[silo.id];
+                    const IconComp = silo.icon;
+
+                    return (
+                      <div key={silo.id} className="relative pl-10 space-y-2">
+                        {/* Milestone Indicator Node */}
+                        <div
+                          className={`absolute left-0 top-3.5 w-10 h-10 -ml-0.5 rounded-full border-2 flex items-center justify-center bg-surface-canvas transition-colors ${
+                            isExpanded ? "border-friction-crimson text-friction-crimson shadow-xs" : "border-border-rule text-ink-secondary"
+                          }`}
+                        >
+                          <IconComp size={16} />
+                        </div>
+
+                        {/* Interactive Step Card */}
+                        <div
+                          onClick={() => {
+                            setSelectedSilo(silo);
+                            setMobileExpandedSiloId(isExpanded ? null : silo.id);
+                          }}
+                          className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                            isExpanded
+                              ? "bg-surface-canvas border-friction-crimson shadow-sm ring-1 ring-friction-crimson/20"
+                              : "bg-surface-canvas border-border-rule hover:border-ink-muted/50"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-[10px] text-ink-muted font-bold">
+                                  {silo.siloNumber}
+                                </span>
+                                <span className="font-serif font-bold text-[15px] text-ink-primary">
+                                  {silo.name}
+                                </span>
+                              </div>
+                              <div className="text-[10px] font-mono text-ink-secondary mt-0.5">
+                                {silo.system}
+                              </div>
+                            </div>
+                            <span className="font-mono text-[10px] text-friction-crimson font-bold shrink-0 px-2 py-0.5 rounded bg-friction-wash/60 border border-friction-crimson/20">
+                              -{silo.hoursWastedPerMonth}h/mo
+                            </span>
+                          </div>
+
+                          {/* Friction Callout Tag with Vector Alert Triangle */}
+                          <div className="mt-3 flex flex-wrap items-center gap-2">
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FEF2F2] border border-[#DC2626]/80 text-[#991B1B] font-mono text-[10.5px] font-bold shadow-2xs">
+                              <svg width="10" height="10" viewBox="0 0 10 10" className="shrink-0">
+                                <path d="M 5 0.5 L 0.5 8.5 C 0.2 9 0.5 9.5 1.1 9.5 L 8.9 9.5 C 9.5 9.5 9.8 9 9.5 8.5 L 5 0.5 Z" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="0.8" strokeLinejoin="round" />
+                                <line x1="5" y1="3.2" x2="5" y2="5.8" stroke="#B91C1C" strokeWidth="0.9" strokeLinecap="round" />
+                                <circle cx="5" cy="7.4" r="0.5" fill="#B91C1C" />
+                              </svg>
+                              <span>{details?.frictionTag || "Disconnected Hand-off"}</span>
+                            </div>
+
+                            <span className="text-[10px] font-mono text-ink-muted flex items-center gap-1 ml-auto">
+                              <span>{isExpanded ? "Hide" : "Details"}</span>
+                              {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                            </span>
+                          </div>
+
+                          {/* Collapsible Deep-Dive Inspection Content */}
+                          {isExpanded && (
+                            <div className="mt-4 pt-3 border-t border-border-rule/80 space-y-3 text-[12px] font-sans animate-in fade-in duration-200">
+                              <div className="p-3 rounded-lg bg-friction-wash/60 border border-friction-crimson/20 space-y-1">
+                                <span className="font-mono text-[9.5px] uppercase tracking-wider text-friction-crimson font-bold block">
+                                  Manual Bottleneck:
+                                </span>
+                                <p className="text-ink-primary leading-snug">
+                                  {silo.manualPain}
+                                </p>
+                              </div>
+
+                              <div className="p-3 rounded-lg bg-stamp-wash/60 border border-stamp-ink/20 space-y-1">
+                                <span className="font-mono text-[9.5px] uppercase tracking-wider text-stamp-ink font-bold block">
+                                  Quant Fusion Resolution:
+                                </span>
+                                <p className="text-ink-primary leading-snug">
+                                  {silo.quantFusionFix}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Transition Step Indicator */}
+                        {details?.transitionText && (
+                          <div className="text-[10px] font-mono text-friction-crimson/90 pl-3 flex items-center gap-1.5 py-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-friction-crimson shrink-0" />
+                            <span>{details.transitionText}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Final Outcome Card: Manual Commit */}
+                <div className="p-5 rounded-xl bg-friction-wash/50 border-2 border-friction-crimson space-y-2 text-center shadow-xs">
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-friction-crimson font-bold">
+                    UNVERIFIED STATUS QUO OUTCOME
+                  </div>
+                  <div className="font-serif text-[20px] font-bold text-friction-crimson">
+                    MANUAL PROMISE DATE
+                  </div>
+                  <div className="font-mono text-[12px] font-semibold text-ink-primary">
+                    5–8 Business Days Elapsed
+                  </div>
+                  <p className="font-sans text-[12px] text-ink-secondary leading-relaxed pt-1">
+                    Date calculated by manual email guesswork. 3% retailer OTIF fine risk active + expedited air-freight penalties.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              /* --- QUANT FUSION: VERTICAL 1-CLICK RESOLUTION PIPELINE --- */
+              <div className="space-y-4">
+                {/* Mobile Stage 0: 1-Click Trigger */}
+                <div className="p-4 rounded-xl bg-surface-canvas border border-btn-cta/40 shadow-xs space-y-1 text-center">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-btn-cta font-bold block">
+                    1-Click Operational Trigger
+                  </span>
+                  <div className="font-serif text-[17px] font-bold text-ink-primary">
+                    Sales Order Ingest
+                  </div>
+                  <div className="font-mono text-[11px] text-btn-cta font-medium">
+                    PO #34018 Line Item • Sub-second solver engaged
+                  </div>
+                </div>
+
+                {/* Connector Laser Beam */}
+                <div className="flex justify-center items-center py-1 text-btn-cta">
+                  <ArrowDown size={20} className="animate-pulse" />
+                </div>
+
+                {/* Central In-Memory Decision Layer Card */}
+                <div className="p-5 rounded-xl bg-emerald-500/10 border-2 border-btn-cta shadow-sm space-y-4">
+                  <div className="text-center space-y-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-btn-cta font-bold block">
+                      Deterministic In-Memory Engine
+                    </span>
+                    <div className="font-serif text-[19px] font-bold text-ink-primary">
+                      Quant Fusion Decision Layer
+                    </div>
+                    <p className="font-sans text-[12px] text-ink-secondary">
+                      Simultaneous parallel ingestion across all 8 isolated stacks in &lt; 250ms.
+                    </p>
+                  </div>
+
+                  {/* 8 Active Telemetry Feeds Grid */}
+                  <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-[10.5px]">
+                    {DEPARTMENT_SILOS.map((silo) => (
+                      <div
+                        key={silo.id}
+                        className="p-2 rounded-lg bg-surface-canvas border border-btn-cta/30 flex items-center justify-between"
+                      >
+                        <div className="truncate pr-1">
+                          <span className="font-bold text-ink-primary">{silo.short}</span>
+                          <span className="text-[9px] text-ink-muted block truncate">{silo.system.split("/")[0]}</span>
+                        </div>
+                        <span className="flex items-center gap-1 shrink-0 text-btn-cta font-bold text-[9.5px]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>OK</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="text-center pt-1 font-mono text-[10.5px] text-btn-cta font-bold flex items-center justify-center gap-1.5">
+                    <ShieldCheck size={14} />
+                    <span>Zero ERP Writeback Risk • Read-Only TLS 1.3 Pipeline</span>
+                  </div>
+                </div>
+
+                {/* Connector Laser Beam */}
+                <div className="flex justify-center items-center py-1 text-btn-cta">
+                  <ArrowDown size={20} className="animate-pulse" />
+                </div>
+
+                {/* Final Stamped Outcome Card */}
+                <div className="p-5 rounded-xl bg-[#E6F3EC] border-2 border-[#0D4E30] text-center space-y-2 shadow-sm">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#0D4E30] font-bold block">
+                    DETERMINISTIC VERIFIED SHIP DATE
+                  </span>
+                  <div className="font-serif text-[24px] font-bold text-ink-primary">
+                    Nov 24, 2026
+                  </div>
+                  <div className="font-mono text-[12px] font-bold text-[#0D4E30]">
+                    0.8s Determination • Cryptographic SOX 404 Audit Stamp
+                  </div>
+                </div>
+
+                {/* 3 Executive Benefits Vertical Cards */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="p-3.5 rounded-xl bg-surface-canvas border border-btn-cta/40 flex items-start gap-3 shadow-2xs">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-btn-cta shrink-0 mt-0.5">
+                      <Check size={14} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <div className="font-sans font-bold text-[13px] text-ink-primary">
+                        Zero Manual Phone Tag
+                      </div>
+                      <div className="font-sans text-[11.5px] text-ink-secondary mt-0.5">
+                        Replaces 40 handoffs with instant deterministic ATP solver.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-surface-canvas border border-btn-cta/40 flex items-start gap-3 shadow-2xs">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-btn-cta shrink-0 mt-0.5">
+                      <Check size={14} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <div className="font-sans font-bold text-[13px] text-ink-primary">
+                        Zero ERP Writeback Risk
+                      </div>
+                      <div className="font-sans text-[11.5px] text-ink-secondary mt-0.5">
+                        Read-only TLS 1.3 in-memory pipeline with zero database mutation.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-surface-canvas border border-btn-cta/40 flex items-start gap-3 shadow-2xs">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-btn-cta shrink-0 mt-0.5">
+                      <Check size={14} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <div className="font-sans font-bold text-[13px] text-ink-primary">
+                        100% Audit Defensibility
+                      </div>
+                      <div className="font-sans text-[11.5px] text-ink-secondary mt-0.5">
+                        Tamper-evident timestamp log eliminates customer & retailer OTIF chargebacks.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
         </div>

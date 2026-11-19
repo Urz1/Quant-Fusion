@@ -32,11 +32,11 @@ export default function HomePage() {
           MOVEMENT 1: THE EXECUTIVE HERO
           Warm Paper Canvas (#ECE8DF) with Interactive Order Console Sheet (#FFFFFF)
       ========================================================================= */}
-      <section className="relative pt-12 pb-20 md:pt-16 md:pb-28 border-b border-border-rule overflow-hidden">
+      <section className="relative pt-10 pb-16 md:pt-14 md:pb-22 border-b border-border-rule overflow-hidden">
         {/* Subtle Ambient Radial Light with breathing animation */}
         <div className="absolute top-0 right-1/4 w-[650px] h-[450px] bg-gradient-to-b from-[#E2DBD0]/70 to-transparent rounded-full blur-3xl pointer-events-none -z-10 animate-glow-breathe" />
 
-        <div className="max-w-[1280px] mx-auto px-6 space-y-12">
+        <div className="max-w-[1280px] mx-auto px-6 space-y-10">
           
           {/* Header Narrative & Positioning */}
           <div className="max-w-3xl space-y-4">
@@ -67,9 +67,9 @@ export default function HomePage() {
               <span>Runs on daily flat-file CSVs or read-only REST/RFC connections. Zero core writeback risk.</span>
             </div>
             <div className="flex items-center gap-4">
-              <span>SOX 404 Compliant</span>
+              <span>Engineered for SOX 404 Audit Logging</span>
               <span>•</span>
-              <span>AES-256 In-Memory Encryption</span>
+              <span>SOC 2 Type II in Pre-Assessment</span>
               <span>•</span>
               <span>Day 1 SFTP Ingestion</span>
             </div>
@@ -82,12 +82,12 @@ export default function HomePage() {
           MOVEMENT 2: THE OPERATIONAL PAIN & 8-SILO CHALLENGE
           Verbatim Practitioner Transcripts + 8 Isolated Silos Teaser
       ========================================================================= */}
-      <section className="py-20 md:py-28 border-b border-border-rule">
+      <section id="the-problem" className="py-18 md:py-24 border-b border-border-rule scroll-mt-20">
         <div className="max-w-[1280px] mx-auto px-6 space-y-12">
           
           <div className="max-w-2xl">
             <span className="font-mono text-[12px] uppercase tracking-wider text-friction-crimson font-semibold block">
-              The 120-Interview Qualitative Diagnosis
+              Field Research & Operational Friction
             </span>
             <h2 className="font-serif text-[32px] sm:text-[42px] font-semibold text-ink-primary mt-1 tracking-tight">
               What really happens when a customer asks: <br />
@@ -98,10 +98,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 4 Practitioner Verbatim Cards with Real Photography */}
+          {/* Varied Editorial Practitioner Spread with Honest Photo Labels */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Quote 1: Inside Sales */}
+            {/* Card 1: Inside Sales (Prominent Narrative Quote) */}
             <ScrollReveal direction="up" delay={80} scale={true}>
               <div className="bg-surface-sheet rounded-lg p-6 sm:p-7 border border-border-rule shadow-card interactive-card space-y-4 h-full flex flex-col justify-between">
                 <div className="space-y-4">
@@ -110,19 +110,22 @@ export default function HomePage() {
                       Inside Sales & Customer Operations
                     </div>
                     <span className="font-mono text-[10px] text-ink-muted px-2 py-0.5 rounded bg-surface-recessed">
-                      22 hrs / mo wasted per CSR
+                      22 hrs / mo per CSR
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <div className="relative w-full sm:w-[110px] h-[95px] shrink-0 rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
-                      <Image
-                        src="/assets/dept_customer_ops_specialist.jpg"
-                        alt="Inside Sales & Customer Operations Specialist"
-                        fill
-                        unoptimized
-                        className="object-cover parchment-photo"
-                      />
+                    <div className="shrink-0 flex flex-col items-center">
+                      <div className="relative w-[110px] h-[95px] rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
+                        <Image
+                          src="/assets/dept_customer_ops_specialist.jpg"
+                          alt="Inside Sales & Customer Operations Specialist"
+                          fill
+                          unoptimized
+                          className="object-cover parchment-photo"
+                        />
+                      </div>
+                      <span className="text-[9px] font-mono text-ink-muted mt-1 text-center">Illustrative photo</span>
                     </div>
                     <blockquote className="font-serif text-[17px] sm:text-[18px] italic text-ink-primary leading-snug">
                       “We open five screens in SAP, check a spreadsheet for inbound railcars, and still end up calling the plant floor. By the time we answer, the date has already changed.”
@@ -137,7 +140,7 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            {/* Quote 2: Logistics */}
+            {/* Card 2: Logistics (Freight Friction Case Note) */}
             <ScrollReveal direction="up" delay={160} scale={true}>
               <div className="bg-surface-sheet rounded-lg p-6 sm:p-7 border border-border-rule shadow-card interactive-card space-y-4 h-full flex flex-col justify-between">
                 <div className="space-y-4">
@@ -146,19 +149,22 @@ export default function HomePage() {
                       Logistics & Transportation
                     </div>
                     <span className="font-mono text-[10px] text-ink-muted px-2 py-0.5 rounded bg-surface-recessed">
-                      17 hrs / mo wasted per Planner
+                      17 hrs / mo per Planner
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <div className="relative w-full sm:w-[110px] h-[95px] shrink-0 rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
-                      <Image
-                        src="/assets/dept_logistics_port_terminal.jpg"
-                        alt="Port Logistics Container Terminal Staging"
-                        fill
-                        unoptimized
-                        className="object-cover parchment-photo"
-                      />
+                    <div className="shrink-0 flex flex-col items-center">
+                      <div className="relative w-[110px] h-[95px] rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
+                        <Image
+                          src="/assets/dept_logistics_port_terminal.jpg"
+                          alt="Port Logistics Container Terminal Staging"
+                          fill
+                          unoptimized
+                          className="object-cover parchment-photo"
+                        />
+                      </div>
+                      <span className="text-[9px] font-mono text-ink-muted mt-1 text-center">Illustrative photo</span>
                     </div>
                     <blockquote className="font-serif text-[17px] sm:text-[18px] italic text-ink-primary leading-snug">
                       “A container sits in railhead dwell in Chicago for three days. Our EDI 214 carrier feed doesn’t talk to the warehouse WMS. Sales promises delivery, and we pay $1,200 for emergency hot-shot freight.”
@@ -173,7 +179,7 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            {/* Quote 3: Sourcing */}
+            {/* Card 3: Sourcing (Operational Metric Callout) */}
             <ScrollReveal direction="up" delay={240} scale={true}>
               <div className="bg-surface-sheet rounded-lg p-6 sm:p-7 border border-border-rule shadow-card interactive-card space-y-4 h-full flex flex-col justify-between">
                 <div className="space-y-4">
@@ -182,23 +188,31 @@ export default function HomePage() {
                       Supply Chain & Sourcing
                     </div>
                     <span className="font-mono text-[10px] text-ink-muted px-2 py-0.5 rounded bg-surface-recessed">
-                      19 hrs / mo wasted per Buyer
+                      19 hrs / mo per Buyer
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <div className="relative w-full sm:w-[110px] h-[95px] shrink-0 rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
-                      <Image
-                        src="/assets/dept_smart_warehouse_amr.jpg"
-                        alt="Automated AGV Warehouse Logistics Staging"
-                        fill
-                        unoptimized
-                        className="object-cover parchment-photo"
-                      />
+                    <div className="shrink-0 flex flex-col items-center">
+                      <div className="relative w-[110px] h-[95px] rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
+                        <Image
+                          src="/assets/dept_smart_warehouse_amr.jpg"
+                          alt="Automated AGV Warehouse Logistics Staging"
+                          fill
+                          unoptimized
+                          className="object-cover parchment-photo"
+                        />
+                      </div>
+                      <span className="text-[9px] font-mono text-ink-muted mt-1 text-center">Illustrative photo</span>
                     </div>
-                    <blockquote className="font-serif text-[17px] sm:text-[18px] italic text-ink-primary leading-snug">
-                      “When one sub-assembly supplier misses a date in Monterrey, the entire final assembly schedule in Cleveland stalls. We only catch it when assembly lines shut down.”
-                    </blockquote>
+                    <div className="space-y-1.5">
+                      <div className="font-mono text-[11px] font-bold text-friction-crimson uppercase tracking-wide">
+                        8-Day Assembly Blindspot
+                      </div>
+                      <blockquote className="font-serif text-[16px] sm:text-[17px] italic text-ink-primary leading-snug">
+                        “When one sub-assembly supplier misses a date in Monterrey, the entire final assembly schedule in Cleveland stalls. We only catch it when assembly lines shut down.”
+                      </blockquote>
+                    </div>
                   </div>
                 </div>
 
@@ -209,7 +223,7 @@ export default function HomePage() {
               </div>
             </ScrollReveal>
 
-            {/* Quote 4: Finance */}
+            {/* Card 4: Finance (Margin Impact Ledger) */}
             <ScrollReveal direction="up" delay={320} scale={true}>
               <div className="bg-surface-sheet rounded-lg p-6 sm:p-7 border border-border-rule shadow-card interactive-card space-y-4 h-full flex flex-col justify-between">
                 <div className="space-y-4">
@@ -217,22 +231,25 @@ export default function HomePage() {
                     <div className="font-mono text-[11px] text-friction-crimson uppercase tracking-wider font-semibold">
                       Corporate Finance & Systems
                     </div>
-                    <span className="font-mono text-[10px] text-ink-muted px-2 py-0.5 rounded bg-surface-recessed">
+                    <span className="font-mono text-[10px] text-friction-crimson font-bold px-2 py-0.5 rounded bg-friction-wash">
                       150 BPS EBITDA Bleed
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <div className="relative w-full sm:w-[110px] h-[95px] shrink-0 rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
-                      <Image
-                        src="/assets/dept_corporate_finance_suite.jpg"
-                        alt="Corporate Finance Operations & Dual Screen Analytics"
-                        fill
-                        unoptimized
-                        className="object-cover parchment-photo"
-                      />
+                    <div className="shrink-0 flex flex-col items-center">
+                      <div className="relative w-[110px] h-[95px] rounded overflow-hidden border border-border-rule img-zoom-container bg-surface-canvas shadow-xs">
+                        <Image
+                          src="/assets/dept_corporate_finance_suite.jpg"
+                          alt="Corporate Finance Operations & Dual Screen Analytics"
+                          fill
+                          unoptimized
+                          className="object-cover parchment-photo"
+                        />
+                      </div>
+                      <span className="text-[9px] font-mono text-ink-muted mt-1 text-center">Illustrative photo</span>
                     </div>
-                    <blockquote className="font-serif text-[17px] sm:text-[18px] italic text-ink-primary leading-snug">
+                    <blockquote className="font-serif text-[16px] sm:text-[17px] italic text-ink-primary leading-snug">
                       “OTIF chargebacks and detention fines eat 150 basis points of EBITDA. Because our promise dates are built on spreadsheets, we have zero audit trail to contest vendor claims.”
                     </blockquote>
                   </div>
@@ -253,17 +270,17 @@ export default function HomePage() {
               <div className="space-y-2 max-w-2xl">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[10px] font-bold text-friction-crimson uppercase tracking-wider px-2 py-0.5 rounded bg-friction-wash">
-                    Documented Field Artifact
+                    Operational Blueprint
                   </span>
                   <span className="font-mono text-[11px] text-ink-muted">
-                    Discovered across commercial plant operations
+                    Synthesized from commercial plant operations
                   </span>
                 </div>
                 <h3 className="font-serif text-[22px] font-semibold text-ink-primary">
                   The 40-Step Operational Workflow Across Eight Isolated Databases
                 </h3>
                 <p className="font-sans text-[14px] text-ink-secondary leading-relaxed">
-                  Without a non-invasive decision layer, fulfilling a single order requires 40 handoffs across Sales, Warehouse, Sourcing, Logistics, Freight Carriers, Factory, Suppliers, and Financetaking 5 to 8 business days per inquiry.
+                  Without a non-invasive decision layer, fulfilling a single order requires 40 handoffs across Sales, Warehouse, Sourcing, Logistics, Freight Carriers, Factory, Suppliers, and Finance—taking 5 to 8 business days per inquiry.
                 </p>
               </div>
 
@@ -286,7 +303,7 @@ export default function HomePage() {
           MOVEMENT 3: THE CFO HARD TRUTH (MEGA-STAT CALLOUT)
           Whitespace on warm parchment with interactive metric switch & Waterfall
       ========================================================================= */}
-      <section id="hard-truth" className="py-20 md:py-28 border-b border-border-rule bg-surface-recessed/40 overflow-hidden relative scroll-mt-24">
+      <section id="hard-truth" className="py-14 sm:py-20 md:py-24 border-b border-border-rule bg-surface-recessed/40 overflow-hidden relative scroll-mt-24">
         <ScrollReveal direction="up" blur={true} scale={true} className="max-w-[1280px] mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
@@ -324,7 +341,9 @@ export default function HomePage() {
               </div>
 
               <div className="font-serif text-[70px] sm:text-[90px] font-bold text-ink-primary leading-none tracking-tight">
-                {bpsMetricMode === "bps" ? "150 BPS" : "$900,000"}
+                <Link href="/calculator" className="hover:text-btn-cta transition-colors">
+                  {bpsMetricMode === "bps" ? "150 BPS" : "$900,000"}
+                </Link>
               </div>
 
               <h3 className="font-serif text-[26px] sm:text-[32px] text-ink-primary font-medium leading-tight">
@@ -334,22 +353,32 @@ export default function HomePage() {
               </h3>
 
               <p className="font-sans text-[16px] sm:text-[17px] text-ink-secondary leading-relaxed max-w-xl">
-                At a single $60M distributor, the simple question <span className="italic">“When will my order ship?”</span> triggered cross-functional fire drills costing $900,000 annuallyover 12,000 hours of manual work scattered across isolated Excel sheets.
+                At a single $60M distributor, the simple question <span className="italic">“When will my order ship?”</span> triggered cross-functional fire drills costing $900,000 annually—over 12,000 hours of manual work scattered across isolated Excel sheets.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 font-mono text-[11px]">
                 <div className="p-3 bg-surface-sheet rounded border border-border-rule interactive-card cursor-default">
-                  <span className="text-friction-crimson font-bold block text-[13px]">-$420K</span>
+                  <span className="text-friction-crimson font-bold block text-[13px]">-$420K (-0.70%)</span>
                   <span className="text-ink-muted text-[10px]">Labor & CSR Lookup Time</span>
                 </div>
                 <div className="p-3 bg-surface-sheet rounded border border-border-rule interactive-card cursor-default">
-                  <span className="text-friction-crimson font-bold block text-[13px]">-$280K</span>
+                  <span className="text-friction-crimson font-bold block text-[13px]">-$280K (-0.47%)</span>
                   <span className="text-ink-muted text-[10px]">Expedited Freight Premiums</span>
                 </div>
                 <div className="p-3 bg-surface-sheet rounded border border-border-rule interactive-card cursor-default">
-                  <span className="text-friction-crimson font-bold block text-[13px]">-$200K</span>
+                  <span className="text-friction-crimson font-bold block text-[13px]">-$200K (-0.33%)</span>
                   <span className="text-ink-muted text-[10px]">Customer OTIF Chargebacks</span>
                 </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  href="/calculator"
+                  className="btn-press inline-flex items-center gap-1.5 text-[13px] font-mono font-semibold text-btn-cta hover:text-btn-ctaHover transition-colors underline underline-offset-4"
+                >
+                  <span>Calculate your company’s avoidable cost in the ledger</span>
+                  <ArrowRight size={14} />
+                </Link>
               </div>
             </div>
 
@@ -392,7 +421,7 @@ export default function HomePage() {
                   <div>
                     <div className="flex justify-between text-friction-crimson mb-1">
                       <span>3. Emergency Expedited Freight</span>
-                      <span className="font-bold">-0.50% (-$280K)</span>
+                      <span className="font-bold">-0.47% (-$280K)</span>
                     </div>
                     <div className="h-2.5 w-full bg-surface-recessed rounded-xs overflow-hidden flex justify-end">
                       <div className="h-full bg-friction-crimson/90 rounded-xs" style={{ width: "16%" }}></div>
@@ -403,7 +432,7 @@ export default function HomePage() {
                   <div>
                     <div className="flex justify-between text-friction-crimson mb-1">
                       <span>4. Customer Delivery Chargebacks</span>
-                      <span className="font-bold">-0.30% (-$200K)</span>
+                      <span className="font-bold">-0.33% (-$200K)</span>
                     </div>
                     <div className="h-2.5 w-full bg-surface-recessed rounded-xs overflow-hidden flex justify-end">
                       <div className="h-full bg-friction-crimson/80 rounded-xs" style={{ width: "10%" }}></div>
@@ -446,26 +475,26 @@ export default function HomePage() {
           
           <ScrollReveal direction="up" blur={true} className="max-w-2xl">
             <span className="font-mono text-[12px] uppercase tracking-wider text-btn-cta font-bold block">
-              Enterprise Solution Architecture
+              Core Platform Capabilities
             </span>
             <h2 className="font-serif text-[32px] sm:text-[42px] font-semibold text-ink-primary mt-1 tracking-tight">
-              Three deterministic engines built for physical supply chains.
+              Where your orders stand, what tariffs will cost, and what spreadsheets cost you.
             </h2>
             <p className="font-sans text-[16px] sm:text-[17px] text-ink-secondary mt-3 leading-relaxed">
-              Explore specialized modules engineered to resolve statutory tariffs, audit SG&A payroll waste, and harmonize disparate ERP data streams.
+              Explore dedicated modules engineered to surface tariff exposure, calculate avoidable SG&A payroll waste, and harmonize disparate ERP data streams.
             </p>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             
-            {/* PILLAR 1: TradeGauge Landed Cost Foresight */}
+            {/* PILLAR 1: Global Tariffs */}
             <ScrollReveal direction="up" delay={80} scale={true} blur={true} className="flex">
               <div className="w-full rounded-lg bg-[#161311] text-[#E2DED6] border border-[#35302B] p-6 sm:p-7 shadow-xl flex flex-col justify-between interactive-card-dark group">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#25201C] text-emerald-400 font-mono text-[11px] font-bold border border-emerald-500/30">
                       <Globe size={13} />
-                      TradeGauge™ Foresight
+                      Global Tariffs
                     </span>
                     <span className="font-mono text-[11px] text-[#8C8478]">177 Boundaries</span>
                   </div>
@@ -496,7 +525,7 @@ export default function HomePage() {
                     href="/tariff-impact-visibility"
                     className="btn-press w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-btn-cta hover:bg-btn-ctaHover text-white text-[13px] font-mono font-medium rounded transition-colors shadow-sm"
                   >
-                    <span>Open Sourcing Command Center</span>
+                    <span>See Your Tariff Exposure</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-200" />
                   </Link>
                 </div>
@@ -541,7 +570,7 @@ export default function HomePage() {
                     href="/calculator"
                     className="btn-press w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-surface-recessed hover:bg-surface-sheet text-ink-primary border border-border-rule text-[13px] font-mono font-medium rounded transition-colors group-hover:border-btn-cta/40"
                   >
-                    <span>Launch Avoidable Cost Ledger</span>
+                    <span>Calculate Avoidable Costs</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-200" />
                   </Link>
                 </div>
@@ -561,11 +590,11 @@ export default function HomePage() {
                   </div>
 
                   <h3 className="font-serif text-[24px] font-semibold text-ink-primary leading-snug">
-                    Non-Invasive Decision Layer & Ingestion Pipeline
+                    Works with the Systems You Already Have
                   </h3>
 
                   <p className="font-sans text-[14px] text-ink-secondary leading-relaxed">
-                    Connect SAP ECC, Oracle, Manhattan WMS, and EDI 214 feeds into an encrypted in-memory processing layer. Zero database writeback risk, deployed via Day 1 SFTP flat files.
+                    Connect SAP ECC, Oracle, NetSuite, Manhattan WMS, and EDI 214 feeds into an encrypted in-memory processing layer. Zero database writeback risk, deployed via Day 1 SFTP flat files or read-only APIs.
                   </p>
 
                   {/* Live Preview Metric Chip */}
@@ -576,7 +605,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex justify-between text-ink-muted">
                       <span>Compliance & Security:</span>
-                      <span className="text-btn-cta font-bold">SOX 404 • TLS 1.3</span>
+                      <span className="text-btn-cta font-bold">SOX 404 Logging • TLS 1.3</span>
                     </div>
                   </div>
                 </div>
@@ -601,7 +630,7 @@ export default function HomePage() {
           MOVEMENT 5: OPERATIONAL PEDIGREE, AUDIT GAP LIST & PILOT CLOSE
           Founder Provenance + Physical Realities + Commercial Commitment
       ========================================================================= */}
-      <section className="py-20 md:py-28 border-b border-border-rule">
+      <section className="py-18 md:py-24 border-b border-border-rule">
         <div className="max-w-[1280px] mx-auto px-6 space-y-16">
           
           {/* Founder Origin Narrative */}
@@ -622,29 +651,29 @@ export default function HomePage() {
 
               <div className="lg:col-span-8 space-y-5">
                 <span className="font-mono text-[12px] uppercase tracking-wider text-btn-cta font-semibold block">
-                  Founder Narrative & Operational Heritage
+                  Leadership & Operational Heritage
                 </span>
                 <h2 className="font-serif text-[32px] sm:text-[38px] font-semibold text-ink-primary leading-tight tracking-tight">
                   Built from 20 years in enterprise supply chains, not in a classroom.
                 </h2>
                 <div className="space-y-4 font-sans text-[16px] text-ink-secondary leading-relaxed">
                   <p>
-                    Deb Friar founded Quant Fusion after more than two decades leading operational, supply chain, and product innovation teams inside global enterprise organizationsincluding executive leadership at Target, Pillsbury, Pepsi, Catalina, and Welbilt.
+                    Debra Friar founded Quant Fusion after more than two decades leading operational, supply chain, and product innovation teams inside global enterprise organizations—including executive leadership at Target, Pillsbury, Pepsi, Catalina, and as Director of Sales Operations at Welbilt.
                   </p>
                   <p>
-                    At Welbilt, Deb witnessed the daily breakdown firsthand: cross-functional teams burning 40 manual steps across inside sales, logistics, procurement, and finance just to answer a simple distributor inquiry. She designed Quant Fusion as a lightweight, non-invasive decision layer that applies MIT-certified and AWS-backed algorithms to eliminate operational firefighting permanently.
+                    At Welbilt, Deb witnessed the daily breakdown firsthand: cross-functional teams burning 40 manual steps across inside sales, logistics, procurement, and finance just to answer a simple distributor inquiry. She designed Quant Fusion as a lightweight, non-invasive decision layer that applies MIT-certified data science frameworks and cloud-native architecture to eliminate operational firefighting permanently.
                   </p>
                 </div>
 
                 <div className="pt-2 flex flex-wrap gap-2 text-[12px] font-mono text-ink-muted">
                   <span className="px-3 py-1 bg-surface-sheet rounded border border-border-rule font-medium text-ink-primary interactive-card cursor-default">
-                    Former Director of Sales Ops, Welbilt
+                    Director of Sales Ops, Welbilt
                   </span>
                   <span className="px-3 py-1 bg-surface-sheet rounded border border-border-rule font-medium text-ink-primary interactive-card cursor-default">
                     Target, Pillsbury, Pepsi & Catalina
                   </span>
                   <span className="px-3 py-1 bg-surface-sheet rounded border border-border-rule font-medium text-ink-primary interactive-card cursor-default">
-                    USF Monica Wooden Supply Chain Advisory Board
+                    USF Monica Wooden SCM Advisory Board
                   </span>
                   <span className="px-3 py-1 bg-surface-sheet rounded border border-border-rule font-medium text-ink-primary interactive-card cursor-default">
                     MIT Professional & AWS Certified
@@ -671,7 +700,7 @@ export default function HomePage() {
                   <Building2 size={13} className="text-btn-cta" />
                   FIELD CONTEXT • THE PHYSICAL SUPPLY CHAIN REALITY
                 </span>
-                <span>[Authentic Operational Facilities]</span>
+                <span>[Illustrative scenarios based on $60M commercial manufacturer operations]</span>
               </div>
             </ScrollReveal>
             
@@ -699,8 +728,9 @@ export default function HomePage() {
                         Component staging buffer where unannounced tier-2 supplier delays freeze sub-assembly lines.
                       </p>
                     </div>
-                    <div className="pt-2 border-t border-border-rule/60 font-mono text-[10px] text-btn-cta font-medium">
-                      Monitored: ERP Work Center #402
+                    <div className="pt-2 border-t border-border-rule/60 flex items-center justify-between font-mono text-[10px]">
+                      <span className="text-btn-cta font-medium">Monitored: ERP Work Center #402</span>
+                      <span className="text-ink-muted">Illustrative scenario</span>
                     </div>
                   </div>
                 </div>
@@ -729,8 +759,9 @@ export default function HomePage() {
                         Where Class I rail dwell times and cross-dock freight appointments require continuous cross-system reconciliation.
                       </p>
                     </div>
-                    <div className="pt-2 border-t border-border-rule/60 font-mono text-[10px] text-btn-cta font-medium">
-                      Monitored: EDI 214 & Rail Dwell Feeds
+                    <div className="pt-2 border-t border-border-rule/60 flex items-center justify-between font-mono text-[10px]">
+                      <span className="text-btn-cta font-medium">Monitored: EDI 214 & Rail Feeds</span>
+                      <span className="text-ink-muted">Illustrative scenario</span>
                     </div>
                   </div>
                 </div>
@@ -759,8 +790,9 @@ export default function HomePage() {
                         Where customs and chassis dwell triggers alternative-route calculations before demurrage charges accrue.
                       </p>
                     </div>
-                    <div className="pt-2 border-t border-border-rule/60 font-mono text-[10px] text-btn-cta font-medium">
-                      Monitored: AIS Vessel & Port EDI 315
+                    <div className="pt-2 border-t border-border-rule/60 flex items-center justify-between font-mono text-[10px]">
+                      <span className="text-btn-cta font-medium">Monitored: AIS & Port EDI 315</span>
+                      <span className="text-ink-muted">Illustrative scenario</span>
                     </div>
                   </div>
                 </div>

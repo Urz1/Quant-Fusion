@@ -83,7 +83,7 @@ export default function AboutPage() {
               </h2>
               
               <p className="font-sans text-[16px] text-ink-secondary leading-[1.7]">
-                Debra Friar is a pioneering AI innovator and supply chain visionary with over two decades of leadership across Consumer Packaged Goods, Marketing Technology, Commercial Equipment, and enterprise SaaS. Throughout her executive career at Target, Pillsbury, Pepsi, Catalina, and Welbilt, she has consistently engineered data-driven decision architectures that automate complex operations and eliminate structural waste.
+                Debra Friar is an enterprise operator and supply chain leader with over two decades of experience across Consumer Packaged Goods, Marketing Technology, Commercial Equipment, and enterprise SaaS. Throughout her career at Target, Pillsbury, Pepsi, Catalina, and as Director of Sales Operations at Welbilt, she has led cross-functional teams to automate complex operations and eliminate structural waste.
               </p>
 
               <p className="font-sans text-[16px] text-ink-secondary leading-[1.7]">
@@ -91,7 +91,7 @@ export default function AboutPage() {
               </p>
 
               <p className="font-sans text-[16px] text-ink-secondary leading-[1.7]">
-                A recognized speaker on artificial intelligence with certifications from MIT Professional and AWS, and an advisory board member of USF&apos;s Monica Wooden Center for Supply Chain Management, Deb built Quant Fusion to solve this permanently. Rather than forcing a disruptive 3-year ERP overhaul, Quant Fusion applies deterministic algorithms and automated exception engines to surface audited promise dates in under 250 milliseconds.
+                Holding executive certifications from MIT Professional and AWS, and serving as an advisory board member of USF&apos;s Monica Wooden Center for Supply Chain Management, Deb built Quant Fusion to solve this permanently. Rather than forcing a disruptive 3-year ERP overhaul, Quant Fusion provides a non-invasive decision layer that surfaces verified, audited promise dates in sub-second queries.
               </p>
 
               <div className="pt-4">

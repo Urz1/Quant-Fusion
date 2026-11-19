@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight, ChevronDown, Shield, Users, Clock, Database, Sparkles } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { LivelyRobot } from "@/components/LivelyRobot";
+import { RobotAvatar } from "@/components/RobotAvatar";
 
 export type RoleKey = "operations" | "supplychain" | "finance" | "it";
 
@@ -54,9 +54,10 @@ export function Header() {
   const pathname = usePathname();
 
   const navLinks = [
-    { label: "Platform", href: "/features" },
-    { label: "Avoidable Costs", href: "/calculator" },
+    { label: "The Problem", href: "/#the-problem" },
+    { label: "How It Works", href: "/features" },
     { label: "Tariff Exposure", href: "/tariff-impact-visibility" },
+    { label: "Cost & Calculator", href: "/calculator" },
     { label: "Case Studies", href: "/case-studies" },
     { label: "Pricing", href: "/pricing" },
     { label: "About", href: "/about" },
@@ -104,7 +105,7 @@ export function Header() {
           <Logo variant="full" />
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 text-[15px]">
+          <nav className="hidden lg:flex items-center gap-7 text-[14px]">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -133,16 +134,15 @@ export function Header() {
               onClick={() => {
                 window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
               }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-border-rule hover:border-btn-cta/50 bg-surface-sheet hover:bg-surface-recessed text-ink-primary text-[12px] font-mono transition-all shadow-xs group"
-              title="Open AI Decision Copilot (⌘K)"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-border-rule hover:border-btn-cta/50 bg-surface-sheet hover:bg-surface-recessed text-ink-primary text-[12px] font-sans font-medium transition-all shadow-xs group"
+              title="Open Decision Assistant"
             >
-              <LivelyRobot size="sm" className="scale-95 -ml-0.5" />
-              <span className="font-semibold">AI Copilot</span>
-              <kbd className="px-1.5 py-0.2 rounded bg-surface-recessed border border-border-rule text-[10px] text-ink-muted">⌘K</kbd>
+              <RobotAvatar size="sm" className="scale-105 -ml-0.5" />
+              <span>Ask Assistant</span>
             </button>
 
             <Link
-              href="/contact"
+              href="/pricing"
               className="inline-flex items-center justify-center px-4 py-2 bg-btn-cta hover:bg-btn-ctaHover text-white text-[14px] font-medium rounded transition-colors shadow-sm"
             >
               Request 30-Day Pilot
@@ -245,14 +245,14 @@ export function Header() {
                     window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
                   }, 100);
                 }}
-                className="w-full py-2.5 px-3 rounded bg-surface-sheet border border-btn-cta/40 text-btn-cta font-mono text-[13px] font-semibold flex items-center justify-center gap-2.5 shadow-xs"
+                className="w-full py-2.5 px-3 rounded bg-surface-sheet border border-btn-cta/40 text-btn-cta font-sans text-[13px] font-semibold flex items-center justify-center gap-2.5 shadow-xs"
               >
-                <LivelyRobot size="sm" />
-                <span>Launch AI Decision Copilot</span>
+                <RobotAvatar size="sm" />
+                <span>Open Decision Assistant</span>
               </button>
 
               <Link
-                href="/contact"
+                href="/pricing"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mt-1 w-full text-center py-2.5 bg-btn-cta text-white font-medium rounded text-[14px]"
               >

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Lock, ShieldCheck, ShieldAlert, AlertOctagon, CheckCircle2, ArrowRight, Server, Database, Cpu } from "lucide-react";
+import { Lock, ShieldCheck, ShieldAlert, AlertOctagon, CheckCircle2, ArrowRight, ArrowDown, Server, Database, Cpu } from "lucide-react";
 
 export function SecurityEnclaveVisualizer() {
   const [testStatus, setTestStatus] = useState<"idle" | "testing" | "blocked">("idle");
@@ -25,7 +25,7 @@ export function SecurityEnclaveVisualizer() {
   };
 
   return (
-    <div className="bg-surface-sheet rounded border border-border-rule shadow-sheet p-6 sm:p-8 space-y-6">
+    <div className="bg-surface-sheet rounded-xl border border-border-rule shadow-sheet p-6 sm:p-8 lg:p-10 space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border-rule gap-3">
         <div>
@@ -67,37 +67,38 @@ export function SecurityEnclaveVisualizer() {
       </div>
 
       {/* Visual Data Flow Diagram */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 items-center">
         {/* Node 1: Customer ERP */}
-        <div className="p-4 rounded bg-surface-canvas border border-border-rule space-y-2">
+        <div className="p-5 sm:p-6 rounded-xl bg-surface-canvas border border-border-rule space-y-3 shadow-xs">
           <div className="flex items-center justify-between text-[11px] font-mono text-ink-muted">
-            <span>CLIENT SYSTEM</span>
-            <Server size={14} className="text-ink-primary" />
+            <span className="font-semibold uppercase tracking-wider">CLIENT SYSTEM</span>
+            <Server size={15} className="text-ink-primary" />
           </div>
-          <div className="font-serif text-[17px] font-semibold text-ink-primary">
+          <div className="font-serif text-[18px] sm:text-[19px] font-semibold text-ink-primary">
             Production SAP / WMS Core
           </div>
-          <div className="font-mono text-[11px] text-btn-cta flex items-center gap-1">
-            <CheckCircle2 size={12} />
+          <div className="font-mono text-[11px] text-btn-cta flex items-center gap-1.5 pt-1">
+            <CheckCircle2 size={13} className="shrink-0" />
             <span>Read-Only Connector (0% Mutation)</span>
           </div>
         </div>
 
         {/* The One-Way Gate */}
-        <div className="p-4 rounded bg-surface-recessed/60 border border-border-rule text-center space-y-2 relative">
-          <div className="font-mono text-[10px] text-ink-muted uppercase">
+        <div className="p-5 sm:p-6 rounded-xl bg-surface-recessed/70 border border-border-rule text-center space-y-2.5 relative shadow-xs">
+          <div className="font-mono text-[10px] text-ink-muted uppercase tracking-wider font-semibold">
             One-Way TLS 1.3 Pipe
           </div>
           <div className="flex items-center justify-center gap-2">
             <span className="font-mono text-[12px] font-bold text-ink-primary">
               INGESTION ONLY
             </span>
-            <ArrowRight size={16} className="text-btn-cta" />
+            <ArrowRight size={18} className="text-btn-cta hidden md:inline-block" />
+            <ArrowDown size={18} className="text-btn-cta md:hidden" />
           </div>
-          <div className="text-[10px] font-mono text-friction-crimson font-semibold flex items-center justify-center gap-1">
+          <div className="text-[11px] font-mono text-friction-crimson font-semibold flex items-center justify-center gap-1.5 pt-0.5">
             {testStatus === "blocked" ? (
               <>
-                <ShieldAlert size={12} className="text-friction-crimson shrink-0" />
+                <ShieldAlert size={13} className="text-friction-crimson shrink-0" />
                 <span>REVERSE WRITE BLOCKED</span>
               </>
             ) : (
@@ -107,22 +108,22 @@ export function SecurityEnclaveVisualizer() {
         </div>
 
         {/* Node 2: Quant Fusion Memory Enclave */}
-        <div className="p-4 rounded bg-surface-canvas border border-border-rule space-y-2">
+        <div className="p-5 sm:p-6 rounded-xl bg-surface-canvas border border-border-rule space-y-3 shadow-xs">
           <div className="flex items-center justify-between text-[11px] font-mono text-ink-muted">
-            <span>DECISION LAYER</span>
-            <Cpu size={14} className="text-btn-cta" />
+            <span className="font-semibold uppercase tracking-wider">DECISION LAYER</span>
+            <Cpu size={15} className="text-btn-cta" />
           </div>
-          <div className="font-serif text-[17px] font-semibold text-ink-primary">
+          <div className="font-serif text-[18px] sm:text-[19px] font-semibold text-ink-primary">
             Quant Fusion In-Memory Enclave
           </div>
-          <div className="font-mono text-[11px] text-ink-secondary">
+          <div className="font-mono text-[11px] text-ink-secondary pt-1">
             Deterministic Rule Engine &lt; 250ms
           </div>
         </div>
       </div>
 
       {/* Security Socket Diagnostic Console */}
-      <div className="p-3.5 rounded bg-[#181614] text-[#E2DED6] font-mono text-[11px] space-y-1.5 border border-[#35302B]">
+      <div className="p-4 sm:p-5 rounded-lg bg-[#181614] text-[#E2DED6] font-mono text-[11px] space-y-2 border border-[#35302B] shadow-inner">
         <div className="flex items-center justify-between pb-1 border-b border-[#2C2723] text-[#8C8478] text-[10px]">
           <span>SOCKET PROTOCOL MONITOR</span>
           <span className={testStatus === "blocked" ? "text-red-400 font-bold" : "text-emerald-400 font-bold"}>

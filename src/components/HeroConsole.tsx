@@ -50,7 +50,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
     name: "Commercial Convection Unit #CX-900",
     customer: "Apex Thermal Dynamics",
     origin: "Tampa Facility #4",
-    manualEstimate: "Nov 14, 2026",
+    manualEstimate: "Dec 18, 2026",
     roleMetrics: {
       operations: "7 Disconnected Screens Eliminated • Sub-second CSR Response",
       cfo: "$14,200 Late Delivery Chargeback Avoided • 150 BPS EBITDA Protected",
@@ -58,7 +58,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
     },
     scenarios: {
       baseline: {
-        date: "Nov 06, 2026",
+        date: "Dec 08, 2026",
         status: "reconciled",
         statusLabel: "Reconciled Delivery Date",
         daysSaved: "8 Days Firefighting Saved",
@@ -71,7 +71,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
         notes: "All components synchronized. Assembly window confirmed without expediting.",
       },
       portDelay: {
-        date: "Nov 09, 2026",
+        date: "Dec 12, 2026",
         status: "reconciled",
         statusLabel: "Re-Routed Promise Date",
         daysSaved: "5 Days Firefighting Saved",
@@ -84,7 +84,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
         notes: "Control board delayed at Port LA. Algorithmic buffer shifted assembly window +3 days; dealer auto-notified.",
       },
       airFreight: {
-        date: "Nov 03, 2026",
+        date: "Dec 04, 2026",
         status: "reconciled",
         statusLabel: "Expedited Air Commitment",
         daysSaved: "11 Days Firefighting Saved",
@@ -103,7 +103,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
     name: "Continuous Conveyor Motor Assembly",
     customer: "Vanguard Logistics Group",
     origin: "Chicago Plant #2",
-    manualEstimate: "Nov 18, 2026",
+    manualEstimate: "Dec 22, 2026",
     roleMetrics: {
       operations: "5 Warehouse Calls Eliminated • Direct Telematics Visibility",
       cfo: "$9,800 Demurrage Fee Prevented by Truck Reschedule",
@@ -111,7 +111,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
     },
     scenarios: {
       baseline: {
-        date: "Nov 10, 2026",
+        date: "Dec 14, 2026",
         status: "reconciled",
         statusLabel: "Reconciled Delivery Date",
         daysSaved: "8 Days Firefighting Saved",
@@ -123,7 +123,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
         notes: "All components staged. Driver check-in verified via carrier telematics feed.",
       },
       portDelay: {
-        date: "Nov 13, 2026",
+        date: "Dec 17, 2026",
         status: "reconciled",
         statusLabel: "Adjusted Dock Delivery",
         daysSaved: "5 Days Firefighting Saved",
@@ -135,7 +135,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
         notes: "Plant QA hold detected before truck arrival. Truck appointment pushed 48 hours to avoid demurrage fee.",
       },
       airFreight: {
-        date: "Nov 08, 2026",
+        date: "Dec 10, 2026",
         status: "reconciled",
         statusLabel: "Same-Week Direct Courier",
         daysSaved: "10 Days Firefighting Saved",
@@ -153,7 +153,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
     name: "Hydraulic Pump Assembly #HP-20",
     customer: "Titan Industrial Machinery",
     origin: "Cleveland Plant",
-    manualEstimate: "Nov 20, 2026",
+    manualEstimate: "Dec 28, 2026",
     roleMetrics: {
       operations: "Automated Early Warning Generated • Customer Escalation Paused",
       cfo: "Uncalibrated Delivery Promise Prevented • SOX Audit Trace Maintained",
@@ -185,7 +185,7 @@ export const SAMPLE_ORDERS: OrderScenario[] = [
         notes: "Supplier component compounding border hold. CSR escalation notification dispatched.",
       },
       airFreight: {
-        date: "Nov 12, 2026 (Alt Sourcing)",
+        date: "Dec 15, 2026 (Alt Sourcing)",
         status: "reconciled",
         statusLabel: "Alternative Supplier Sourced",
         daysSaved: "8 Days Firefighting Saved",

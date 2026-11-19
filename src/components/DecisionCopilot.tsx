@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ExecutiveTelemetryNode } from "@/components/ExecutiveTelemetryNode";
+import { LivelyRobot } from "@/components/LivelyRobot";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import {
   Sparkles,
@@ -402,20 +402,26 @@ export function DecisionCopilot() {
   return (
     <>
       {/* =========================================================================
-      {/* =========================================================================
-          EXECUTIVE TELEMETRY COPILOT NODE (BOTTOM RIGHT)
+          INTERACTIVE 3D MINI-ROBOT ASSISTANT MASCOT (BOTTOM RIGHT)
       ========================================================================= */}
       {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end animate-in fade-in zoom-in-95 duration-200 origin-bottom-right max-sm:scale-85">
           <button
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-full"
+            className="group relative flex items-center justify-center focus:outline-none transition-transform duration-300 hover:scale-110 active:scale-95"
             aria-label="Open Quant Fusion AI Decision Copilot"
           >
-            <ExecutiveTelemetryNode
-              size="launcher"
+
+            {/* Standalone Interactive 3D Robot Mascot */}
+            <LivelyRobot
+              size="mascot"
+              trackCursor={true}
               isStreaming={isLoading}
+              showSpeechBubble={false}
+              speechText="Ask Quant Fusion"
+              onClick={() => setIsOpen(true)}
             />
+
           </button>
         </div>
       )}
@@ -445,7 +451,10 @@ export function DecisionCopilot() {
             {/* Header Bar */}
             <div className="bg-surface-sheet px-5 py-3.5 border-b border-border-rule flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <ExecutiveTelemetryNode size="md" isStreaming={isLoading} />
+                <div className="relative w-9 h-9 rounded-full bg-slate-900 border border-slate-700 text-white flex items-center justify-center shadow-xs shrink-0 overflow-visible">
+                  <LivelyRobot size="md" isStreaming={isLoading} />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-surface-sheet rounded-full" />
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-serif text-[16px] font-semibold text-ink-primary leading-tight">
@@ -516,8 +525,8 @@ export function DecisionCopilot() {
                   >
                     {/* Assistant Avatar */}
                     {!isUser && (
-                      <div className="shrink-0 mt-0.5">
-                        <ExecutiveTelemetryNode size="sm" isStreaming={msg.isStreaming} />
+                      <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 text-white shrink-0 flex items-center justify-center mt-0.5 shadow-xs overflow-visible">
+                        <LivelyRobot size="sm" isStreaming={msg.isStreaming} />
                       </div>
                     )}
 
@@ -608,8 +617,8 @@ export function DecisionCopilot() {
               {/* Streaming loading indicator when waiting for first token */}
               {isLoading && messages[messages.length - 1]?.content === "" && (
                 <div className="flex items-center gap-2.5 text-ink-muted font-sans text-[13px] pl-1">
-                  <div className="shrink-0">
-                    <ExecutiveTelemetryNode size="sm" isStreaming={true} />
+                  <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 text-white flex items-center justify-center shrink-0 overflow-visible">
+                    <LivelyRobot size="sm" isStreaming={true} forceWave={true} />
                   </div>
                   <div className="flex items-center gap-1 p-2.5 rounded-2xl bg-surface-sheet border border-border-rule/80">
                     <span className="w-2 h-2 rounded-full bg-btn-cta animate-bounce" style={{ animationDelay: "0ms" }} />
