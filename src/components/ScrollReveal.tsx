@@ -22,10 +22,11 @@ export function ScrollReveal({
   direction = "up",
   blur = false,
   scale = false,
-  duration = 320,
-  distance = 10,
+  duration = 180,
+  distance = 6,
 }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  // Always render visible immediately so page navigation is sub-second with zero blank delay
+  const [isVisible, setIsVisible] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

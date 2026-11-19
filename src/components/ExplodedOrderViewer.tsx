@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { AlertTriangle, Check, Layers, RotateCw, ZoomIn, Info } from "lucide-react";
+import { AlertTriangle, Check, Layers, RotateCw } from "lucide-react";
 
 export interface OrderPart {
   id: string;

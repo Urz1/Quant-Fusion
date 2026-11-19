@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import Image from "next/image";
-import { Check, AlertTriangle, Clock, RefreshCw, FileText, ArrowRight, Printer, X, Download, Eye, Sparkles, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Check, AlertTriangle, FileText, Printer, X, Zap } from "lucide-react";
 import { ExplodedOrderViewer } from "./ExplodedOrderViewer";
 
 interface OrderScenario {

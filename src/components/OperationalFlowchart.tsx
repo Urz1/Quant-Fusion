@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { 
   Layers, 
-  Clock, 
   AlertTriangle, 
-  CheckCircle2, 
-  ArrowRight, 
   ArrowDown,
   ChevronDown,
   ChevronUp,
@@ -20,7 +17,6 @@ import {
   Factory, 
   Building2, 
   Landmark, 
-  Sparkles,
   Eye,
   Info,
   Zap,

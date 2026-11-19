@@ -1,7 +1,5 @@
-import React from "react";
 import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
-import { ScrollReveal } from "@/components/ScrollReveal";
+import { Check } from "lucide-react";
 
 export const metadata = {
   title: "Pricing & Plans | Quant Fusion",

@@ -448,7 +448,19 @@ export function Robot3DCanvas({
     floorShadow.position.set(0, -1.42, 0);
     scene.add(floorShadow);
 
-    // 5. Interactive Cursor & Drag Orbit Physics
+    // 5. Interactive Cursor & Drag Orbit Physics (Zero-Reflow Cached Engine)
+    let cachedCenterX = 0;
+    let cachedCenterY = 0;
+    const updateCenter = () => {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      cachedCenterX = rect.left + rect.width / 2;
+      cachedCenterY = rect.top + rect.height / 2;
+    };
+    updateCenter();
+    window.addEventListener("resize", updateCenter, { passive: true });
+    window.addEventListener("scroll", updateCenter, { passive: true });
+
     const handlePointerDown = (e: PointerEvent) => {
       isDraggingRef.current = true;
       hasMovedRef.current = false;
@@ -480,15 +492,13 @@ export function Robot3DCanvas({
 
         lastMousePosRef.current = { x: e.clientX, y: e.clientY };
       } else if (trackCursor) {
-        // Continuous 360° Circular Gaze Tracking across viewport
-        const rect = container.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const deltaX = e.clientX - centerX;
-        const deltaY = e.clientY - centerY;
+        // Continuous 360° Circular Gaze Tracking across viewport (Zero layout thrashing)
+        if (!cachedCenterX) updateCenter();
+        const deltaX = e.clientX - cachedCenterX;
+        const deltaY = e.clientY - cachedCenterY;
         const distance = Math.hypot(deltaX, deltaY);
 
-        if (distance > 10) {
+        if (distance > 8) {
           // Circular angle around the mascot (-PI to PI)
           const angle = Math.atan2(deltaX, 400);
           const verticalAngle = Math.max(-0.45, Math.min(0.45, -deltaY / 400));
@@ -501,19 +511,21 @@ export function Robot3DCanvas({
     };
 
     const handlePointerUp = () => {
+      if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
-      if (!hasMovedRef.current) {
-        targetRotationRef.current.y += Math.PI * 2;
-        if (onClick) onClick();
-      }
+      // Reset hasMovedRef after the browser click event window has elapsed
+      setTimeout(() => {
+        hasMovedRef.current = false;
+      }, 100);
     };
 
     const handleCanvasClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      if (!hasMovedRef.current) {
-        targetRotationRef.current.y += Math.PI * 2;
-        if (onClick) onClick();
+      if (hasMovedRef.current) {
+        e.stopPropagation();
+        return;
       }
+      targetRotationRef.current.y += Math.PI * 2;
+      if (onClick) onClick();
     };
 
     // Attach pointer listeners to window for fluid drag across elements
@@ -633,6 +645,8 @@ export function Robot3DCanvas({
       domEl.removeEventListener("click", handleCanvasClick);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("resize", updateCenter);
+      window.removeEventListener("scroll", updateCenter);
 
       // Dispose all GPU geometries, materials, and textures
       geometries.forEach((g) => g.dispose());

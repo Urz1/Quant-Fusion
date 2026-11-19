@@ -1,7 +1,6 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, AlertCircle, Play, Layers } from "lucide-react";
+import { ArrowRight, Check, AlertCircle, Play } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const metadata = {

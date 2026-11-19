@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Database, ShieldCheck, Check } from "lucide-react";
+import { useState } from "react";
+import { ShieldCheck } from "lucide-react";
 
 export function SourceInspector() {
   const [activeSource, setActiveSource] = useState<"sap" | "oracle" | "edi" | "csv">("sap");

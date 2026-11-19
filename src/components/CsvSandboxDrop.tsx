@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { UploadCloud, CheckCircle2, AlertTriangle, FileSpreadsheet, ArrowRight, ShieldCheck, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { UploadCloud, CheckCircle2, FileSpreadsheet, RefreshCw } from "lucide-react";
 
 interface ParsedOrderResult {
   poNumber: string;

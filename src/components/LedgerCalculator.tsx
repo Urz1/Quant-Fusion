@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronDown, ChevronUp, Printer, FileText, Check, HelpCircle, X, Download, Copy } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Printer, FileText, Check, X, Copy } from "lucide-react";
 
 export interface DepartmentMetric {
   key: string;

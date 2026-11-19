@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 
 interface LogoProps {
@@ -111,6 +110,7 @@ export function Logo({
     return (
       <Link
         href={href}
+        prefetch={true}
         className="inline-flex outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-btn-cta/40 focus-visible:ring-offset-2 rounded-md select-none"
       >
         {content}

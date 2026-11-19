@@ -7,16 +7,10 @@ import {
   Check, 
   ArrowRight, 
   ShieldCheck, 
-  Clock, 
-  AlertTriangle, 
-  FileText, 
-  Layers, 
   Database, 
   TrendingUp, 
   Building2, 
-  Globe,
-  Compass,
-  Zap
+  Globe
 } from "lucide-react";
 import { HeroConsole } from "@/components/HeroConsole";
 import { ScrollReveal } from "@/components/ScrollReveal";

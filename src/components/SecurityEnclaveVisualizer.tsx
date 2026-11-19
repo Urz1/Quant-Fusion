@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Lock, ShieldCheck, ShieldAlert, AlertOctagon, CheckCircle2, ArrowRight, ArrowDown, Server, Database, Cpu } from "lucide-react";
+import { useState } from "react";
+import { ShieldAlert, AlertOctagon, CheckCircle2, ArrowRight, ArrowDown, Server, Cpu } from "lucide-react";
 
 export function SecurityEnclaveVisualizer() {
   const [testStatus, setTestStatus] = useState<"idle" | "testing" | "blocked">("idle");

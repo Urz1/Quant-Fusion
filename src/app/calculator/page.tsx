@@ -1,7 +1,4 @@
-import React from "react";
-import Link from "next/link";
 import { LedgerCalculator } from "@/components/LedgerCalculator";
-import { ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
 export const metadata = {

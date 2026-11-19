@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight, ChevronDown, Shield, Users, Clock, Database, Sparkles } from "lucide-react";
+import { Menu, X, ArrowUpRight, ChevronDown, Users } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { RobotAvatar } from "@/components/RobotAvatar";
 
 export type RoleKey = "operations" | "supplychain" | "finance" | "it";
 
@@ -105,7 +104,7 @@ export function Header() {
           <Logo variant="full" />
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-7 text-[14px]">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-[13.5px] xl:text-[14px] whitespace-nowrap">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -113,7 +112,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   prefetch={true}
-                  className={`relative py-1 font-sans transition-colors ${
+                  className={`relative py-1 font-sans whitespace-nowrap transition-colors ${
                     isActive
                       ? "text-ink-primary font-medium"
                       : "text-ink-secondary hover:text-ink-primary"
@@ -129,21 +128,11 @@ export function Header() {
           </nav>
 
           {/* CTA and Actions */}
-          <div className="hidden lg:flex items-center gap-3">
-            <button
-              onClick={() => {
-                window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-              }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-border-rule hover:border-btn-cta/50 bg-surface-sheet hover:bg-surface-recessed text-ink-primary text-[12px] font-sans font-medium transition-all shadow-xs group"
-              title="Open Decision Assistant"
-            >
-              <RobotAvatar size="sm" className="scale-105 -ml-0.5" />
-              <span>Ask Assistant</span>
-            </button>
-
+          <div className="hidden lg:flex items-center">
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center px-4 py-2 bg-btn-cta hover:bg-btn-ctaHover text-white text-[14px] font-medium rounded transition-colors shadow-sm"
+              prefetch={true}
+              className="inline-flex items-center justify-center px-4 py-2 bg-btn-cta hover:bg-btn-ctaHover text-white text-[14px] font-medium rounded transition-colors shadow-sm whitespace-nowrap"
             >
               Request 30-Day Pilot
             </Link>
@@ -238,23 +227,11 @@ export function Header() {
                   <ArrowUpRight size={15} className="text-ink-muted" />
                 </Link>
               ))}
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setTimeout(() => {
-                    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-                  }, 100);
-                }}
-                className="w-full py-2.5 px-3 rounded bg-surface-sheet border border-btn-cta/40 text-btn-cta font-sans text-[13px] font-semibold flex items-center justify-center gap-2.5 shadow-xs"
-              >
-                <RobotAvatar size="sm" />
-                <span>Open Decision Assistant</span>
-              </button>
 
               <Link
                 href="/pricing"
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-1 w-full text-center py-2.5 bg-btn-cta text-white font-medium rounded text-[14px]"
+                className="mt-2 w-full text-center py-2.5 bg-btn-cta text-white font-medium rounded text-[14px]"
               >
                 Request 30-Day Pilot
               </Link>

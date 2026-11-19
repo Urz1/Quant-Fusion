@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { Mail, Phone, MapPin, ArrowUpRight, ShieldCheck, FileText } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 export function Footer() {
@@ -46,22 +45,22 @@ export function Footer() {
             </span>
             <ul className="mt-4 space-y-2.5 text-[14px]">
               <li>
-                <Link href="/features" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/features" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   1-Click Ship Date Engine
                 </Link>
               </li>
               <li>
-                <Link href="/features#pipeline" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/features#pipeline" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   UNIFY: Ingestion Connectors
                 </Link>
               </li>
               <li>
-                <Link href="/features#algorithms" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/features#algorithms" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   TRANSFORM: Order Routing Logic
                 </Link>
               </li>
               <li>
-                <Link href="/features" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/features" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   SOX 404 Audit Traceability
                 </Link>
               </li>
@@ -75,22 +74,22 @@ export function Footer() {
             </span>
             <ul className="mt-4 space-y-2.5 text-[14px]">
               <li>
-                <Link href="/tariff-impact-visibility" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/tariff-impact-visibility" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Tariff Exposure Module
                 </Link>
               </li>
               <li>
-                <Link href="/calculator" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/calculator" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Avoidable SG&A Cost Ledger
                 </Link>
               </li>
               <li>
-                <Link href="/case-studies" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/case-studies" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Field Research & Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/pricing" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Transparent Pricing & Tiers
                 </Link>
               </li>
@@ -104,22 +103,22 @@ export function Footer() {
             </span>
             <ul className="mt-4 space-y-2.5 text-[14px]">
               <li>
-                <Link href="/privacy-policy" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/privacy-policy" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Privacy Policy (15 Sections)
                 </Link>
               </li>
               <li>
-                <Link href="/terms-of-service" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/terms-of-service" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Terms of Service & GDPR Annexes
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/about" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Executive Leadership (Deb Friar)
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-[#BAB3A7] hover:text-white transition-colors">
+                <Link href="/contact" prefetch={true} className="text-[#BAB3A7] hover:text-white transition-colors">
                   Schedule Direct Consultation
                 </Link>
               </li>

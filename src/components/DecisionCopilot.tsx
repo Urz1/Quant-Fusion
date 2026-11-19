@@ -1,15 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { LivelyRobot } from "@/components/LivelyRobot";
+import dynamic from "next/dynamic";
+import { RobotAvatar } from "@/components/RobotAvatar";
+
+const Robot3DCanvas = dynamic(
+  () => import("@/components/Robot3DCanvas").then((mod) => mod.Robot3DCanvas),
+  {
+    ssr: false,
+    loading: () => <RobotAvatar size="md" className="scale-125" />,
+  }
+);
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import {
-  Sparkles,
   X,
   Send,
   RotateCcw,
   ShieldCheck,
-  ChevronRight,
   TrendingUp,
   Truck,
   Headphones,
@@ -412,16 +419,13 @@ export function DecisionCopilot() {
             aria-label="Open Quant Fusion AI Decision Copilot"
           >
 
-            {/* Standalone Interactive 3D Robot Mascot */}
-            <LivelyRobot
-              size="mascot"
-              trackCursor={true}
-              isStreaming={isLoading}
-              showSpeechBubble={false}
-              speechText="Ask Quant Fusion"
-              onClick={() => setIsOpen(true)}
-            />
-
+            {/* Standalone Interactive 3D WebGL Mascot (360° Orbit & Drag) */}
+            <div className="w-24 h-26 sm:w-28 sm:h-30 flex items-center justify-center">
+              <Robot3DCanvas
+                isStreaming={isLoading}
+                onClick={() => setIsOpen(true)}
+              />
+            </div>
           </button>
         </div>
       )}
@@ -452,7 +456,7 @@ export function DecisionCopilot() {
             <div className="bg-surface-sheet px-5 py-3.5 border-b border-border-rule flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative w-9 h-9 rounded-full bg-slate-900 border border-slate-700 text-white flex items-center justify-center shadow-xs shrink-0 overflow-visible">
-                  <LivelyRobot size="md" isStreaming={isLoading} />
+                  <RobotAvatar size="md" isStreaming={isLoading} />
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-surface-sheet rounded-full" />
                 </div>
                 <div>
@@ -526,7 +530,7 @@ export function DecisionCopilot() {
                     {/* Assistant Avatar */}
                     {!isUser && (
                       <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 text-white shrink-0 flex items-center justify-center mt-0.5 shadow-xs overflow-visible">
-                        <LivelyRobot size="sm" isStreaming={msg.isStreaming} />
+                        <RobotAvatar size="sm" isStreaming={msg.isStreaming} />
                       </div>
                     )}
 
@@ -618,7 +622,7 @@ export function DecisionCopilot() {
               {isLoading && messages[messages.length - 1]?.content === "" && (
                 <div className="flex items-center gap-2.5 text-ink-muted font-sans text-[13px] pl-1">
                   <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-700 text-white flex items-center justify-center shrink-0 overflow-visible">
-                    <LivelyRobot size="sm" isStreaming={true} forceWave={true} />
+                    <RobotAvatar size="sm" isStreaming={true} />
                   </div>
                   <div className="flex items-center gap-1 p-2.5 rounded-2xl bg-surface-sheet border border-border-rule/80">
                     <span className="w-2 h-2 rounded-full bg-btn-cta animate-bounce" style={{ animationDelay: "0ms" }} />

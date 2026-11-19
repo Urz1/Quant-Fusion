@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 
 interface RobotAvatarProps {
   size?: "xs" | "sm" | "md";

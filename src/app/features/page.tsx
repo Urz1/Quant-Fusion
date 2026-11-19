@@ -1,12 +1,34 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, Shield, Database, Cpu, Lock, RefreshCw, Layers } from "lucide-react";
-import { SourceInspector } from "@/components/SourceInspector";
-import { CsvSandboxDrop } from "@/components/CsvSandboxDrop";
-import { SecurityEnclaveVisualizer } from "@/components/SecurityEnclaveVisualizer";
-import { OperationalFlowchart } from "@/components/OperationalFlowchart";
+import dynamic from "next/dynamic";
 import { ScrollReveal } from "@/components/ScrollReveal";
+
+const OperationalFlowchart = dynamic(
+  () => import("@/components/OperationalFlowchart").then((m) => m.OperationalFlowchart),
+  {
+    ssr: true,
+    loading: () => <div className="h-[460px] w-full rounded-2xl bg-surface-sheet border border-border-rule animate-pulse" />
+  }
+);
+
+const SecurityEnclaveVisualizer = dynamic(
+  () => import("@/components/SecurityEnclaveVisualizer").then((m) => m.SecurityEnclaveVisualizer),
+  {
+    ssr: true,
+    loading: () => <div className="h-[380px] w-full rounded-2xl bg-surface-sheet border border-border-rule animate-pulse" />
+  }
+);
+
+const SourceInspector = dynamic(
+  () => import("@/components/SourceInspector").then((m) => m.SourceInspector),
+  { ssr: true }
+);
+
+const CsvSandboxDrop = dynamic(
+  () => import("@/components/CsvSandboxDrop").then((m) => m.CsvSandboxDrop),
+  { ssr: true }
+);
 
 export const metadata = {
   title: "Platform Architecture | Quant Fusion",

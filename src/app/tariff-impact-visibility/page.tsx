@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { 
   ArrowRight, 
-  Check, 
   AlertTriangle, 
   Database, 
   Shield, 
@@ -12,12 +11,25 @@ import {
   Globe, 
   Clock, 
   TrendingUp, 
-  Ship, 
   Sliders, 
   CheckCircle2 
 } from "lucide-react";
-import { TradeGaugeGlobe, ORIGIN_HUBS } from "@/components/TradeGaugeGlobe";
+import dynamic from "next/dynamic";
+import { ORIGIN_HUBS } from "@/data/tariffData";
 import { ScrollReveal } from "@/components/ScrollReveal";
+
+const TradeGaugeGlobe = dynamic(
+  () => import("@/components/TradeGaugeGlobe").then((m) => m.TradeGaugeGlobe),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[520px] rounded-2xl bg-[#1F1C19] border border-[#2C2723] flex flex-col items-center justify-center gap-3 animate-pulse">
+        <div className="w-12 h-12 rounded-full border-2 border-btn-cta/40 border-t-btn-cta animate-spin" />
+        <span className="font-mono text-[12px] text-ink-muted">Initializing TradeGauge™ Projection Engine...</span>
+      </div>
+    ),
+  }
+);
 
 export default function TariffExposurePage() {
   const [selectedSort, setSelectedSort] = useState<"rate" | "name">("rate");
