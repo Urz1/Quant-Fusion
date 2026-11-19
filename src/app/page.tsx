@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { HeroConsole } from "@/components/HeroConsole";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { HeroKineticHeadline } from "@/components/KineticHeadline";
 
 export default function HomePage() {
   const [bpsMetricMode, setBpsMetricMode] = useState<"bps" | "dollars">("bps");
@@ -46,15 +47,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="animate-hero-2 font-serif text-[44px] sm:text-[56px] lg:text-[64px] font-semibold text-ink-primary leading-[1.08] tracking-tight">
-              One order. Eight isolated systems. <br />
-              <span className="relative inline-block mt-1 sm:mt-0">
-                <span className="italic font-normal animate-verified-sweep">
-                  One verified ship date.
-                </span>
-                <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/80 to-transparent animate-verified-underline pointer-events-none" />
-              </span>
-            </h1>
+            <HeroKineticHeadline />
 
             <p className="animate-hero-3 font-sans text-[18px] sm:text-[20px] text-ink-secondary leading-relaxed max-w-2xl">
               Quant Fusion connects isolated ERPs, warehouse WMS, and ocean carrier tracking into sub-second ship commitments without a multi-year IT overhaul.

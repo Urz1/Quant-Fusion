@@ -239,34 +239,59 @@ export function DecisionCopilot() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let accumulatedContent = "";
+      let incomingQueue = "";
+      let displayedContent = "";
       let retrievedCitations: Citation[] = [];
       let currentQueryId = "";
       let buffer = "";
+      let readerDone = false;
 
-      let rafId: number | null = null;
-      let flushPending = false;
+      // Silky-smooth adaptive streaming typewriter ticker
+      const tickerPromise = new Promise<void>((resolve) => {
+        const intervalId = setInterval(() => {
+          if (abortController.signal.aborted) {
+            clearInterval(intervalId);
+            resolve();
+            return;
+          }
 
-      const scheduleFlush = () => {
-        if (flushPending) return;
-        flushPending = true;
-        rafId = requestAnimationFrame(() => {
-          flushPending = false;
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === assistantMessageId
-                ? {
-                    ...msg,
-                    content: accumulatedContent,
-                    queryId: currentQueryId,
-                    citations: retrievedCitations,
-                    isStreaming: true,
-                  }
-                : msg
-            )
-          );
-        });
-      };
+          if (incomingQueue.length > 0) {
+            // Adaptive consumption:
+            // Small backlog (< 20 chars): 1-2 chars per tick (~60-120 chars/sec, natural human reading pace)
+            // Medium backlog (20-60 chars): 3-5 chars per tick
+            // Large backlog (> 60 chars): 8-16 chars per tick (speeds up smoothly so never stalls)
+            let step = 2;
+            if (incomingQueue.length > 100) {
+              step = 14;
+            } else if (incomingQueue.length > 50) {
+              step = 6;
+            } else if (incomingQueue.length > 20) {
+              step = 3;
+            }
+
+            const chunk = incomingQueue.slice(0, step);
+            incomingQueue = incomingQueue.slice(step);
+            displayedContent += chunk;
+
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMessageId
+                  ? {
+                      ...msg,
+                      content: displayedContent,
+                      queryId: currentQueryId,
+                      citations: retrievedCitations,
+                      isStreaming: true,
+                    }
+                  : msg
+              )
+            );
+          } else if (readerDone) {
+            clearInterval(intervalId);
+            resolve();
+          }
+        }, 16);
+      });
 
       while (true) {
         const { done, value } = await reader.read();
@@ -289,19 +314,21 @@ export function DecisionCopilot() {
               currentQueryId = parsed.queryId;
               retrievedCitations = parsed.citations || [];
             } else if (parsed.type === "token") {
-              accumulatedContent += parsed.token;
-              scheduleFlush();
+              incomingQueue += parsed.token;
             } else if (parsed.type === "done") {
               clearInterval(latencyTimer);
               setStreamLatency(parsed.totalLatencyMs);
             }
           } catch {
-            // Ignore incomplete JSON chunks
+            // Ignore incomplete chunks
           }
         }
       }
 
-      if (rafId) cancelAnimationFrame(rafId);
+      readerDone = true;
+      // Wait for ticker to gracefully finish outputting any remaining characters
+      await tickerPromise;
+
       clearInterval(latencyTimer);
       const finalLatency = Date.now() - startTime;
       setMessages((prev) =>
@@ -309,7 +336,7 @@ export function DecisionCopilot() {
           msg.id === assistantMessageId
             ? {
                 ...msg,
-                content: accumulatedContent,
+                content: displayedContent,
                 queryId: currentQueryId,
                 citations: retrievedCitations,
                 latencyMs: finalLatency,
@@ -417,7 +444,7 @@ export function DecisionCopilot() {
           {/* Assistant Window Container */}
           <div className="fixed z-50 flex flex-col bg-canvas-page border border-border-rule shadow-2xl overflow-hidden transition-all duration-300
             max-sm:inset-x-0 max-sm:bottom-0 max-sm:h-[90vh] max-sm:rounded-t-2xl
-            sm:bottom-6 sm:right-6 sm:w-[440px] sm:h-[650px] sm:rounded-2xl
+            sm:bottom-6 sm:right-6 sm:w-[530px] md:w-[570px] sm:h-[700px] sm:rounded-2xl
           ">
             
             {/* Mobile Drag Indicator Bar */}
@@ -507,7 +534,7 @@ export function DecisionCopilot() {
                       </div>
                     )}
 
-                    <div className={`max-w-[86%] sm:max-w-[82%] space-y-1.5 ${isUser ? "items-end" : "items-start"}`}>
+                    <div className={`${isUser ? "max-w-[85%] sm:max-w-[80%] items-end" : "w-full max-w-[96%] items-start"} space-y-1.5`}>
                       {/* Message Bubble */}
                       <div
                         className={`p-3.5 rounded-2xl text-[14px] leading-relaxed shadow-card ${

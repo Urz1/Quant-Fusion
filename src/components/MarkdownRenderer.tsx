@@ -40,7 +40,7 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
           return (
             <Tag
               key={idx}
-              className={`font-serif font-semibold text-ink-primary pt-1.5 pb-0.5 tracking-tight ${
+              className={`font-serif font-semibold text-ink-primary pt-2 pb-0.5 tracking-tight ${
                 block.level === 2 ? "text-[16px]" : "text-[14.5px]"
               }`}
             >
@@ -54,28 +54,48 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
 
         if (block.type === "table") {
           return (
-            <div key={idx} className="my-2.5 overflow-x-auto rounded-lg border border-border-rule shadow-2xs">
-              <table className="w-full text-left text-[12px] font-sans border-collapse">
+            <div
+              key={idx}
+              className="my-3 overflow-x-auto rounded-lg border border-border-rule bg-surface-sheet shadow-2xs"
+            >
+              <table className="w-full text-left text-[12.5px] border-collapse">
                 <thead>
-                  <tr className="bg-surface-recessed/70 border-b border-border-rule text-ink-primary font-mono text-[11px]">
-                    {block.headers.map((h, hIdx) => (
-                      <th key={hIdx} className="px-3 py-2 font-semibold">
-                        {renderInline(h)}
-                      </th>
-                    ))}
+                  <tr className="bg-surface-recessed/90 border-b border-border-rule text-ink-primary font-mono text-[10.5px] sm:text-[11px] tracking-wider uppercase">
+                    {block.headers.map((h, hIdx) => {
+                      const isRight = block.alignments?.[hIdx] === "right";
+                      const isCenter = block.alignments?.[hIdx] === "center";
+                      const alignClass = isRight ? "text-right" : isCenter ? "text-center" : "text-left";
+                      return (
+                        <th key={hIdx} className={`px-3 py-2 font-semibold whitespace-nowrap ${alignClass}`}>
+                          {renderInline(h)}
+                        </th>
+                      );
+                    })}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border-rule/60 bg-surface-sheet">
+                <tbody className="divide-y divide-border-rule/60">
                   {block.rows.map((row, rIdx) => (
                     <tr
                       key={rIdx}
-                      className={rIdx % 2 === 1 ? "bg-surface-canvas/40" : "bg-surface-sheet"}
+                      className="hover:bg-surface-recessed/50 transition-colors even:bg-surface-canvas/25 odd:bg-surface-sheet"
                     >
-                      {row.map((cell, cIdx) => (
-                        <td key={cIdx} className="px-3 py-2 text-ink-primary font-mono">
-                          {renderInline(cell)}
-                        </td>
-                      ))}
+                      {row.map((cell, cIdx) => {
+                        const isRight = block.alignments?.[cIdx] === "right";
+                        const isCenter = block.alignments?.[cIdx] === "center";
+                        const alignClass = isRight ? "text-right" : isCenter ? "text-center" : "text-left";
+                        const isNumeric = isRight || /^[$\d+\-%<>#]/.test(cell.trim());
+
+                        return (
+                          <td
+                            key={cIdx}
+                            className={`px-3 py-2 text-ink-primary ${alignClass} ${
+                              isNumeric ? "font-mono text-[11.5px] font-medium" : "font-sans text-[12px] leading-snug"
+                            }`}
+                          >
+                            {renderInline(cell)}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </tbody>
@@ -83,7 +103,7 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
               {isStreaming && isLastBlock && (
                 <div className="p-1.5 bg-surface-sheet border-t border-border-rule/40 text-[10px] text-ink-muted font-mono flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-btn-cta animate-ping" />
-                  <span>Synthesizing tabular figures...</span>
+                  <span>Streaming tabular ledger...</span>
                 </div>
               )}
             </div>
@@ -92,7 +112,7 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
 
         if (block.type === "list") {
           return (
-            <ul key={idx} className="space-y-1.5 pl-1 my-1">
+            <ul key={idx} className="space-y-1.5 pl-1 my-1.5">
               {block.items.map((item, iIdx) => {
                 const isLastItem = iIdx === block.items.length - 1;
                 return (
@@ -115,7 +135,7 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
           return (
             <blockquote
               key={idx}
-              className="border-l-3 border-btn-cta pl-3 py-1 my-1.5 bg-surface-recessed/30 rounded-r text-ink-secondary italic text-[13px]"
+              className="border-l-3 border-btn-cta pl-3.5 py-1.5 my-2 bg-surface-recessed/30 rounded-r text-ink-secondary italic text-[13px]"
             >
               {renderInline(block.content)}
               {isStreaming && isLastBlock && (
@@ -126,11 +146,11 @@ export function MarkdownRenderer({ content, isStreaming = false }: MarkdownRende
         }
 
         if (block.type === "divider") {
-          return <hr key={idx} className="my-2.5 border-t border-border-rule/80" />;
+          return <hr key={idx} className="my-3 border-t border-border-rule/80" />;
         }
 
         return (
-          <p key={idx} className="whitespace-pre-wrap">
+          <p key={idx} className="whitespace-pre-wrap leading-relaxed">
             {renderInline(block.content)}
             {isStreaming && isLastBlock && (
               <span className="inline-block w-1.5 h-3.5 ml-1 bg-btn-cta animate-pulse align-baseline rounded-2xs" />
@@ -146,85 +166,168 @@ type Block =
   | { type: "paragraph"; content: string }
   | { type: "heading"; level: number; content: string }
   | { type: "list"; items: string[] }
-  | { type: "table"; headers: string[]; rows: string[][] }
+  | { type: "table"; headers: string[]; rows: string[][]; alignments: ("left" | "right" | "center")[] }
   | { type: "quote"; content: string }
   | { type: "divider" };
 
+// Line-by-line stateful parser that accurately isolates tables, lists, and headings
 function parseMarkdownBlocks(text: string): Block[] {
   if (!text) return [];
 
-  const rawBlocks = text.split(/\n{2,}/);
+  const rawLines = text.split(/\r?\n/);
   const result: Block[] = [];
+  let currentParagraphLines: string[] = [];
+  let i = 0;
 
-  for (const raw of rawBlocks) {
-    const trimmed = raw.trim();
-    if (!trimmed) continue;
+  const flushParagraph = () => {
+    if (currentParagraphLines.length > 0) {
+      const pText = currentParagraphLines.join("\n").trim();
+      if (pText) {
+        result.push({ type: "paragraph", content: pText });
+      }
+      currentParagraphLines = [];
+    }
+  };
 
-    // Divider
-    if (/^---+$|^___+$/.test(trimmed)) {
-      result.push({ type: "divider" });
+  while (i < rawLines.length) {
+    const line = rawLines[i];
+    const trimmed = line.trim();
+
+    // 1. Empty line -> flush pending paragraph
+    if (trimmed === "") {
+      flushParagraph();
+      i++;
       continue;
     }
 
-    // Heading
+    // 2. Horizontal divider
+    if (/^---+$|^___+$|^\*\*\*+$/.test(trimmed)) {
+      flushParagraph();
+      result.push({ type: "divider" });
+      i++;
+      continue;
+    }
+
+    // 3. Headings
     if (trimmed.startsWith("### ")) {
+      flushParagraph();
       result.push({ type: "heading", level: 3, content: trimmed.replace(/^###\s+/, "") });
+      i++;
       continue;
     }
     if (trimmed.startsWith("## ")) {
+      flushParagraph();
       result.push({ type: "heading", level: 2, content: trimmed.replace(/^##\s+/, "") });
+      i++;
+      continue;
+    }
+    if (trimmed.startsWith("# ")) {
+      flushParagraph();
+      result.push({ type: "heading", level: 1, content: trimmed.replace(/^#\s+/, "") });
+      i++;
       continue;
     }
 
-    // Blockquote
+    // 4. Blockquotes
     if (trimmed.startsWith("> ")) {
-      const quoteText = trimmed
-        .split("\n")
-        .map((l) => l.replace(/^>\s?/, ""))
-        .join(" ");
-      result.push({ type: "quote", content: quoteText });
+      flushParagraph();
+      const quoteLines: string[] = [];
+      while (i < rawLines.length && rawLines[i].trim().startsWith("> ")) {
+        quoteLines.push(rawLines[i].trim().replace(/^>\s?/, ""));
+        i++;
+      }
+      result.push({ type: "quote", content: quoteLines.join(" ") });
       continue;
     }
 
-    // Markdown Table
-    if (trimmed.includes("|") && trimmed.includes("\n")) {
-      const lines = trimmed.split("\n").filter((l) => l.trim().length > 0);
-      if (lines.length >= 2 && lines[0].includes("|") && lines[1].includes("-")) {
-        const headers = lines[0]
-          .split("|")
-          .map((c) => c.trim())
-          .filter((c, i, arr) => !(i === 0 && c === "") && !(i === arr.length - 1 && c === ""));
+    // 5. Table detection: line contains '|' and subsequent line is separator or table row
+    if (trimmed.includes("|")) {
+      const nextLine = i + 1 < rawLines.length ? rawLines[i + 1].trim() : "";
+      const isHeaderAndSep = nextLine.includes("|") && /^[|\s-:]+$/.test(nextLine);
 
-        const rows = lines.slice(2).map((l) =>
-          l
-            .split("|")
-            .map((c) => c.trim())
-            .filter((c, i, arr) => !(i === 0 && c === "") && !(i === arr.length - 1 && c === ""))
-        );
+      if (isHeaderAndSep) {
+        flushParagraph();
+        const headerRaw = trimmed;
+        const sepRaw = nextLine;
+        i += 2;
 
-        result.push({ type: "table", headers, rows });
+        const headers = splitTableRow(headerRaw);
+        const alignments = parseAlignments(sepRaw, headers.length);
+        const rows: string[][] = [];
+
+        while (i < rawLines.length && rawLines[i].trim().includes("|")) {
+          const rowLine = rawLines[i].trim();
+          if (rowLine.length > 0 && !/^[|\s-:]+$/.test(rowLine)) {
+            const cells = splitTableRow(rowLine);
+            if (cells.length > 0) {
+              rows.push(cells);
+            }
+          }
+          i++;
+        }
+
+        // Detect numerical alignment if not explicitly set
+        for (let c = 0; c < headers.length; c++) {
+          if (alignments[c] === "left" && rows.length > 0) {
+            const numCount = rows.filter((r) => r[c] && /^[$\d+\-%<>#]/.test(r[c].trim())).length;
+            if (numCount >= Math.ceil(rows.length * 0.7)) {
+              alignments[c] = "right";
+            }
+          }
+        }
+
+        result.push({ type: "table", headers, rows, alignments });
         continue;
       }
     }
 
-    // List: if any line starts with bullet or number list
-    const lines = trimmed.split("\n");
-    const isList = lines.some((l) => /^[-*•]\s+|^\d+\.\s+/.test(l.trim()));
-    if (isList && lines.length > 0) {
-      const items = lines
-        .map((l) => l.replace(/^[-*•]\s+|^\d+\.\s+/, "").trim())
-        .filter((l) => l.length > 0);
-      if (items.length > 0) {
-        result.push({ type: "list", items });
-        continue;
+    // 6. Lists: bullet or numbered
+    if (/^[-*•]\s+|^\d+\.\s+/.test(trimmed)) {
+      flushParagraph();
+      const listItems: string[] = [];
+      while (i < rawLines.length && /^[-*•]\s+|^\d+\.\s+/.test(rawLines[i].trim())) {
+        listItems.push(rawLines[i].trim().replace(/^[-*•]\s+|^\d+\.\s+/, "").trim());
+        i++;
       }
+      if (listItems.length > 0) {
+        result.push({ type: "list", items: listItems });
+      }
+      continue;
     }
 
-    // Normal paragraph
-    result.push({ type: "paragraph", content: trimmed });
+    // 7. Regular paragraph line
+    currentParagraphLines.push(line);
+    i++;
   }
 
+  flushParagraph();
   return result;
+}
+
+// Split table pipe row into cleaned cells
+function splitTableRow(row: string): string[] {
+  let s = row.trim();
+  if (s.startsWith("|")) s = s.substring(1);
+  if (s.endsWith("|")) s = s.substring(0, s.length - 1);
+  return s.split("|").map((cell) => cell.trim());
+}
+
+// Parse markdown separator alignments (|:---|:---:|---:|)
+function parseAlignments(sepLine: string, colCount: number): ("left" | "right" | "center")[] {
+  const parts = splitTableRow(sepLine);
+  const alignments: ("left" | "right" | "center")[] = [];
+
+  for (let i = 0; i < colCount; i++) {
+    const part = (parts[i] || "").trim();
+    if (part.startsWith(":") && part.endsWith(":")) {
+      alignments.push("center");
+    } else if (part.endsWith(":")) {
+      alignments.push("right");
+    } else {
+      alignments.push("left");
+    }
+  }
+  return alignments;
 }
 
 // Inline formatting: bold (**text**), italics (*text*), inline code (`code`), citations
@@ -232,7 +335,6 @@ function renderInline(text: string): React.ReactNode {
   if (typeof text !== "string") return text;
 
   const parts: React.ReactNode[] = [];
-  // Tokenize bold, code, citations, italics
   const regex = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]|\*[^*]+\*)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -286,3 +388,4 @@ function renderInline(text: string): React.ReactNode {
 
   return parts.length > 0 ? parts : text;
 }
+
