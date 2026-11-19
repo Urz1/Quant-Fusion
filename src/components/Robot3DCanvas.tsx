@@ -448,7 +448,7 @@ export function Robot3DCanvas({
     floorShadow.position.set(0, -1.42, 0);
     scene.add(floorShadow);
 
-    // 5. Interactive Cursor & Drag Orbit Physics (Zero-Reflow Cached Engine)
+    // 5. Interactive Cursor, Touch Drag & Mobile Gyroscope Physics (Zero-Reflow Cached Engine)
     let cachedCenterX = 0;
     let cachedCenterY = 0;
     const updateCenter = () => {
@@ -459,7 +459,71 @@ export function Robot3DCanvas({
     };
     updateCenter();
     window.addEventListener("resize", updateCenter, { passive: true });
-    window.addEventListener("scroll", updateCenter, { passive: true });
+
+    // Subtle tactile haptic response on supported mobile devices
+    const triggerHaptic = (ms = 12) => {
+      if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        try {
+          navigator.vibrate(ms);
+        } catch {}
+      }
+    };
+
+    // Mobile Gyroscope / Device Orientation tracking
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (isDraggingRef.current) return;
+      if (e.gamma === null || e.beta === null) return;
+      // Gamma is left-to-right tilt in degrees [-90 to 90]
+      // Beta is front-to-back tilt in degrees [-180 to 180], typical holding angle is ~45deg
+      const normGamma = Math.max(-45, Math.min(45, e.gamma)) / 45;
+      const normBeta = Math.max(-30, Math.min(30, e.beta - 45)) / 30;
+
+      targetRotationRef.current = {
+        x: -normBeta * 0.35,
+        y: normGamma * 0.7,
+      };
+    };
+
+    const requestGyroPermission = () => {
+      if (
+        typeof window !== "undefined" &&
+        typeof (window.DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })?.requestPermission === "function"
+      ) {
+        (window.DeviceOrientationEvent as unknown as { requestPermission: () => Promise<string> })
+          .requestPermission()
+          .then((state) => {
+            if (state === "granted") {
+              window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+            }
+          })
+          .catch(() => {});
+      }
+    };
+
+    // Auto-attach orientation on devices that do not require explicit iOS prompt (Android / Chrome)
+    if (typeof window !== "undefined" && "DeviceOrientationEvent" in window) {
+      window.addEventListener("deviceorientation", handleOrientation, { passive: true });
+    }
+
+    // Scroll Velocity Flare (Mobile reacts dynamically during page browsing)
+    let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    let lastScrollTime = performance.now();
+    const handleScroll = () => {
+      updateCenter();
+      if (isDraggingRef.current) return;
+      const currentScrollY = window.scrollY;
+      const now = performance.now();
+      const dt = Math.max(1, now - lastScrollTime);
+      const speed = (currentScrollY - lastScrollY) / dt;
+      lastScrollY = currentScrollY;
+      lastScrollTime = now;
+
+      if (Math.abs(speed) > 0.15) {
+        const tilt = Math.max(-0.35, Math.min(0.35, speed * 0.18));
+        targetRotationRef.current.x = tilt;
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     const handlePointerDown = (e: PointerEvent) => {
       isDraggingRef.current = true;
@@ -467,7 +531,11 @@ export function Robot3DCanvas({
       dragStartRef.current = { x: e.clientX, y: e.clientY };
       lastMousePosRef.current = { x: e.clientX, y: e.clientY };
       rotationVelocityRef.current = { x: 0, y: 0 };
-      (e.target as HTMLElement)?.setPointerCapture?.(e.pointerId);
+      triggerHaptic(8);
+      requestGyroPermission();
+      try {
+        (e.target as HTMLElement)?.setPointerCapture?.(e.pointerId);
+      } catch {}
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -479,15 +547,15 @@ export function Robot3DCanvas({
           hasMovedRef.current = true;
         }
 
-        targetRotationRef.current.y += deltaX * 0.022;
+        targetRotationRef.current.y += deltaX * 0.024;
         targetRotationRef.current.x = Math.max(
           -0.55,
-          Math.min(0.55, targetRotationRef.current.x + deltaY * 0.016)
+          Math.min(0.55, targetRotationRef.current.x + deltaY * 0.018)
         );
 
         rotationVelocityRef.current = {
-          x: deltaY * 0.012,
-          y: deltaX * 0.016,
+          x: deltaY * 0.014,
+          y: deltaX * 0.020,
         };
 
         lastMousePosRef.current = { x: e.clientX, y: e.clientY };
@@ -499,7 +567,6 @@ export function Robot3DCanvas({
         const distance = Math.hypot(deltaX, deltaY);
 
         if (distance > 8) {
-          // Circular angle around the mascot (-PI to PI)
           const angle = Math.atan2(deltaX, 400);
           const verticalAngle = Math.max(-0.45, Math.min(0.45, -deltaY / 400));
           targetRotationRef.current = {
@@ -510,13 +577,22 @@ export function Robot3DCanvas({
       }
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e?: PointerEvent) => {
       if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
-      // Reset hasMovedRef after the browser click event window has elapsed
+      if (e && e.pointerId) {
+        try {
+          (e.target as HTMLElement)?.releasePointerCapture?.(e.pointerId);
+        } catch {}
+      }
       setTimeout(() => {
         hasMovedRef.current = false;
       }, 100);
+    };
+
+    const handlePointerCancel = () => {
+      isDraggingRef.current = false;
+      hasMovedRef.current = false;
     };
 
     const handleCanvasClick = (e: MouseEvent) => {
@@ -525,15 +601,21 @@ export function Robot3DCanvas({
         return;
       }
       targetRotationRef.current.y += Math.PI * 2;
+      triggerHaptic(16);
       if (onClick) onClick();
     };
 
-    // Attach pointer listeners to window for fluid drag across elements
+    // Attach pointer listeners to window for fluid drag across elements with touch-action isolation
     const domEl = renderer.domElement;
+    domEl.style.touchAction = "none";
+    domEl.style.userSelect = "none";
+    domEl.style.webkitUserSelect = "none";
+
     domEl.addEventListener("pointerdown", handlePointerDown);
     domEl.addEventListener("click", handleCanvasClick);
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerCancel);
 
     // 6. Intelligent Render Loop (Energy & Battery Saver)
     let animationFrameId: number;
@@ -645,8 +727,13 @@ export function Robot3DCanvas({
       domEl.removeEventListener("click", handleCanvasClick);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerCancel);
       window.removeEventListener("resize", updateCenter);
-      window.removeEventListener("scroll", updateCenter);
+      window.removeEventListener("scroll", handleScroll);
+
+      if (typeof window !== "undefined" && "DeviceOrientationEvent" in window) {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
 
       // Dispose all GPU geometries, materials, and textures
       geometries.forEach((g) => g.dispose());
@@ -660,21 +747,13 @@ export function Robot3DCanvas({
     };
   }, [trackCursor, isStreaming, forceWave, isHovered, onClick, onReady]);
 
-  // Click handler (preserves click vs drag distinction)
-  const handleClick = () => {
-    if (hasMovedRef.current) return;
-    // Perform celebratory 360° spin flip
-    targetRotationRef.current.y += Math.PI * 2;
-    if (onClick) onClick();
-  };
-
   return (
     <div
       ref={mountRef}
-      onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="w-full h-full cursor-grab active:cursor-grabbing select-none flex items-center justify-center overflow-visible"
+      className="w-full h-full cursor-grab active:cursor-grabbing select-none touch-none flex items-center justify-center overflow-visible"
+      style={{ touchAction: "none", userSelect: "none", WebkitUserSelect: "none" }}
       title="Quant Fusion 3D Assistant (Drag to spin 360°)"
     />
   );

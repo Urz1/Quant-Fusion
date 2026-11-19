@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight, ChevronDown, Users } from "lucide-react";
@@ -51,6 +51,18 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeRoleModal, setActiveRoleModal] = useState<RoleKey | null>(null);
   const pathname = usePathname();
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Dispatch event so floating mascot hides when mobile menu is open
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("mobile-menu-toggle", { detail: { open: mobileMenuOpen } })
+    );
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { label: "The Problem", href: "/#the-problem" },
@@ -188,10 +200,10 @@ export function Header() {
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-canvas-page border-b border-border-rule px-6 py-6 shadow-sheet">
-            <div className="pb-3 mb-3 border-b border-border-rule text-[12px] font-mono text-ink-muted">
-              Select Role Briefing:
-              <div className="grid grid-cols-2 gap-2 mt-2">
+          <div className="lg:hidden bg-canvas-page/98 backdrop-blur-xl border-b border-border-rule px-6 py-6 shadow-2xl max-h-[calc(100vh-64px)] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="pb-3.5 mb-3.5 border-b border-border-rule text-[12px] font-mono text-ink-muted">
+              <span className="font-semibold uppercase tracking-wider text-[11px] text-ink-muted">Tailored Role Briefing:</span>
+              <div className="grid grid-cols-2 gap-2.5 mt-2.5">
                 {(
                   [
                     { key: "operations", label: "Operations" },
@@ -206,7 +218,7 @@ export function Header() {
                       setActiveRoleModal(role.key);
                       setMobileMenuOpen(false);
                     }}
-                    className="p-2 bg-surface-sheet rounded border border-border-rule text-left text-[11px] text-ink-primary"
+                    className="p-2.5 min-h-[44px] bg-surface-sheet hover:bg-surface-recessed active:scale-98 rounded-md border border-border-rule text-left text-[12px] font-medium text-ink-primary flex items-center transition-all"
                   >
                     {role.label}
                   </button>
@@ -214,24 +226,25 @@ export function Header() {
               </div>
             </div>
 
-            <nav className="flex flex-col gap-3 text-[15px]">
+            <nav className="flex flex-col gap-1 text-[15px]">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   prefetch={true}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="py-1 text-ink-primary font-medium border-b border-border-rule/60 flex items-center justify-between"
+                  className="py-3 px-1 min-h-[48px] text-ink-primary font-medium border-b border-border-rule/60 flex items-center justify-between transition-colors active:bg-surface-recessed rounded"
                 >
-                  {link.label}
-                  <ArrowUpRight size={15} className="text-ink-muted" />
+                  <span>{link.label}</span>
+                  <ArrowUpRight size={16} className="text-ink-muted" />
                 </Link>
               ))}
 
               <Link
                 href="/pricing"
+                prefetch={true}
                 onClick={() => setMobileMenuOpen(false)}
-                className="mt-2 w-full text-center py-2.5 bg-btn-cta text-white font-medium rounded text-[14px]"
+                className="mt-4 w-full min-h-[48px] flex items-center justify-center bg-btn-cta hover:bg-btn-ctaHover active:scale-98 text-white font-medium rounded-lg text-[15px] shadow-sm transition-all"
               >
                 Request 30-Day Pilot
               </Link>

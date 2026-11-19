@@ -25,7 +25,7 @@ export default function CalculatorPage() {
       </section>
 
       {/* Main Ledger Section */}
-      <section className="py-14 md:py-20 border-b border-border-rule">
+      <section className="pt-14 pb-28 md:py-20 border-b border-border-rule">
         <div className="max-w-[1280px] mx-auto px-6 space-y-12">
           <LedgerCalculator />
 

@@ -125,6 +125,7 @@ const SUGGESTED_PROMPTS: Record<PersonaType, { label: string; query: string }[]>
 
 export function DecisionCopilot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [persona, setPersona] = useState<PersonaType>("general");
   const [input, setInput] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -143,6 +144,18 @@ export function DecisionCopilot() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Listen for mobile menu state to auto-hide mascot
+  useEffect(() => {
+    const handleMenuToggle = (e: Event) => {
+      const custom = e as CustomEvent<{ open: boolean }>;
+      if (typeof custom.detail?.open === "boolean") {
+        setIsMobileMenuOpen(custom.detail.open);
+      }
+    };
+    window.addEventListener("mobile-menu-toggle", handleMenuToggle);
+    return () => window.removeEventListener("mobile-menu-toggle", handleMenuToggle);
+  }, []);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Smooth, non-blocking auto-scroll (preserves user scroll position if scrolled up)
@@ -411,22 +424,20 @@ export function DecisionCopilot() {
       {/* =========================================================================
           INTERACTIVE 3D MINI-ROBOT ASSISTANT MASCOT (BOTTOM RIGHT)
       ========================================================================= */}
-      {!isOpen && (
-        <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end animate-in fade-in zoom-in-95 duration-200 origin-bottom-right max-sm:scale-85">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="group relative flex items-center justify-center focus:outline-none transition-transform duration-300 hover:scale-110 active:scale-95"
-            aria-label="Open Quant Fusion AI Decision Copilot"
+      {!isOpen && !isMobileMenuOpen && (
+        <div className="fixed bottom-2 right-2 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end animate-in fade-in zoom-in-95 duration-200 origin-bottom-right">
+          <div
+            className="group relative flex items-center justify-center focus:outline-none transition-transform duration-300 hover:scale-105 active:scale-95 touch-none"
+            aria-label="Quant Fusion AI Decision Copilot Assistant (Tap to open, drag to orbit)"
           >
-
             {/* Standalone Interactive 3D WebGL Mascot (360° Orbit & Drag) */}
-            <div className="w-24 h-26 sm:w-28 sm:h-30 flex items-center justify-center">
+            <div className="w-22 h-24 sm:w-28 sm:h-30 flex items-center justify-center touch-none select-none">
               <Robot3DCanvas
                 isStreaming={isLoading}
                 onClick={() => setIsOpen(true)}
               />
             </div>
-          </button>
+          </div>
         </div>
       )}
 
@@ -465,11 +476,11 @@ export function DecisionCopilot() {
                       Quant Fusion Assistant
                     </h3>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-ink-muted">
-                    <span className="w-1.5 h-1.5 rounded-full bg-btn-cta animate-pulse" />
+                  <div className="flex items-center gap-1.5 text-[10.5px] sm:text-[11px] font-mono text-ink-muted whitespace-nowrap">
+                    <span className="w-1.5 h-1.5 rounded-full bg-btn-cta animate-pulse shrink-0" />
                     <span>Deterministic AI</span>
                     <span>•</span>
-                    <span>SOX 404 Grounded</span>
+                    <span>SOX 404</span>
                   </div>
                 </div>
               </div>
@@ -678,7 +689,7 @@ export function DecisionCopilot() {
                   }}
                   placeholder={PERSONA_CONFIG[persona].promptHint}
                   disabled={isLoading}
-                  className="flex-1 bg-transparent px-3.5 py-3 text-[13px] font-sans text-ink-primary placeholder:text-ink-muted resize-none focus:outline-none max-h-24"
+                  className="flex-1 bg-transparent px-3.5 py-3 text-[13px] font-sans text-ink-primary placeholder:text-ink-muted placeholder:truncate resize-none focus:outline-none max-h-24"
                 />
 
                 <div className="pr-2 flex items-center gap-1.5">
@@ -706,11 +717,11 @@ export function DecisionCopilot() {
 
               {/* Engine Telemetry Footer */}
               <div className="mt-2 px-1 flex items-center justify-between text-[10px] font-mono text-ink-muted">
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 shrink-0">
                   <Cpu size={11} className="text-emerald-600" />
-                  <span>Zero-Writeback Decision Engine</span>
+                  <span>Zero-Writeback Engine</span>
                 </span>
-                <span>Deterministic • SOX 404 Defensible</span>
+                <span className="truncate">Deterministic • SOX 404</span>
               </div>
             </div>
 

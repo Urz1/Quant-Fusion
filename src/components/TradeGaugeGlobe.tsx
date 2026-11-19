@@ -373,26 +373,26 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
   }, []);
 
   return (
-    <div className={`w-full bg-[#161311] text-[#E2DED6] rounded-xl border border-[#35302B] shadow-2xl overflow-hidden font-sans ${className}`}>
+    <div className={`w-full bg-surface-sheet text-ink-primary rounded-xl border border-border-rule shadow-sheet overflow-hidden font-sans ${className}`}>
       
       {/* =======================================================================
           TOP BAR: CONSOLE HEADER & CONTROLS
       ======================================================================= */}
-      <div className="p-4 sm:p-5 border-b border-[#2C2723] bg-[#1E1B18] flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 sm:p-5 border-b border-border-rule bg-surface-canvas/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${isAutoRotating ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
+            <span className={`w-2 h-2 rounded-full ${isAutoRotating ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
             <span className="font-mono text-[11px] uppercase tracking-wider text-btn-cta font-bold">
               TradeGauge™ Landed Cost Foresight
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#272320] text-[#BAB3A7] border border-[#3C3630]">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-recessed text-ink-secondary border border-border-rule">
               Natural Earth 110m Cartography
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#272320] text-emerald-400 border border-[#3C3630]">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-recessed text-btn-cta border border-border-rule font-medium">
               177 Sovereign Boundaries
             </span>
           </div>
-          <h3 className="font-serif text-[20px] sm:text-[24px] font-semibold text-white mt-1">
+          <h3 className="font-serif text-[20px] sm:text-[24px] font-semibold text-ink-primary mt-1">
             Global Tariff Exposure & Maritime In-Transit Simulator
           </h3>
         </div>
@@ -409,8 +409,8 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
               }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-[11px] font-mono border transition-all ${
                 isAutoRotating
-                  ? "bg-[#2A2420] text-emerald-400 border-emerald-500/40 shadow-xs hover:border-emerald-400"
-                  : "bg-[#1C1815] text-[#9E978E] border-[#38322B] hover:text-white hover:border-[#4E473F]"
+                  ? "bg-surface-sheet text-btn-cta border-btn-cta/40 shadow-xs font-medium"
+                  : "bg-surface-recessed/60 text-ink-secondary border-border-rule hover:text-ink-primary hover:bg-surface-recessed"
               }`}
               title={isAutoRotating ? "Click to pause automatic rotation" : "Click to resume automatic rotation"}
             >
@@ -420,13 +420,13 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
           )}
 
           {/* View Mode Toggle */}
-          <div className="inline-flex items-center p-1 rounded-lg bg-[#141210] border border-[#35302B] text-[12px] font-mono">
+          <div className="inline-flex items-center p-1 rounded-lg bg-surface-recessed/60 border border-border-rule text-[12px] font-mono">
             <button
               onClick={() => setViewMode("globe")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all ${
                 viewMode === "globe"
-                  ? "bg-btn-cta text-white font-semibold shadow-xs"
-                  : "text-[#9E978E] hover:text-white"
+                  ? "bg-ink-primary text-white font-semibold shadow-xs"
+                  : "text-ink-secondary hover:text-ink-primary"
               }`}
             >
               <Globe size={14} />
@@ -436,8 +436,8 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
               onClick={() => setViewMode("flat")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-all ${
                 viewMode === "flat"
-                  ? "bg-btn-cta text-white font-semibold shadow-xs"
-                  : "text-[#9E978E] hover:text-white"
+                  ? "bg-ink-primary text-white font-semibold shadow-xs"
+                  : "text-ink-secondary hover:text-ink-primary"
               }`}
             >
               <MapIcon size={14} />
@@ -451,10 +451,10 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
       {/* =======================================================================
           SUB-BAR: PRODUCT PICKER & CORRIDOR FOCUS PRESETS (ZERO OVERLAP GUARANTEED)
       ======================================================================= */}
-      <div className="px-4 py-3 bg-[#1A1715] border-b border-[#2C2723] flex flex-col xl:flex-row xl:items-center justify-between gap-3 text-[12px]">
+      <div className="px-4 py-3 bg-surface-recessed/30 border-b border-border-rule flex flex-col xl:flex-row xl:items-center justify-between gap-3 text-[12px]">
         {/* Left: Product Picker with strict max-width constraints */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0 flex-1">
-          <span className="text-[#8C8478] font-mono shrink-0 flex items-center gap-1.5">
+          <span className="text-ink-muted font-mono shrink-0 flex items-center gap-1.5">
             <Layers size={13} className="text-btn-cta" />
             <span>Product HTS:</span>
           </span>
@@ -465,7 +465,7 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
                 const found = HTS_PRODUCTS.find((p) => p.code === e.target.value);
                 if (found) setSelectedProduct(found);
               }}
-              className="w-full bg-[#24201D] text-white border border-[#3E3832] rounded px-3 py-1.5 text-[12px] font-mono focus:outline-hidden focus:border-btn-cta cursor-pointer truncate"
+              className="w-full bg-surface-sheet text-ink-primary border border-border-rule rounded px-3 py-1.5 text-[12px] font-mono focus:outline-hidden focus:border-btn-cta cursor-pointer truncate shadow-xs"
             >
               {HTS_PRODUCTS.map((p) => (
                 <option key={p.code} value={p.code}>
@@ -478,13 +478,13 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
 
         {/* Right: Corridor Focus Chips with dedicated wrapping space */}
         <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono shrink-0 pt-1 xl:pt-0">
-          <span className="text-[#8C8478] mr-1 hidden sm:inline">Corridor Focus:</span>
+          <span className="text-ink-muted mr-1 hidden sm:inline">Corridor Focus:</span>
           <button
             onClick={() => focusCorridor(115, 20, "vietnam")}
             className={`px-2.5 py-1 rounded border transition-colors ${
               centerLon > 60 && centerLon < 160
-                ? "bg-[#2D2823] text-btn-cta border-btn-cta/50 font-medium"
-                : "bg-[#221E1B] text-[#9E978E] border-[#35302B] hover:text-white"
+                ? "bg-btn-cta text-white border-btn-cta font-medium shadow-xs"
+                : "bg-surface-sheet text-ink-secondary border-border-rule hover:text-ink-primary hover:bg-surface-recessed"
             }`}
           >
             Transpacific Asia
@@ -493,8 +493,8 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
             onClick={() => focusCorridor(15, 45, "germany")}
             className={`px-2.5 py-1 rounded border transition-colors ${
               centerLon > -30 && centerLon < 60
-                ? "bg-[#2D2823] text-btn-cta border-btn-cta/50 font-medium"
-                : "bg-[#221E1B] text-[#9E978E] border-[#35302B] hover:text-white"
+                ? "bg-btn-cta text-white border-btn-cta font-medium shadow-xs"
+                : "bg-surface-sheet text-ink-secondary border-border-rule hover:text-ink-primary hover:bg-surface-recessed"
             }`}
           >
             Transatlantic Europe
@@ -503,8 +503,8 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
             onClick={() => focusCorridor(-100, 30, "mexico")}
             className={`px-2.5 py-1 rounded border transition-colors ${
               centerLon < -60 && centerLon > -140
-                ? "bg-[#2D2823] text-btn-cta border-btn-cta/50 font-medium"
-                : "bg-[#221E1B] text-[#9E978E] border-[#35302B] hover:text-white"
+                ? "bg-btn-cta text-white border-btn-cta font-medium shadow-xs"
+                : "bg-surface-sheet text-ink-secondary border-border-rule hover:text-ink-primary hover:bg-surface-recessed"
             }`}
           >
             Nearshore Americas
@@ -520,7 +520,7 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
         {/* Globe Surface Column (7 Cols on desktop) */}
         <div 
           ref={containerRef}
-          className="lg:col-span-7 bg-[#0E0C0B] relative flex items-center justify-center min-h-[340px] sm:min-h-[460px] p-2 select-none overflow-hidden"
+          className="lg:col-span-7 bg-[#F4F1EA] relative flex items-center justify-center min-h-[340px] sm:min-h-[460px] p-2 select-none overflow-hidden border-b lg:border-b-0 lg:border-r border-border-rule"
           onMouseDown={(e) => onPointerDown(e.clientX, e.clientY)}
           onMouseMove={(e) => onPointerMove(e.clientX, e.clientY)}
           onMouseUp={onPointerUp}
@@ -538,8 +538,16 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
           onTouchEnd={onPointerUp}
           style={{ touchAction: "none" }}
         >
-          {/* Deep Ambient Space Lighting Behind Globe */}
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(32,44,60,0.45)_0%,rgba(14,12,11,0.95)_75%)]" />
+          {/* Subtle Archival Nautical Coordinate Grid */}
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-60"
+            style={{
+              backgroundImage: "radial-gradient(rgba(26, 23, 20, 0.08) 1px, transparent 1px)",
+              backgroundSize: "24px 24px"
+            }}
+          />
+          {/* Soft Vignette Depth */}
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(223,218,207,0.4)_100%)]" />
 
           {/* Floating Auto-Spin Feedback Pill */}
           {clickFeedback && (
@@ -937,25 +945,25 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
         </div>
 
         {/* Right Inspection Column (5 Cols) */}
-        <div className="lg:col-span-5 bg-[#1B1815] border-t lg:border-t-0 lg:border-l border-[#2C2723] p-4 sm:p-5 lg:p-6 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-5 bg-surface-sheet border-t lg:border-t-0 lg:border-l border-border-rule p-4 sm:p-5 lg:p-6 flex flex-col justify-between space-y-4">
           
           <div className="space-y-4">
             {/* Country Header */}
-            <div className="flex items-start justify-between pb-3 border-b border-[#2C2723]">
+            <div className="flex items-start justify-between pb-3 border-b border-border-rule">
               <div>
                 <span className="font-mono text-[10px] text-btn-cta uppercase tracking-wider block font-semibold">
                   Origin Country & Port of Lading
                 </span>
-                <h4 className="font-serif text-[22px] sm:text-[24px] font-bold text-white mt-0.5">
+                <h4 className="font-serif text-[22px] sm:text-[24px] font-bold text-ink-primary mt-0.5">
                   {selectedCountry.name} ({selectedCountry.code})
                 </h4>
-                <div className="text-[12px] font-sans text-[#BAB3A7] mt-0.5">
-                  Primary Port: <span className="font-mono text-white">{selectedCountry.port}</span>
+                <div className="text-[12px] font-sans text-ink-secondary mt-0.5">
+                  Primary Port: <span className="font-mono text-ink-primary font-medium">{selectedCountry.port}</span>
                 </div>
               </div>
               <div className="text-right shrink-0">
-                <span className="font-mono text-[10px] text-[#8C8478] block">Transit to LA</span>
-                <span className="font-mono text-[15px] font-bold text-emerald-400">
+                <span className="font-mono text-[10px] text-ink-muted block">Transit to LA</span>
+                <span className="font-mono text-[15px] font-bold text-btn-cta">
                   {selectedCountry.transitDaysToLA} Days
                 </span>
               </div>
@@ -963,32 +971,32 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
 
             {/* Duty Breakdown */}
             <div className="space-y-2">
-              <span className="font-sans text-[11px] text-[#9E978E] uppercase tracking-wider block font-semibold">
+              <span className="font-sans text-[11px] text-ink-muted uppercase tracking-wider block font-semibold">
                 Statutory Duty Components ({selectedProduct.code})
               </span>
               
-              <div className="p-3 bg-[#131110] rounded border border-[#2F2924] space-y-2 text-[12px]">
+              <div className="p-3 bg-surface-recessed/40 rounded border border-border-rule space-y-2 text-[12px]">
                 <div className="flex items-center justify-between">
-                  <span className="font-sans text-[#BAB3A7]">1. Base Column 1 (MFN):</span>
-                  <span className="font-mono tabular-nums text-white font-medium">{calculatedDuties.baseRate.toFixed(1)}%</span>
+                  <span className="font-sans text-ink-secondary">1. Base Column 1 (MFN):</span>
+                  <span className="font-mono tabular-nums text-ink-primary font-medium">{calculatedDuties.baseRate.toFixed(1)}%</span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="font-sans text-[#BAB3A7]">2. Section 301 Surcharge:</span>
-                  <span className={`font-mono tabular-nums ${calculatedDuties.sec301Rate > 0 ? "text-friction-crimson font-semibold" : "text-[#8C8478]"}`}>
+                  <span className="font-sans text-ink-secondary">2. Section 301 Surcharge:</span>
+                  <span className={`font-mono tabular-nums ${calculatedDuties.sec301Rate > 0 ? "text-friction-crimson font-semibold" : "text-ink-muted"}`}>
                     {calculatedDuties.sec301Rate > 0 ? `+${calculatedDuties.sec301Rate.toFixed(1)}%` : "0.0%"}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="font-sans text-[#BAB3A7]">3. Reciprocal Action ({activeMilestone.label}):</span>
-                  <span className={`font-mono tabular-nums ${calculatedDuties.reciprocalEffective > 0 ? "text-amber-400 font-semibold" : "text-[#8C8478]"}`}>
+                  <span className="font-sans text-ink-secondary">3. Reciprocal Action ({activeMilestone.label}):</span>
+                  <span className={`font-mono tabular-nums ${calculatedDuties.reciprocalEffective > 0 ? "text-amber-700 font-semibold" : "text-ink-muted"}`}>
                     {calculatedDuties.reciprocalEffective > 0 ? `+${calculatedDuties.reciprocalEffective.toFixed(1)}%` : "0.0% (Stayed)"}
                   </span>
                 </div>
 
-                <div className="pt-2 border-t border-[#2F2924] flex items-center justify-between text-[14px]">
-                  <span className="font-serif text-white font-semibold">Total Landed Duty Rate:</span>
+                <div className="pt-2 border-t border-border-rule flex items-center justify-between text-[14px]">
+                  <span className="font-serif text-ink-primary font-semibold">Total Landed Duty Rate:</span>
                   <span className="font-mono font-bold text-btn-cta text-[17px]">
                     {calculatedDuties.totalRate.toFixed(1)}%
                   </span>
@@ -997,18 +1005,18 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
             </div>
 
             {/* Active In-Transit Shipment Alert */}
-            <div className="p-3.5 rounded-lg bg-[#221A14] border border-amber-500/40 space-y-2">
+            <div className="p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/30 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="flex items-center gap-1.5 font-bold text-amber-400">
-                  <Ship size={14} className="text-amber-400" />
+                <span className="flex items-center gap-1.5 font-bold text-amber-800">
+                  <Ship size={14} className="text-amber-700" />
                   ACTIVE SHIPMENT IN TRANSIT
                 </span>
-                <span className="text-[#BAB3A7]">{selectedCountry.samplePoNumber}</span>
+                <span className="text-ink-secondary">{selectedCountry.samplePoNumber}</span>
               </div>
 
-              <div className="font-sans text-[13px] text-[#E2DED6] leading-snug">
-                Vessel <span className="font-semibold text-white">CMA CGM Marco Polo</span> carrying 420x {selectedProduct.bomItem} units.
-                Estimated arrival at Pier 400: <span className="font-semibold text-white">Nov 24, 2026</span>.
+              <div className="font-sans text-[13px] text-ink-secondary leading-snug">
+                Vessel <span className="font-semibold text-ink-primary">CMA CGM Marco Polo</span> carrying 420x {selectedProduct.bomItem} units.
+                Estimated arrival at Pier 400: <span className="font-semibold text-ink-primary">Nov 24, 2026</span>.
               </div>
 
               <div className="pt-1.5 border-t border-amber-500/20 flex items-center justify-between text-[11px] font-mono">
@@ -1024,11 +1032,11 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
                   </>
                 ) : (
                   <>
-                    <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                    <span className="text-btn-cta font-semibold flex items-center gap-1">
                       <CheckCircle2 size={12} />
                       Arrives Inside Stay Window
                     </span>
-                    <span className="text-[#BAB3A7]">
+                    <span className="text-ink-secondary">
                       Duty: ${calculatedDuties.totalDutyCost.toLocaleString()}
                     </span>
                   </>
@@ -1039,8 +1047,8 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
           </div>
 
           {/* Sourcing Action CTA */}
-          <div className="pt-3 border-t border-[#2C2723] flex flex-wrap items-center justify-between gap-2 text-[11px]">
-            <span className="text-[#8C8478] font-mono truncate max-w-[220px] sm:max-w-none">
+          <div className="pt-3 border-t border-border-rule flex flex-wrap items-center justify-between gap-2 text-[11px]">
+            <span className="text-ink-muted font-mono truncate max-w-[220px] sm:max-w-none">
               Route: {selectedCountry.typicalVesselRoute}
             </span>
             <span className="text-btn-cta font-mono font-medium flex items-center gap-1 hover:underline cursor-pointer shrink-0">
@@ -1055,20 +1063,20 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
       {/* =======================================================================
           BOTTOM TIMELINE SCRUBBER: STATUTORY ENFORCEMENT DATE CONTROL
       ======================================================================= */}
-      <div className="p-4 sm:p-5 bg-[#151311] border-t border-[#2C2723] space-y-3">
+      <div className="p-4 sm:p-5 bg-surface-canvas/60 border-t border-border-rule space-y-3">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] font-mono">
           <div className="flex items-center gap-2">
             <Calendar size={13} className="text-btn-cta" />
-            <span className="uppercase text-white font-semibold tracking-wider">
+            <span className="uppercase text-ink-primary font-semibold tracking-wider">
               Regulatory Enforcement Timeline Scrubber:
             </span>
-            <span className="px-2 py-0.5 rounded bg-[#25201C] text-amber-300 border border-[#3C342C]">
+            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-800 border border-amber-500/30">
               {activeMilestone.statusBadge}
             </span>
           </div>
-          <div className="text-[#8C8478]">
-            Effective Date: <span className="text-white font-medium">{activeMilestone.dateStr}</span>
+          <div className="text-ink-muted">
+            Effective Date: <span className="text-ink-primary font-medium">{activeMilestone.dateStr}</span>
           </div>
         </div>
 
@@ -1080,7 +1088,7 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
             step="1"
             value={timelineStep}
             onChange={(e) => setTimelineStep(parseInt(e.target.value, 10))}
-            className="w-full h-2 bg-[#28221D] rounded-lg appearance-none cursor-pointer accent-[#0F663E]"
+            className="w-full h-2 bg-surface-recessed rounded-lg appearance-none cursor-pointer accent-btn-cta"
           />
 
           <div className="grid grid-cols-3 text-center mt-2 font-mono text-[11px] gap-2">
@@ -1089,28 +1097,26 @@ export function TradeGaugeGlobe({ className = "" }: { className?: string }) {
                 key={idx}
                 onClick={() => setTimelineStep(idx)}
                 className={`text-left sm:text-center transition-colors ${
-                  timelineStep === idx ? "text-btn-cta font-bold" : "text-[#8C8478] hover:text-[#BAB3A7]"
+                  timelineStep === idx ? "text-btn-cta font-bold" : "text-ink-muted hover:text-ink-primary"
                 }`}
               >
                 <div className="font-semibold">{m.label}</div>
-                <div className="text-[10px] text-[#6E675D] hidden sm:block">{m.summary}</div>
+                <div className="text-[10px] text-ink-muted/80 hidden sm:block">{m.summary}</div>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="pt-2 border-t border-[#25201C] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-[#8C8478]">
+        <div className="pt-2 border-t border-border-rule flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-ink-muted">
           <div className="flex items-center gap-1.5">
             <Info size={12} className="text-btn-cta shrink-0" />
             <span>{activeMilestone.description}</span>
           </div>
-          <div className="text-[10px] text-[#6E675D] shrink-0">
+          <div className="text-[10px] text-ink-muted/80 shrink-0">
             Source: USITC HTS & Federal Register Feeds
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }

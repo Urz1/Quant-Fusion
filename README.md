@@ -11,7 +11,7 @@ At mid-market and enterprise manufacturers ($50M–$100B in revenue), cross-func
 
 This operational fragmentation silently bleeds **150 basis points of net profit margin** ($900,000 annually at a $60M manufacturer) through avoidable SG&A payroll waste, expedited air freight, and retailer OTIF chargebacks.
 
-**Quant Fusion** solves this permanently as a lightweight, non-invasive decision layer. By applying deterministic routing algorithms and automated exception engines, Quant Fusion reconciles inbound carrier EDI, port customs dwell, vendor POs, and factory bill-of-materials (BOM) components into audited promise dates in under **250 milliseconds**—with **zero ERP writeback risk**.
+**Quant Fusion** solves this permanently as a lightweight, non-invasive decision layer. By applying deterministic routing algorithms and automated exception engines, Quant Fusion reconciles inbound carrier EDI, port customs dwell, vendor POs, and factory bill-of-materials (BOM) components into audited promise dates in under **250 milliseconds**with **zero ERP writeback risk**.
 
 ---
 
@@ -116,8 +116,32 @@ Open [http://localhost:3005](http://localhost:3005) in your browser.
 │   │   ├── Logo.tsx         # Responsive vector Convergence Crucible mark
 │   │   ├── OperationalFlowchart.tsx # 40-step multi-silo blueprint
 │   │   └── TradeGaugeGlobe.tsx      # 3D Orthographic cartographic engine
-│   └── lib/                 # Utilities, RAG embeddings, and knowledge bases
+│   └── lib/                 # Utilities, Knowledge Graph, BM25, and RAG retrieval
+│       └── rag/             # GraphRAG engine, intent classification, and knowledge base
+├── eval/                    # RAG evaluation harness, golden dataset, and metrics
+│   ├── dataset.json         # 50 golden test cases (easy, multi-hop, exploratory, out-of-scope)
+│   ├── evaluate.ts          # Automated evaluation runner for retrieval & generation safety
+│   ├── baseline.json        # Pre-refactor evaluation metrics
+│   └── final_report.json    # Post-refactor evaluation metrics with 100% refusal rate
 └── DESIGN_SYSTEM.md         # Comprehensive paper-and-ink design specifications
+```
+
+---
+
+## 🧠 Enterprise GraphRAG Architecture
+
+The Quant Fusion Copilot implements a multi-tier **Hybrid Retrieval-Augmented Generation with an In-Memory Knowledge Graph** to provide deterministic supply chain answers while strictly refusing out-of-domain inquiries:
+
+1. **Intent Classification & Guardrails:** Query pre-filtering via [intentClassifier.ts](file:///home/sadam/Development/Quant_Fusion/src/lib/rag/intentClassifier.ts) detects non-supply chain and general queries (trivia, historical figures, recipes, programming, politics), enforcing an immediate, zero-tolerance refusal with **zero false citations**.
+2. **Knowledge Graph Subgraph Traversal:** Relational entities (Orders $\leftrightarrow$ Bottlenecks $\leftrightarrow$ Facilities $\leftrightarrow$ Tariffs $\leftrightarrow$ Leadership) in [knowledgeGraph.ts](file:///home/sadam/Development/Quant_Fusion/src/lib/rag/knowledgeGraph.ts) extract multi-hop relational context triples (e.g. `(ORD-78192) -[ROUTES_THROUGH]-> (Chicago Railhead Dwell +48h)`).
+3. **Hybrid BM25 + Vector Retrieval:** Lexical matching with domain synonym expansion and metadata boost in [bm25.ts](file:///home/sadam/Development/Quant_Fusion/src/lib/rag/bm25.ts) and [retrieval.ts](file:///home/sadam/Development/Quant_Fusion/src/lib/rag/retrieval.ts).
+4. **Deterministic Audited Generation:** Prompt engineering in [route.ts](file:///home/sadam/Development/Quant_Fusion/src/app/api/rag/chat/route.ts) with zero-hallucination constraints and offline fallback.
+
+### Running RAG Evaluations
+
+```bash
+# Run the automated 50-query golden dataset evaluation
+npx tsx eval/evaluate.ts final_report.json
 ```
 
 ---

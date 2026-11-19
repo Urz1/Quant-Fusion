@@ -274,7 +274,7 @@ export default function HomePage() {
                   The 40-Step Operational Workflow Across Eight Isolated Databases
                 </h3>
                 <p className="font-sans text-[14px] text-ink-secondary leading-relaxed">
-                  Without a non-invasive decision layer, fulfilling a single order requires 40 handoffs across Sales, Warehouse, Sourcing, Logistics, Freight Carriers, Factory, Suppliers, and Finance—taking 5 to 8 business days per inquiry.
+                  Without a non-invasive decision layer, fulfilling a single order requires 40 handoffs across Sales, Warehouse, Sourcing, Logistics, Freight Carriers, Factory, Suppliers, and Financetaking 5 to 8 business days per inquiry.
                 </p>
               </div>
 
@@ -347,7 +347,7 @@ export default function HomePage() {
               </h3>
 
               <p className="font-sans text-[16px] sm:text-[17px] text-ink-secondary leading-relaxed max-w-xl">
-                At a single $60M distributor, the simple question <span className="italic">“When will my order ship?”</span> triggered cross-functional fire drills costing $900,000 annually—over 12,000 hours of manual work scattered across isolated Excel sheets.
+                At a single $60M distributor, the simple question <span className="italic">“When will my order ship?”</span> triggered cross-functional fire drills costing $900,000 annuallyover 12,000 hours of manual work scattered across isolated Excel sheets.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 font-mono text-[11px]">
@@ -652,7 +652,7 @@ export default function HomePage() {
                 </h2>
                 <div className="space-y-4 font-sans text-[16px] text-ink-secondary leading-relaxed">
                   <p>
-                    Debra Friar founded Quant Fusion after more than two decades leading operational, supply chain, and product innovation teams inside global enterprise organizations—including executive leadership at Target, Pillsbury, Pepsi, Catalina, and as Director of Sales Operations at Welbilt.
+                    Debra Friar founded Quant Fusion after more than two decades leading operational, supply chain, and product innovation teams inside global enterprise organizationsincluding executive leadership at Target, Pillsbury, Pepsi, Catalina, and as Director of Sales Operations at Welbilt.
                   </p>
                   <p>
                     At Welbilt, Deb witnessed the daily breakdown firsthand: cross-functional teams burning 40 manual steps across inside sales, logistics, procurement, and finance just to answer a simple distributor inquiry. She designed Quant Fusion as a lightweight, non-invasive decision layer that applies MIT-certified data science frameworks and cloud-native architecture to eliminate operational firefighting permanently.

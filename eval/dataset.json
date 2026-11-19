@@ -1,0 +1,402 @@
+[
+  {
+    "id": "q01_order_78192_status",
+    "type": "in_domain_easy",
+    "query": "What is the confirmed promise date for order ORD-78192?",
+    "targetChunkIds": ["scenario-ord-78192-foodservice"],
+    "expectedAnswerKeywords": ["November 17, 2026", "14:30 EST", "Apex Thermal", "CX-900"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q02_order_78192_bottleneck",
+    "type": "in_domain_easy",
+    "query": "What caused the delay for ORD-78192 and how did Quant Fusion resolve it?",
+    "targetChunkIds": ["scenario-ord-78192-foodservice"],
+    "expectedAnswerKeywords": ["Chicago", "railhead", "dwell", "48 hr", "Tampa Facility #4"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q03_order_po34018_chemical",
+    "type": "in_domain_easy",
+    "query": "What is the verified arrival date for purchase order PO-34018?",
+    "targetChunkIds": ["scenario-po-34018-chemical"],
+    "expectedAnswerKeywords": ["November 22, 2026", "09:15 CST", "ChemCo", "PC-400"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q04_order_po34018_telematics",
+    "type": "in_domain_easy",
+    "query": "How did telematics resolve the siding manifold pressure bottleneck on PO-34018?",
+    "targetChunkIds": ["scenario-po-34018-chemical"],
+    "expectedAnswerKeywords": ["Houston Siding #2", "telematics", "SAP batch release", "72h"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q05_order_91204_shortage",
+    "type": "in_domain_easy",
+    "query": "What component caused the shortage exception on order ORD-91204?",
+    "targetChunkIds": ["scenario-ord-91204-machinery"],
+    "expectedAnswerKeywords": ["Viton", "seal", "Monterrey", "Titan Heavy Machinery", "Dallas"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q06_vessel_msku_tradegauge",
+    "type": "in_domain_easy",
+    "query": "When does container MSKU-90812 clear customs at Pier 400?",
+    "targetChunkIds": ["scenario-msku-90812-vessel"],
+    "expectedAnswerKeywords": ["November 24, 2026", "Pier 400", "CMA CGM Marco Polo", "48,200"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q07_founder_deb_friar",
+    "type": "in_domain_easy",
+    "query": "Who is the founder of Quant Fusion and what is her enterprise background?",
+    "targetChunkIds": ["founder-deb-friar-credentials"],
+    "expectedAnswerKeywords": ["Deb Friar", "Welbilt", "Target", "Pepsi", "20 years"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q08_founder_education_credentials",
+    "type": "in_domain_easy",
+    "query": "What certifications and academic credentials does Deb Friar hold?",
+    "targetChunkIds": ["founder-deb-friar-credentials"],
+    "expectedAnswerKeywords": ["MIT", "AWS", "University of Wisconsin", "MBA", "USF"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q09_pricing_pilot",
+    "type": "in_domain_easy",
+    "query": "How much does the 30-Day Proof-of-Value Pilot cost and is it credited?",
+    "targetChunkIds": ["pricing-deployment-pilots"],
+    "expectedAnswerKeywords": ["$15,000", "100% credited", "Payback Guarantee", "48 hours"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q10_pricing_tiers_enterprise",
+    "type": "in_domain_easy",
+    "query": "What are the monthly subscription tiers for Mid-Market and Global Enterprise?",
+    "targetChunkIds": ["pricing-deployment-pilots"],
+    "expectedAnswerKeywords": ["$4,500", "$12,500", "Mid-Market", "Global Enterprise"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q11_ebitda_150_bps_waterfall",
+    "type": "in_domain_easy",
+    "query": "How is the 150 basis point EBITDA margin recovery calculated on a $60M baseline?",
+    "targetChunkIds": ["fin-150-bps-waterfall"],
+    "expectedAnswerKeywords": ["150 BPS", "$900,000", "32.00%", "30.50%", "$420,000", "$280,000", "$200,000"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q12_avoidable_cost_formula",
+    "type": "in_domain_easy",
+    "query": "What is the four-factor formula for annual avoidable SG&A operational waste?",
+    "targetChunkIds": ["fin-labor-waste-calculator"],
+    "expectedAnswerKeywords": ["Annual Orders", "Chased Ratio", "Lookup Hours", "Loaded Hourly Wage", "OTIF"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q13_sox404_zero_writeback",
+    "type": "in_domain_easy",
+    "query": "How does Quant Fusion guarantee zero database writeback risk and SOX 404 compliance?",
+    "targetChunkIds": ["sec-zero-writeback-sox404"],
+    "expectedAnswerKeywords": ["Zero-Writeback", "read-only", "SOX 404", "cryptographic", "tamper-evident"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q14_ingestion_pathways_48h",
+    "type": "in_domain_easy",
+    "query": "What are the four non-invasive ingestion pathways used for 48-hour onboarding?",
+    "targetChunkIds": ["tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["SFTP", "CSV", "REST", "RFC", "BAPI", "EDI 214"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q15_screen_hops_latency",
+    "type": "in_domain_easy",
+    "query": "How many disconnected screens and departments are required to track an order manually?",
+    "targetChunkIds": ["ops-screen-hops-latency", "ops-8-silos-flowchart"],
+    "expectedAnswerKeywords": ["7 disconnected screens", "8 departments", "40 manual handoffs", "0.22s"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q16_multihop_chicago_freight_avoidance",
+    "type": "in_domain_multihop",
+    "query": "How does detecting the Chicago railcar dwell on ORD-78192 prevent the $3,400 hot-shot freight spend and protect the EBITDA margin waterfall?",
+    "targetChunkIds": ["scenario-ord-78192-foodservice", "fin-150-bps-waterfall"],
+    "expectedAnswerKeywords": ["Chicago railcar", "dwell", "hot-shot freight", "Apex Thermal", "EBITDA margin", "buffer scheduling"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q17_multihop_monterrey_shortage_line_down",
+    "type": "in_domain_multihop",
+    "query": "Trace the Monterrey Tier-2 supplier backorder on ORD-91204 to its resolution via Dallas buffer stock.",
+    "targetChunkIds": ["scenario-ord-91204-machinery", "ops-8-silos-flowchart"],
+    "expectedAnswerKeywords": ["Monterrey", "Tier-2", "Viton seal", "12 days prior", "Dallas hub", "shortage exception"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q18_multihop_tradegauge_tariffinversion_usmca",
+    "type": "in_domain_multihop",
+    "query": "Explain how TradeGauge detects tariff inversion between sub-assemblies and finished goods, and connects with USMCA nearshoring.",
+    "targetChunkIds": ["tariff-tradegauge-methodology", "tariff-nearshore-usmca"],
+    "expectedAnswerKeywords": ["tariff inversion", "Section 301", "finished good 2.5%", "sub-assembly 25%", "USMCA", "Monterrey"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q19_multihop_otif_fines_scorecard",
+    "type": "in_domain_multihop",
+    "query": "How do unannounced carrier dwells lead to 3-5% retailer OTIF chargebacks, and how does the decision engine eliminate them?",
+    "targetChunkIds": ["fin-chargebacks-freight", "fin-150-bps-waterfall"],
+    "expectedAnswerKeywords": ["OTIF chargebacks", "3% to 5%", "$200,000", "retailer", "Walmart", "Target", "proactive exception alerts"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q20_multihop_sox404_revenue_recognition",
+    "type": "in_domain_multihop",
+    "query": "Why does cryptographic audit logging in a read-only decision layer protect revenue recognition during SOX Section 404 audits?",
+    "targetChunkIds": ["sec-zero-writeback-sox404", "tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["SOX 404", "revenue recognition", "tamper-evident audit receipt", "read-only", "zero writeback"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q21_multihop_welbilt_origin_to_decision_layer",
+    "type": "in_domain_multihop",
+    "query": "How did Deb Friar's experience at Welbilt uncover the 40-step manual fulfillment breakdown that inspired Quant Fusion?",
+    "targetChunkIds": ["founder-deb-friar-credentials", "ops-8-silos-flowchart"],
+    "expectedAnswerKeywords": ["Welbilt", "Director of Sales Operations", "40-step manual", "8 software silos", "plant floor"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q22_multihop_pier400_demurrage_reciprocal_tariff",
+    "type": "in_domain_multihop",
+    "query": "How did container MSKU-90812 avoid both Pier 400 port demurrage and the statutory December 01 tariff escalation?",
+    "targetChunkIds": ["scenario-msku-90812-vessel", "tariff-tradegauge-methodology"],
+    "expectedAnswerKeywords": ["MSKU-90812", "Pier 400", "November 24", "demurrage $250/day", "25.0%", "$48,200"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q23_multihop_sga_waste_csr_turnaround",
+    "type": "in_domain_multihop",
+    "query": "Connect the 400 annual hours wasted per CSR in 7-screen ERP lookups with the sub-250ms deterministic lookup turnaround.",
+    "targetChunkIds": ["fin-labor-waste-calculator", "ops-screen-hops-latency"],
+    "expectedAnswerKeywords": ["400 hours", "12,000 hours", "7 screens", "sub-250ms", "4 to 24 hours"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q24_multihop_celonis_processmining_vs_realtime",
+    "type": "in_domain_multihop",
+    "query": "Contrast Celonis post-mortem process mining against Quant Fusion forward-looking deterministic decisioning.",
+    "targetChunkIds": ["comp-vs-traditional-alternatives"],
+    "expectedAnswerKeywords": ["Celonis", "post-mortem", "historical server logs", "forward-looking", "in-memory"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q25_multihop_mulesoft_writeback_vs_readonly",
+    "type": "in_domain_multihop",
+    "query": "Why does MuleSoft or Boomi integration risk database mutation whereas Quant Fusion deploys in 48 hours?",
+    "targetChunkIds": ["comp-vs-traditional-alternatives", "sec-zero-writeback-sox404", "tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["MuleSoft", "Boomi", "bidirectional writeback", "schema mapping", "read-only", "48 hours"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q26_ambiguous_speed_performance",
+    "type": "in_domain_ambiguous",
+    "query": "How fast does the system return an answer when looking up an order?",
+    "targetChunkIds": ["ops-screen-hops-latency", "tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["sub-250ms", "0.22s", "in-memory"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q27_ambiguous_security_concerns",
+    "type": "in_domain_ambiguous",
+    "query": "Can your software corrupt my SAP production database?",
+    "targetChunkIds": ["sec-zero-writeback-sox404", "tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["zero-writeback", "read-only", "cannot write", "RFC", "REST"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q28_ambiguous_competitor_comparison",
+    "type": "in_domain_ambiguous",
+    "query": "Are you just another map visibility tool like project44?",
+    "targetChunkIds": ["comp-vs-traditional-alternatives"],
+    "expectedAnswerKeywords": ["project44", "GPS pins", "bill-of-materials", "fuses internal ERP buffers"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q29_ambiguous_pilot_risk",
+    "type": "in_domain_ambiguous",
+    "query": "What happens if we run the 30-day pilot and don't see the margin recovery?",
+    "targetChunkIds": ["pricing-deployment-pilots"],
+    "expectedAnswerKeywords": ["Payback Guarantee", "$15,000", "credited", "zero disruption"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q30_ambiguous_duty_strategies",
+    "type": "in_domain_ambiguous",
+    "query": "Can we defer paying import duties until we actually assemble the products?",
+    "targetChunkIds": ["tariff-nearshore-usmca"],
+    "expectedAnswerKeywords": ["Bonded Warehouse", "Foreign Trade Zones", "FTZ", "defer duty"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q31_ambiguous_customs_codes",
+    "type": "in_domain_ambiguous",
+    "query": "How does your system monitor international customs codes?",
+    "targetChunkIds": ["tariff-tradegauge-methodology"],
+    "expectedAnswerKeywords": ["TradeGauge", "USITC", "HTS", "Section 301"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q32_ambiguous_labor_savings",
+    "type": "in_domain_ambiguous",
+    "query": "How much time does an operations team save every month?",
+    "targetChunkIds": ["fin-labor-waste-calculator", "fin-150-bps-waterfall"],
+    "expectedAnswerKeywords": ["17 to 22 hours", "12,000 hours", "90%"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q33_ambiguous_reporting_difference",
+    "type": "in_domain_ambiguous",
+    "query": "Why can't I just build this in PowerBI or Tableau myself?",
+    "targetChunkIds": ["comp-vs-traditional-alternatives"],
+    "expectedAnswerKeywords": ["PowerBI", "Tableau", "static", "passive", "binding operational commitments"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q34_ambiguous_it_effort",
+    "type": "in_domain_ambiguous",
+    "query": "Does our IT team need to spend 6 months building connectors?",
+    "targetChunkIds": ["tech-ingestion-architecture"],
+    "expectedAnswerKeywords": ["48 hours", "SFTP", "CSV", "zero changes", "read-only"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q35_ambiguous_who_is_friar",
+    "type": "in_domain_ambiguous",
+    "query": "Tell me about Deb Friar's background.",
+    "targetChunkIds": ["founder-deb-friar-credentials"],
+    "expectedAnswerKeywords": ["Deb Friar", "Target", "Pepsi", "Welbilt", "USF"],
+    "isOutOfScope": false
+  },
+  {
+    "id": "q36_oos_sadam_husen",
+    "type": "out_of_scope",
+    "query": "who's sadam husen",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["Quant Fusion", "supply chain", "cannot answer", "outside my operational domain"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q37_oos_recipe_cake",
+    "type": "out_of_scope",
+    "query": "Give me a recipe for chocolate cake.",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q38_oos_quantum_computing",
+    "type": "out_of_scope",
+    "query": "Explain Shor's algorithm in quantum computing.",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q39_oos_french_capital",
+    "type": "out_of_scope",
+    "query": "What is the capital of France and what is its population?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q40_oos_world_cup_winner",
+    "type": "out_of_scope",
+    "query": "Who won the FIFA World Cup in 2022?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q41_oos_python_binary_tree",
+    "type": "out_of_scope",
+    "query": "Write a Python script to invert a binary search tree.",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q42_oos_medical_headache",
+    "type": "out_of_scope",
+    "query": "What medication should I take for a severe migraine?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q43_oos_joke_funny",
+    "type": "out_of_scope",
+    "query": "Tell me a hilarious joke about astronauts.",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q44_oos_crypto_bitcoin",
+    "type": "out_of_scope",
+    "query": "Should I invest in Bitcoin or Ethereum right now?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q45_oos_uk_prime_minister",
+    "type": "out_of_scope",
+    "query": "Who was the prime minister of the UK in 1940?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q46_oos_repair_iphone",
+    "type": "out_of_scope",
+    "query": "How do I replace a cracked screen on an iPhone 14 Pro?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q47_oos_weather_tokyo",
+    "type": "out_of_scope",
+    "query": "What is the weather forecast in Tokyo tomorrow?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q48_oos_astronomy_mars",
+    "type": "out_of_scope",
+    "query": "How far is Mars from the Sun during aphelion?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q49_oos_movie_godfather",
+    "type": "out_of_scope",
+    "query": "Who directed The Godfather and when was it released?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  },
+  {
+    "id": "q50_oos_music_beatles",
+    "type": "out_of_scope",
+    "query": "Who was the drummer for the Beatles?",
+    "targetChunkIds": [],
+    "expectedAnswerKeywords": ["supply chain", "cannot answer", "outside"],
+    "isOutOfScope": true
+  }
+]

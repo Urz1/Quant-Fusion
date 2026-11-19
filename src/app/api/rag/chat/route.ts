@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { retrieveRelevantChunks, formatRetrievedContextForPrompt } from "@/lib/rag/retrieval";
+import {
+  retrieveRelevantChunks,
+  formatRetrievedContextForPrompt,
+  RetrievalResult,
+} from "@/lib/rag/retrieval";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const GROQ_PRIMARY_MODEL = "openai/gpt-oss-120b";
-const GROQ_FALLBACK_MODEL = "qwen/qwen3.8-27b";
+const GROQ_PRIMARY_MODEL = "qwen/qwen3.8-27b";
+const GROQ_FALLBACK_MODEL = "openai/gpt-oss-120b";
 
 interface ChatMessage {
   role: "system" | "user" | "assistant";
@@ -24,9 +28,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Message query is required." }, { status: 400 });
     }
 
-    // Retrieve context from knowledge base with persona biasing
+    // Retrieve context using Corrective RAG (CRAG) pipeline with intent classification
     const retrievalResult = retrieveRelevantChunks(message, 4, persona);
     const retrievedContext = formatRetrievedContextForPrompt(retrievalResult);
+    const intentType = retrievalResult.intent.intent;
 
     // Persona-specific executive lenses
     let personaGuidance = "";
@@ -45,6 +50,7 @@ export async function POST(req: NextRequest) {
         personaGuidance = `Lens: Customer Operations & Inside Sales Leadership.
 - Core Priority: Instant < 0.22s order lookups, eliminating 7 disconnected ERP/WMS/TMS screen hops, saving ~22 hours/month per representative, and giving customers verified, immutable promise dates.
 - Tone: Responsive, customer-centric, focused on turnaround velocity and vendor scorecard reputation.`;
+        break;
       case "ciso":
         personaGuidance = `Lens: CISO & Enterprise Security Architect.
 - Core Priority: Zero-Writeback Hardware/Protocol Isolation, read-only SFTP flat files or TLS 1.3 REST/RFC connectors, zero risk of ERP master data corruption, and SOC 2 Type II audit receipts.
@@ -54,22 +60,61 @@ export async function POST(req: NextRequest) {
         personaGuidance = `Lens: Executive Enterprise Operations Advisor. Deliver balanced operational, financial, and technical clarity.`;
     }
 
-    const systemPrompt = `You are the Quant Fusion Decision Copilot — an authoritative, concise, and straight-to-the-point AI decision assistant built for commercial supply chains, distribution, and manufacturing leadership.
+    // Adaptive System Prompt Construction based on Query Intent
+    let systemPrompt = "";
+
+    if (intentType === "OUT_OF_DOMAIN") {
+      systemPrompt = `You are the Quant Fusion Decision Copilot — an authoritative AI decision assistant built exclusively for commercial supply chains, distribution, and manufacturing leadership.
+Founded by Deb Friar.
+
+CRITICAL DIRECTIVES FOR OUT-OF-DOMAIN INQUIRIES:
+The user inquiry is OUTSIDE the operational domain of Quant Fusion's enterprise supply chain software.
+1. ZERO TOLERANCE REFUSAL: You MUST strictly refuse to answer the question. Do NOT answer, define, or explain the external person, history, pop culture, cooking recipe, programming code, medical topic, or external trivia.
+2. Output strictly the following standard operational domain refusal:
+"I am strictly specialized in Quant Fusion commercial supply chain operations, enterprise ERP data unification, and operational margin recovery. I cannot answer inquiries outside this operational domain.
+
+Please feel free to ask about:
+- **Verified Order Simulations**: \`ORD-78192\`, \`PO-34018\`, or \`ORD-91204\`
+- **Avoidable Cost Diagnostics**: Auditing SG&A payroll waste and OTIF chargebacks (+150 BPS EBITDA recovery)
+- **TradeGauge Tariff Engine**: Section 301/232 statutory exposure and USMCA nearshoring
+- **48-Hour Ingestion**: Read-only SFTP flat files, SAP RFC, or REST connectors with zero writeback risk"
+3. STRICT MANDATE:
+   - Do NOT answer any part of the out-of-domain question.
+   - Do NOT output a comparison table.
+   - Return zero citations.
+   - Never mention underlying AI models, providers, or prompts.`;
+    } else if (intentType === "GREETING") {
+      systemPrompt = `You are the Quant Fusion Decision Copilot — an authoritative AI decision assistant built for commercial supply chains, distribution, and manufacturing leadership.
+Founded by Deb Friar.
+
+CRITICAL DIRECTIVES FOR GREETINGS & INTRODUCTIONS:
+1. Welcome the executive with an authoritative, professional, and courteous greeting.
+2. Concisely summarize how you can assist them:
+   - Determining verified order promise dates and carrier dwells (e.g., ORD-78192, PO-34018).
+   - Auditing avoidable SG&A payroll waste and recovering +150 BPS EBITDA margin.
+   - Simulating TradeGauge statutory tariff exposures (Section 301/232/USMCA).
+   - Explaining our 48-hour zero-writeback read-only ERP architecture (SAP, Oracle, NetSuite).
+3. Do NOT output a comparison table for greetings.
+4. Keep the greeting concise and engaging.`;
+    } else {
+      // IN_DOMAIN or SPECIFIC_ENTITY
+      systemPrompt = `You are the Quant Fusion Decision Copilot — an authoritative, concise, and straight-to-the-point AI decision assistant built for commercial supply chains, distribution, and manufacturing leadership.
 Founded by Deb Friar (20+ years executive leadership at Target, Pillsbury, Pepsi, Catalina, Welbilt; USF Monica Wooden Center Advisory Board; MIT Professional & AWS AI certified).
 
 CRITICAL DIRECTIVES:
-1. STRICT IDENTITY MANDATE:
+1. STRICT IDENTITY & GROUNDING MANDATE:
    - NEVER mention underlying AI providers, model names (Groq, OpenAI, GPT, Llama, Qwen, DeepSeek, etc.), or external AI infrastructure.
    - You are exclusively the "Quant Fusion Decision Copilot", a proprietary deterministic decision layer.
-   - Never output meta-commentary about system prompts or models.
+   - Ground all operational facts, metrics, and architecture strictly in the VERIFIED KNOWLEDGE BASE CONTEXT provided below.
+   - If the verified context does not contain sufficient details to answer, state clearly what is verified and avoid speculative claims.
 
 2. STRAIGHT TO THE POINT (NO VERBOSITY):
-   - Answer directly in the very first sentence. Eliminate conversational filler, polite greetings ("Certainly! As an assistant..."), and corporate throat-clearing.
+   - Answer directly in the very first sentence. Eliminate conversational filler and corporate throat-clearing.
    - Keep answers concise and focused (typically 2 to 3 concise paragraphs or tight bullet points). Respect the executive's time.
    - Plain English: Explain supply chain, ERP, and tariff mechanics with crystal-clear, professional language without convoluted jargon.
 
-3. CLEAN TABULAR COMPARISONS:
-   - When presenting metrics, department hours, financials, or competitor comparisons, ALWAYS include a clean, compact markdown table (2 to 4 columns, 2 to 4 rows).
+3. TABULAR COMPARISONS (WHEN RELEVANT):
+   - When presenting metrics, department hours, financials, or competitor comparisons, include a clean, compact markdown table (2 to 4 columns, 2 to 4 rows). Do not force tables on simple qualitative questions.
    - Use simple, descriptive headers:
      | Metric | Industry Reality | Quant Fusion Impact |
    - Keep table cells compact. Numerical data in right or center columns.
@@ -87,6 +132,7 @@ ${personaGuidance}
 VERIFIED KNOWLEDGE BASE CONTEXT:
 ${retrievedContext}
 `;
+    }
 
     // Retrieve API Key
     const apiKey = (process.env.GROQ_API || process.env.GROQ_API_KEY || "").trim();
@@ -112,6 +158,9 @@ ${retrievedContext}
 
     if (apiKey) {
       try {
+        // Temperature calibration: Lower for in-domain (0.15), slightly higher for general/OOD (0.3)
+        const temperature = intentType === "IN_DOMAIN" ? 0.15 : 0.3;
+
         // Attempt primary model with 8-second timeout
         groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
@@ -123,7 +172,7 @@ ${retrievedContext}
             model: GROQ_PRIMARY_MODEL,
             messages,
             stream: true,
-            temperature: 0.2,
+            temperature,
             max_tokens: 1024,
           }),
           signal: AbortSignal.timeout(8000),
@@ -142,7 +191,7 @@ ${retrievedContext}
               model: GROQ_FALLBACK_MODEL,
               messages,
               stream: true,
-              temperature: 0.2,
+              temperature,
               max_tokens: 1024,
             }),
             signal: AbortSignal.timeout(8000),
@@ -173,7 +222,7 @@ ${retrievedContext}
             }
           };
 
-          // Send initial metadata with queryId and citations (NO model name exposed)
+          // Send initial metadata with queryId and calibrated citations
           const initPayload = JSON.stringify({
             type: "meta",
             queryId,
@@ -252,7 +301,7 @@ ${retrievedContext}
 
     // DETERMINISTIC KNOWLEDGE BASE FALLBACK STREAM
     // If Groq is unavailable, network is restricted, or key is missing,
-    // guarantee an immediate, professional, tabular answer with 100% resilience.
+    // guarantee an immediate, professional, truthful response with 0 hallucinations.
     const fallbackText = generateDeterministicFallback(message, retrievalResult, persona);
     const encoder = new TextEncoder();
 
@@ -270,7 +319,7 @@ ${retrievedContext}
         };
 
         try {
-          // Metadata event
+          // Metadata event with verified citations
           const initPayload = JSON.stringify({
             type: "meta",
             queryId,
@@ -333,11 +382,37 @@ ${retrievedContext}
 /**
  * Deterministic domain generator for reliable, instant executive responses
  * when external LLM infrastructure is unreachable.
+ * Guaranteed to NEVER hallucinate connections to out-of-domain entities.
  */
-function generateDeterministicFallback(query: string, retrievalResult: any, persona: string = "cfo"): string {
-  const queryLower = query.toLowerCase();
+function generateDeterministicFallback(
+  query: string,
+  retrievalResult: RetrievalResult,
+  persona: string = "cfo"
+): string {
+  const queryLower = query.toLowerCase().trim();
+  const intent = retrievalResult.intent;
 
-  // 1. Specific Order Scenarios
+  // 1. Greetings & Meta Inquiries
+  if (intent.intent === "GREETING") {
+    return `Hello! I am the **Quant Fusion Decision Copilot**.
+
+I can help you analyze operational friction across enterprise systems, simulate verified order promise dates (such as \`ORD-78192\` or \`PO-34018\`), audit avoidable SG&A payroll waste (+150 BPS EBITDA recovery), or explain our zero-writeback read-only architecture.
+
+What operational challenge or scenario would you like to explore?`;
+  }
+
+  // 2. Out-of-Domain Guardrail Fallback
+  if (intent.intent === "OUT_OF_DOMAIN" || (retrievalResult.grade === "INCORRECT" && retrievalResult.confidence === 0)) {
+    return `I am strictly specialized in Quant Fusion commercial supply chain operations, enterprise ERP data unification, and operational margin recovery. I cannot answer inquiries outside this operational domain.
+
+Please feel free to ask about:
+- **Verified Order Simulations**: \`ORD-78192\`, \`PO-34018\`, or \`ORD-91204\`
+- **Avoidable Cost Diagnostics**: Auditing SG&A payroll waste and OTIF chargebacks (+150 BPS EBITDA recovery)
+- **TradeGauge Tariff Engine**: Section 301/232 statutory exposure and USMCA nearshoring
+- **48-Hour Ingestion**: Read-only SFTP flat files, SAP RFC, or REST connectors with zero writeback risk`;
+  }
+
+  // 3. Specific Order Scenarios
   if (/ord-78192|cx-900|foodservice|apex/i.test(queryLower)) {
     return `Order **ORD-78192** (Apex Thermal Dynamics • Commercial Convection Unit CX-900) has been algorithmically determined for **November 17, 2026 at 14:30 EST** (99.4% confidence, 0.18s query latency).
 
@@ -390,7 +465,7 @@ Quant Fusion surfaced the Tier-2 seal shortage 12 days in advance, re-allocated 
 Customs clearance will occur 7 days prior to proposed statutory reciprocal tariff enactment, saving $48,200 on this single entry.`;
   }
 
-  // 2. Competitors & Alternative Comparison
+  // 4. Competitor Comparisons
   if (/celonis|project44|fourkites|mulesoft|kinaxis|powerbi|tableau|competitor|vs|alternative/i.test(queryLower)) {
     return `Quant Fusion is an **in-memory deterministic operational decision layer**, fundamentally distinct from process miners, map-tracking tools, or heavyweight middleware.
 
@@ -404,7 +479,7 @@ Customs clearance will occur 7 days prior to proposed statutory reciprocal tarif
 Quant Fusion does not replace your ERP; it acts as an intelligent decision overlay that operates in under 250 milliseconds without schema changes.`;
   }
 
-  // 3. Technical Architecture & 48-Hour Ingestion
+  // 5. Technical Ingestion Architecture & 48-Hour Onboarding
   if (/csv|sftp|rfc|api|connector|integrate|integration|onboard|ingest|how it works/i.test(queryLower)) {
     return `Quant Fusion deploys in **under 48 hours** with zero client database schema mutations using four non-invasive ingestion pathways.
 
@@ -418,8 +493,8 @@ Quant Fusion does not replace your ERP; it acts as an intelligent decision overl
 All data is processed strictly in-memory using deterministic rule graphs, returning calculations in < 0.22 seconds with 0% ERP writeback risk.`;
   }
 
-  // 4. Nearshoring & USMCA Tariff Strategies
-  if (/nearshore|usmca|mexico|duty deferral|tariff inversion|rvc/i.test(queryLower)) {
+  // 6. Tariffs & TradeGauge
+  if (/nearshore|usmca|mexico|duty deferral|tariff inversion|rvc|tradegauge|tariff|301|232/i.test(queryLower)) {
     return `Quant Fusion's **TradeGauge** engine calculates statutory tariff exposures and evaluates nearshoring strategies to shield gross margins against trade volatility.
 
 | Optimization Strategy | Operational Mechanism | Financial Margin Impact |
@@ -431,7 +506,7 @@ All data is processed strictly in-memory using deterministic rule graphs, return
 Enables manufacturing executives to protect margins before foreign components leave overseas ports.`;
   }
 
-  // 5. Retailer OTIF Penalties & Expedited Freight
+  // 7. OTIF & Expedited Freight
   if (/otif|chargeback|penalty|penalties|freight|hot-shot|fines/i.test(queryLower)) {
     return `Quant Fusion eliminates **retailer OTIF chargebacks ($200,000/yr)** and **emergency hot-shot freight ($280,000/yr)** by surfacing carrier delays 7 to 14 days before delivery windows breach.
 
@@ -444,7 +519,7 @@ Enables manufacturing executives to protect margins before foreign components le
 Provides automated exception alerts that allow operations to resolve bottlenecks without burning expedited freight capital.`;
   }
 
-  // 6. EBITDA, Margin Bleed, or Financial Waterfall
+  // 8. EBITDA, Margin Bleed, or Financial Waterfall
   if (/ebitda|margin|financial|loss|waterfall|profit|\$900|150\s*bps/i.test(queryLower)) {
     return `Quant Fusion recovers an audited **+150 BPS EBITDA margin ($900,000 net annual margin)** on a standard $60M revenue baseline by eliminating spreadsheet firefighting and manual order status chasing.
 
@@ -458,7 +533,7 @@ Provides automated exception alerts that allow operations to resolve bottlenecks
 All financial recoveries are backed by Quant Fusion's **30-day proof-of-value payback guarantee** with zero ERP writeback risk via read-only SFTP or TLS 1.3 REST connectors.`;
   }
 
-  // 7. Avoidable SG&A Cost Formula & Labor Waste
+  // 9. Avoidable SG&A Cost Formula & Labor Waste
   if (/calculator|labor|hours|csr|payroll|sga|formula|wasted time|400 hours/i.test(queryLower)) {
     return `Quant Fusion calculates avoidable SG&A waste using an audited four-factor formula:
 **Annual Avoidable Cost = (Annual Orders × % Chased × Lookup Hours × Loaded Wage) + Expedited Freight + OTIF Penalties**.
@@ -473,7 +548,7 @@ All financial recoveries are backed by Quant Fusion's **30-day proof-of-value pa
 Replaces manual cross-department status chasing with an instant, verified promise date.`;
   }
 
-  // 8. 8 Silos & 40 Steps Manual Ping-Pong
+  // 10. 8 Silos & 40 Steps Manual Ping-Pong
   if (/silos|flowchart|40 steps|ping pong|7 screens/i.test(queryLower)) {
     return `Answering "When will my order ship?" typically spans **8 disconnected software silos and 40 manual handoffs**, taking 5 to 8 business days.
 
@@ -488,7 +563,7 @@ Replaces manual cross-department status chasing with an instant, verified promis
 Quant Fusion unifies these feeds into an in-memory decision layer that outputs a verified deterministic promise date in **< 0.22 seconds**.`;
   }
 
-  // 9. Zero-Writeback, Security, SOX 404, or CISO Governance
+  // 11. Zero-Writeback, Security, SOX 404, or CISO Governance
   if (/security|writeback|sox|404|ciso|architecture|erp|safe|isolation/i.test(queryLower)) {
     return `Quant Fusion operates on a **Zero-Writeback Hardware/Protocol Isolation Architecture**, guaranteeing 0% database mutation risk to client enterprise systems.
 
@@ -502,7 +577,7 @@ Quant Fusion unifies these feeds into an in-memory decision layer that outputs a
 Integrates seamlessly across SAP, Oracle NetSuite, Microsoft Dynamics, and AS400 with zero production downtime.`;
   }
 
-  // 10. Founder Pedigree: Deb Friar
+  // 12. Founder Pedigree: Deb Friar (ONLY when explicitly asked!)
   if (/deb|friar|founder|ceo|welbilt|target|pepsi|experience|pedigree|credentials/i.test(queryLower)) {
     return `Quant Fusion was founded by **Deb (Debra) Friar**, an executive operational and technology leader with over 20 years of commercial supply chain experience.
 
@@ -513,10 +588,10 @@ Integrates seamlessly across SAP, Oracle NetSuite, Microsoft Dynamics, and AS400
 | **Advisory Board Member** | Univ. of South Florida (USF) | Monica Wooden Center for Supply Chain Management |
 | **Technical Certifications** | MIT & Amazon Web Services (AWS) | Applied AI, Machine Learning, and Cloud Architecture |
 
-Holds both a BBA and MBA from the University of Wisconsin. Built from real plant floors and railheads—not academic theory.`;
+Holds both a BBA and MBA from the University of Wisconsin. Built from real plant floors and railheads — not academic theory.`;
   }
 
-  // 11. Pricing & 30-Day Proof-of-Value Pilot
+  // 13. Pricing & 30-Day Proof-of-Value Pilot
   if (/price|pricing|cost|pilot|how much|15000|4500|12500/i.test(queryLower)) {
     return `Quant Fusion offers transparent, non-punitive enterprise pricing designed around zero-friction onboarding:
 
@@ -529,21 +604,20 @@ Holds both a BBA and MBA from the University of Wisconsin. Built from real plant
 The 30-Day Pilot is backed by our **30-Day Payback Guarantee** and requires zero client schema modifications.`;
   }
 
-  // 12. General Context Fallback from Top Retrieved Chunks
-  const topChunk = retrievalResult?.topChunks?.[0];
-  const chunkText = topChunk ? topChunk.content.split("\n").slice(0, 3).join(" ") : "Quant Fusion unifies disconnected ERP, WMS, and TMS data into sub-second operational clarity.";
+  // 14. High-Confidence Verified Chunk Synthesizer
+  if (retrievalResult.topChunks.length > 0) {
+    const topChunk = retrievalResult.topChunks[0];
+    return `### ${topChunk.title}
 
-  return `Quant Fusion addresses this operational inquiry directly through deterministic cross-silo data unification.
+${topChunk.content}
 
-${chunkText}
+Quant Fusion resolves this deterministically in under 250 milliseconds with zero ERP writeback risk.`;
+  }
 
-| Solution Dimension | Traditional Workflow | Quant Fusion Approach |
-| :--- | :---: | :--- |
-| Operational Speed | 4 to 24-hour spreadsheet loops | **Sub-250ms deterministic decision engine** |
-| Margin Protection | Silent EBITDA margin bleed | **+150 BPS margin recovery guarantee** |
-| System Disruption | Multi-year ERP overhaul | **Zero-writeback read-only integration** |
+  // 15. Standard General Domain Fallback
+  return `Quant Fusion is an in-memory deterministic decision layer designed for commercial manufacturing and distribution operations.
 
-Backed by founder Deb Friar's 20+ years of enterprise supply chain leadership and certified under SOC 2 Type II controls.`;
+For your operational inquiry regarding **"${query}"**, our system unifies cross-department data across ERP, WMS, and TMS without requiring schema migrations or writeback access.
+
+Feel free to ask about our 48-hour rapid ingestion protocols, avoidable cost calculations, or order simulations.`;
 }
-
-

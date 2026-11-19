@@ -15,9 +15,9 @@ export function KineticText({
   text,
   className = "",
   letterClassName = "",
-  baseDelay = 0.1,
+  baseDelay = 0.05,
   wiggleInterval = 7.5,
-  staggerMs = 42,
+  staggerMs = 20,
 }: KineticTextProps) {
   // Split by words first so word wrapping is preserved naturally
   const words = text.split(" ");
@@ -39,7 +39,7 @@ export function KineticText({
                   key={lIdx}
                   className={`inline-block transition-transform duration-200 hover:-translate-y-1.5 hover:rotate-3 hover:scale-110 cursor-default ${letterClassName}`}
                   style={{
-                    animation: `letterEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${entranceDelay}s both, letterWiggle 7s ease-in-out ${wiggleDelay}s infinite`,
+                    animation: `letterEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) ${entranceDelay}s both, letterWiggle 7s ease-in-out ${wiggleDelay}s infinite`,
                     transformOrigin: "bottom center",
                   }}
                 >
@@ -65,23 +65,20 @@ export function KineticText({
 
 export function HeroKineticHeadline() {
   return (
-    <h1 className="font-serif text-[44px] sm:text-[56px] lg:text-[64px] font-semibold text-ink-primary leading-[1.08] tracking-tight">
+    <h1 className="font-serif text-[32px] sm:text-[42px] md:text-[54px] lg:text-[64px] font-semibold text-ink-primary leading-[1.14] sm:leading-[1.08] tracking-tight">
       <style jsx global>{`
         /* 1. Staggered Entrance Movement: letters spring up with micro-rotation */
         @keyframes letterEntrance {
           0% {
             opacity: 0;
-            transform: translateY(28px) rotate(-4deg) scale(0.92);
-            filter: blur(4px);
+            transform: translateY(16px) scale(0.96);
           }
           70% {
-            transform: translateY(-3px) rotate(1deg) scale(1.02);
-            filter: blur(0px);
+            transform: translateY(-2px) scale(1.01);
           }
           100% {
             opacity: 1;
-            transform: translateY(0px) rotate(0deg) scale(1);
-            filter: blur(0px);
+            transform: translateY(0px) scale(1);
           }
         }
 
@@ -110,7 +107,8 @@ export function HeroKineticHeadline() {
       <span className="block">
         <KineticText
           text="One order. Eight isolated systems."
-          baseDelay={0.15}
+          baseDelay={0.05}
+          staggerMs={18}
           letterClassName="text-ink-primary"
         />
       </span>
@@ -119,7 +117,8 @@ export function HeroKineticHeadline() {
       <span className="block mt-1 sm:mt-0">
         <KineticText
           text="One verified ship date."
-          baseDelay={0.85}
+          baseDelay={0.25}
+          staggerMs={18}
           letterClassName="italic font-normal text-btn-cta hover:text-emerald-500"
         />
       </span>

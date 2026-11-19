@@ -327,7 +327,7 @@ Proven Enterprise Supply Chain & Operations Track Record:
 - Former Director of Sales Operations at Welbilt, where she managed commercial foodservice equipment distribution and mapped the original 40-step manual cross-silo fulfillment breakdown.
 - Academic & Advisory Roles: Serves on the Advisory Board of the University of South Florida (USF) Monica Wooden Center for Supply Chain Management.
 - Technical Credentials: Certifications in Applied AI and Machine Learning from MIT Professional Education and Amazon Web Services (AWS). Holds both a BBA and MBA from the University of Wisconsin.
-- Provenance Principle: Built from real operational plant floors, intermodal rail yards, and maritime container terminals—not academic theory.`
+- Provenance Principle: Built from real operational plant floors, intermodal rail yards, and maritime container terminalsnot academic theory.`
   },
 
   // 9. PRICING & PROOF-OF-VALUE DEPLOYMENT
