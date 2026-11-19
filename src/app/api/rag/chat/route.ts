@@ -162,6 +162,17 @@ ${retrievedContext}
 
       const customStream = new ReadableStream({
         async start(controller) {
+          let isClosed = false;
+
+          const safeEnqueue = (payload: string) => {
+            if (isClosed) return;
+            try {
+              controller.enqueue(encoder.encode(payload));
+            } catch {
+              isClosed = true;
+            }
+          };
+
           // Send initial metadata with queryId and citations (NO model name exposed)
           const initPayload = JSON.stringify({
             type: "meta",
@@ -169,10 +180,9 @@ ${retrievedContext}
             citations: retrievalResult.citations,
             initialLatencyMs: Date.now() - startTime,
           });
-          controller.enqueue(encoder.encode(`data: ${initPayload}\n\n`));
+          safeEnqueue(`data: ${initPayload}\n\n`);
 
           let buffer = "";
-          let isClosed = false;
 
           try {
             while (true) {
@@ -184,6 +194,7 @@ ${retrievedContext}
               buffer = lines.pop() || "";
 
               for (const line of lines) {
+                if (isClosed) break;
                 const trimmed = line.trim();
                 if (!trimmed || !trimmed.startsWith("data:")) continue;
 
@@ -200,7 +211,7 @@ ${retrievedContext}
                       type: "token",
                       token: deltaContent,
                     });
-                    controller.enqueue(encoder.encode(`data: ${tokenEvent}\n\n`));
+                    safeEnqueue(`data: ${tokenEvent}\n\n`);
                   }
                 } catch {
                   // Ignore partial JSON chunks
@@ -214,18 +225,15 @@ ${retrievedContext}
               totalLatencyMs: Date.now() - startTime,
               timestamp: new Date().toISOString(),
             });
-            controller.enqueue(encoder.encode(`data: ${donePayload}\n\n`));
+            safeEnqueue(`data: ${donePayload}\n\n`);
             if (!isClosed) {
               isClosed = true;
-              controller.close();
+              try { controller.close(); } catch {}
             }
           } catch (streamErr) {
-            console.error("Streaming error:", streamErr);
             if (!isClosed) {
               isClosed = true;
-              try {
-                controller.error(streamErr);
-              } catch {}
+              try { controller.close(); } catch {}
             }
           }
         },
@@ -251,6 +259,16 @@ ${retrievedContext}
     const fallbackStream = new ReadableStream({
       async start(controller) {
         let isClosed = false;
+
+        const safeEnqueue = (payload: string) => {
+          if (isClosed) return;
+          try {
+            controller.enqueue(encoder.encode(payload));
+          } catch {
+            isClosed = true;
+          }
+        };
+
         try {
           // Metadata event
           const initPayload = JSON.stringify({
@@ -259,17 +277,18 @@ ${retrievedContext}
             citations: retrievalResult.citations,
             initialLatencyMs: Date.now() - startTime,
           });
-          controller.enqueue(encoder.encode(`data: ${initPayload}\n\n`));
+          safeEnqueue(`data: ${initPayload}\n\n`);
 
           // Stream fallback text in smooth word batches
           const words = fallbackText.split(/(\s+)/);
           for (let i = 0; i < words.length; i += 2) {
+            if (isClosed) break;
             const chunk = (words[i] || "") + (words[i + 1] || "");
             const tokenEvent = JSON.stringify({
               type: "token",
               token: chunk,
             });
-            controller.enqueue(encoder.encode(`data: ${tokenEvent}\n\n`));
+            safeEnqueue(`data: ${tokenEvent}\n\n`);
             // Micro-tick delay for organic stream pacing
             await new Promise((res) => setTimeout(res, 12));
           }
@@ -280,18 +299,15 @@ ${retrievedContext}
             totalLatencyMs: Date.now() - startTime,
             timestamp: new Date().toISOString(),
           });
-          controller.enqueue(encoder.encode(`data: ${donePayload}\n\n`));
+          safeEnqueue(`data: ${donePayload}\n\n`);
           if (!isClosed) {
             isClosed = true;
-            controller.close();
+            try { controller.close(); } catch {}
           }
         } catch (streamErr) {
-          console.error("Fallback stream error:", streamErr);
           if (!isClosed) {
             isClosed = true;
-            try {
-              controller.error(streamErr);
-            } catch {}
+            try { controller.close(); } catch {}
           }
         }
       },

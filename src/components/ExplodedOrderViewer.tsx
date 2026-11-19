@@ -397,7 +397,14 @@ export function ExplodedOrderViewer({ scenario, isAssembled, onPartClick, compac
                     : "bg-surface-sheet text-ink-secondary border border-border-rule hover:text-ink-primary"
                 }`}
               >
-                {p.id === "board" && p.criticalPath ? "⚠ Control Module" : p.name.split(" ")[0]}
+                {p.id === "board" && p.criticalPath ? (
+                  <span className="inline-flex items-center gap-1">
+                    <AlertTriangle size={11} className="text-amber-500 shrink-0" />
+                    <span>Control Module</span>
+                  </span>
+                ) : (
+                  p.name.split(" ")[0]
+                )}
               </button>
             ))}
           </div>

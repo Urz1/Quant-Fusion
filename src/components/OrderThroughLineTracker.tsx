@@ -82,7 +82,7 @@ export function OrderThroughLineTracker() {
                         : "bg-surface-recessed text-ink-muted"
                     }`}
                   >
-                    {isPast ? "✓" : st.num}
+                    {isPast ? <Check size={9} strokeWidth={3} className="text-white" /> : st.num}
                   </span>
                   <span>{st.name}</span>
                 </div>

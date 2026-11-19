@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Lock, ShieldCheck, AlertOctagon, CheckCircle2, ArrowRight, Server, Database, Cpu } from "lucide-react";
+import { Lock, ShieldCheck, ShieldAlert, AlertOctagon, CheckCircle2, ArrowRight, Server, Database, Cpu } from "lucide-react";
 
 export function SecurityEnclaveVisualizer() {
   const [testStatus, setTestStatus] = useState<"idle" | "testing" | "blocked">("idle");
@@ -94,8 +94,15 @@ export function SecurityEnclaveVisualizer() {
             </span>
             <ArrowRight size={16} className="text-btn-cta" />
           </div>
-          <div className="text-[10px] font-mono text-friction-crimson font-semibold">
-            {testStatus === "blocked" ? "⛔ REVERSE WRITE BLOCKED" : "Reverse Write Disabled"}
+          <div className="text-[10px] font-mono text-friction-crimson font-semibold flex items-center justify-center gap-1">
+            {testStatus === "blocked" ? (
+              <>
+                <ShieldAlert size={12} className="text-friction-crimson shrink-0" />
+                <span>REVERSE WRITE BLOCKED</span>
+              </>
+            ) : (
+              <span>Reverse Write Disabled</span>
+            )}
           </div>
         </div>
 

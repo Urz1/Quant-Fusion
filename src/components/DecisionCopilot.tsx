@@ -373,7 +373,7 @@ export function DecisionCopilot() {
             msg.id === assistantMessageId
               ? {
                   ...msg,
-                  content: `⚠️ **Audit Note**: ${err.message || "Failed to complete determination. Please check your network connection."}`,
+                  content: `**[Operational Audit Note]**: ${err.message || "Failed to complete determination. Please check your network connection."}`,
                   timestamp: "Error",
                   isStreaming: false,
                 }
