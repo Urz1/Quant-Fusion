@@ -340,15 +340,57 @@ export function OperationalFlowchart() {
                       {silo.system.split("/")[0].trim()}
                     </text>
 
-                    {/* Database Cylinder Icon at Top of Lane */}
-                    <g transform={`translate(${colX + 42}, 68)`}>
-                      <ellipse cx="16" cy="6" rx="16" ry="4" fill="#FFFFFF" stroke={isSelected ? "#0F663E" : "#9E978E"} strokeWidth="1" />
-                      <rect x="0" y="6" width="32" height="12" fill="#FFFFFF" stroke="none" />
-                      <path d="M0 6 v12 a16 4 0 0 0 32 0 v-12" fill="none" stroke={isSelected ? "#0F663E" : "#9E978E"} strokeWidth="1" />
-                      <ellipse cx="16" cy="18" rx="16" ry="4" fill="none" stroke={isSelected ? "#0F663E" : "#9E978E"} strokeWidth="1" />
-                      <text x="16" y="15" textAnchor="middle" fill="#4A463F" fontSize="6.5" fontWeight="bold">
-                        SILO
+                    {/* Professional Enterprise Data Node Badge */}
+                    <g transform={`translate(${colX + 8}, 66)`}>
+                      {/* Node container card */}
+                      <rect
+                        x="0"
+                        y="0"
+                        width="100"
+                        height="22"
+                        rx="4"
+                        fill={isSelected ? "#F0FDF4" : "#FFFFFF"}
+                        stroke={isSelected ? "#0F663E" : "#D5D0C5"}
+                        strokeWidth="1"
+                      />
+                      
+                      {/* Precision Micro Database Stack SVG */}
+                      <g transform="translate(6, 4)">
+                        <ellipse cx="6" cy="2.5" rx="5" ry="1.6" fill={isSelected ? "#DCFCE7" : "#ECE8DF"} stroke={isSelected ? "#0F663E" : "#78716C"} strokeWidth="0.8" />
+                        <path d="M1 2.5 v4.2 a5 1.6 0 0 0 10 0 v-4.2" fill="none" stroke={isSelected ? "#0F663E" : "#78716C"} strokeWidth="0.8" />
+                        <path d="M1 5.6 v4.2 a5 1.6 0 0 0 10 0 v-4.2" fill="none" stroke={isSelected ? "#0F663E" : "#78716C"} strokeWidth="0.8" />
+                        <ellipse cx="6" cy="9.8" rx="5" ry="1.6" fill="none" stroke={isSelected ? "#0F663E" : "#78716C"} strokeWidth="0.8" />
+                      </g>
+
+                      {/* Technical Architecture Metadata */}
+                      <text
+                        x="22"
+                        y="10"
+                        fill={isSelected ? "#0F663E" : "#57534E"}
+                        fontSize="6.5"
+                        fontWeight="600"
+                        letterSpacing="0.04em"
+                      >
+                        LOCAL STORE
                       </text>
+                      <text
+                        x="22"
+                        y="17.5"
+                        fill={mode === "status_quo" ? "#991B1B" : "#0F663E"}
+                        fontSize="5.5"
+                        fontWeight="bold"
+                        letterSpacing="0.03em"
+                      >
+                        {mode === "status_quo" ? "DISCONNECTED" : "IN-MEMORY SYNC"}
+                      </text>
+
+                      {/* Live Status LED */}
+                      <circle
+                        cx="91"
+                        cy="11"
+                        r="2"
+                        fill={mode === "status_quo" ? "#EF4444" : "#10B981"}
+                      />
                     </g>
                   </g>
                 );
@@ -423,25 +465,53 @@ export function OperationalFlowchart() {
                   <path d="M684 327 L684 350 L80 350 L80 355" fill="none" stroke="#8A1C14" strokeWidth="1.5" strokeDasharray="3 2" />
                   <path d="M808 397 L808 420 L80 420 L80 395" fill="none" stroke="#8A1C14" strokeWidth="1.5" strokeDasharray="3 2" />
 
-                  {/* Friction Friction Callout Tags on Canvas */}
-                  <g transform="translate(210, 110)">
-                    <rect x="-2" y="-12" width="94" height="16" rx="3" fill="#F7DFDE" stroke="#8A1C14" strokeWidth="0.8" />
-                    <text x="45" y="-1" textAnchor="middle" fill="#8A1C14" fontSize="8" fontWeight="bold">⚠️ WMS Sync Lag</text>
+                  {/* Professional Friction Callout Tags with Vector Warning Glyphs */}
+                  <g transform="translate(208, 108)">
+                    <rect x="0" y="0" width="98" height="18" rx="4" fill="#FEF2F2" stroke="#DC2626" strokeWidth="0.9" />
+                    <g transform="translate(6, 4)">
+                      <path d="M 5 0.5 L 0.5 8.5 C 0.2 9 0.5 9.5 1.1 9.5 L 8.9 9.5 C 9.5 9.5 9.8 9 9.5 8.5 L 5 0.5 Z" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="0.8" strokeLinejoin="round" />
+                      <line x1="5" y1="3.2" x2="5" y2="5.8" stroke="#B91C1C" strokeWidth="0.9" strokeLinecap="round" />
+                      <circle cx="5" cy="7.4" r="0.5" fill="#B91C1C" />
+                    </g>
+                    <text x="20" y="12" fill="#991B1B" fontSize="7.5" fontWeight="bold" letterSpacing="0.02em">
+                      WMS Sync Lag
+                    </text>
                   </g>
 
-                  <g transform="translate(440, 175)">
-                    <rect x="-2" y="-12" width="102" height="16" rx="3" fill="#F7DFDE" stroke="#8A1C14" strokeWidth="0.8" />
-                    <text x="49" y="-1" textAnchor="middle" fill="#8A1C14" fontSize="8" fontWeight="bold">⚠️ Unlinked PDF BOLs</text>
+                  <g transform="translate(438, 172)">
+                    <rect x="0" y="0" width="112" height="18" rx="4" fill="#FEF2F2" stroke="#DC2626" strokeWidth="0.9" />
+                    <g transform="translate(6, 4)">
+                      <path d="M 5 0.5 L 0.5 8.5 C 0.2 9 0.5 9.5 1.1 9.5 L 8.9 9.5 C 9.5 9.5 9.8 9 9.5 8.5 L 5 0.5 Z" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="0.8" strokeLinejoin="round" />
+                      <line x1="5" y1="3.2" x2="5" y2="5.8" stroke="#B91C1C" strokeWidth="0.9" strokeLinecap="round" />
+                      <circle cx="5" cy="7.4" r="0.5" fill="#B91C1C" />
+                    </g>
+                    <text x="20" y="12" fill="#991B1B" fontSize="7.5" fontWeight="bold" letterSpacing="0.02em">
+                      Unlinked PDF BOLs
+                    </text>
                   </g>
 
-                  <g transform="translate(670, 260)">
-                    <rect x="-2" y="-12" width="106" height="16" rx="3" fill="#F7DFDE" stroke="#8A1C14" strokeWidth="0.8" />
-                    <text x="51" y="-1" textAnchor="middle" fill="#8A1C14" fontSize="8" fontWeight="bold">⚠️ Blind Assembly Queue</text>
+                  <g transform="translate(668, 258)">
+                    <rect x="0" y="0" width="128" height="18" rx="4" fill="#FEF2F2" stroke="#DC2626" strokeWidth="0.9" />
+                    <g transform="translate(6, 4)">
+                      <path d="M 5 0.5 L 0.5 8.5 C 0.2 9 0.5 9.5 1.1 9.5 L 8.9 9.5 C 9.5 9.5 9.8 9 9.5 8.5 L 5 0.5 Z" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="0.8" strokeLinejoin="round" />
+                      <line x1="5" y1="3.2" x2="5" y2="5.8" stroke="#B91C1C" strokeWidth="0.9" strokeLinecap="round" />
+                      <circle cx="5" cy="7.4" r="0.5" fill="#B91C1C" />
+                    </g>
+                    <text x="20" y="12" fill="#991B1B" fontSize="7.5" fontWeight="bold" letterSpacing="0.02em">
+                      Blind Assembly Queue
+                    </text>
                   </g>
 
-                  <g transform="translate(850, 335)">
-                    <rect x="-2" y="-12" width="102" height="16" rx="3" fill="#F7DFDE" stroke="#8A1C14" strokeWidth="0.8" />
-                    <text x="49" y="-1" textAnchor="middle" fill="#8A1C14" fontSize="8" fontWeight="bold">⚠️ Vendor Phone Tag</text>
+                  <g transform="translate(848, 332)">
+                    <rect x="0" y="0" width="110" height="18" rx="4" fill="#FEF2F2" stroke="#DC2626" strokeWidth="0.9" />
+                    <g transform="translate(6, 4)">
+                      <path d="M 5 0.5 L 0.5 8.5 C 0.2 9 0.5 9.5 1.1 9.5 L 8.9 9.5 C 9.5 9.5 9.8 9 9.5 8.5 L 5 0.5 Z" fill="#FEE2E2" stroke="#B91C1C" strokeWidth="0.8" strokeLinejoin="round" />
+                      <line x1="5" y1="3.2" x2="5" y2="5.8" stroke="#B91C1C" strokeWidth="0.9" strokeLinecap="round" />
+                      <circle cx="5" cy="7.4" r="0.5" fill="#B91C1C" />
+                    </g>
+                    <text x="20" y="12" fill="#991B1B" fontSize="7.5" fontWeight="bold" letterSpacing="0.02em">
+                      Vendor Phone Tag
+                    </text>
                   </g>
 
                   {/* Start Node: Customer Sales Order */}
@@ -556,19 +626,31 @@ export function OperationalFlowchart() {
                   {/* Benefits Callout Badges */}
                   <g transform="translate(150, 275)">
                     <rect x="0" y="0" width="190" height="44" rx="5" fill="#FFFFFF" stroke="#0F663E" strokeWidth="1" />
-                    <text x="14" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">✓ Zero Manual Phone Tag</text>
+                    <g transform="translate(12, 10)">
+                      <circle cx="5" cy="5" r="5" fill="rgba(15, 102, 62, 0.12)" />
+                      <polyline points="2.5 5, 4.5 7, 7.5 3" fill="none" stroke="#0F663E" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                    <text x="26" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">Zero Manual Phone Tag</text>
                     <text x="14" y="32" fill="#6B665C" fontSize="7.5">Replaces 40 handoffs with instant ATP solver</text>
                   </g>
 
                   <g transform="translate(410, 275)">
                     <rect x="0" y="0" width="200" height="44" rx="5" fill="#FFFFFF" stroke="#0F663E" strokeWidth="1" />
-                    <text x="14" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">✓ Zero ERP Writeback Risk</text>
+                    <g transform="translate(12, 10)">
+                      <circle cx="5" cy="5" r="5" fill="rgba(15, 102, 62, 0.12)" />
+                      <polyline points="2.5 5, 4.5 7, 7.5 3" fill="none" stroke="#0F663E" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                    <text x="26" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">Zero ERP Writeback Risk</text>
                     <text x="14" y="32" fill="#6B665C" fontSize="7.5">Read-only TLS 1.3 in-memory pipeline</text>
                   </g>
 
                   <g transform="translate(670, 275)">
                     <rect x="0" y="0" width="190" height="44" rx="5" fill="#FFFFFF" stroke="#0F663E" strokeWidth="1" />
-                    <text x="14" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">✓ 100% Audit Defensibility</text>
+                    <g transform="translate(12, 10)">
+                      <circle cx="5" cy="5" r="5" fill="rgba(15, 102, 62, 0.12)" />
+                      <polyline points="2.5 5, 4.5 7, 7.5 3" fill="none" stroke="#0F663E" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                    <text x="26" y="18" fill="#0F663E" fontSize="8.5" fontWeight="bold">100% Audit Defensibility</text>
                     <text x="14" y="32" fill="#6B665C" fontSize="7.5">Tamper-evident timestamp defends OTIF claims</text>
                   </g>
                 </g>
@@ -625,8 +707,9 @@ export function OperationalFlowchart() {
                     System: {selectedSilo.system}
                   </span>
                 </div>
-                <div className="font-mono text-[11px] text-friction-crimson font-bold shrink-0">
-                  ⚡ Eliminates ~{selectedSilo.hoursWastedPerMonth} Hours / Month of Status Chasing
+                <div className="font-mono text-[11px] text-friction-crimson font-bold shrink-0 flex items-center gap-1.5">
+                  <Zap size={13} className="text-friction-crimson fill-friction-crimson/20" />
+                  <span>Eliminates ~{selectedSilo.hoursWastedPerMonth} Hours / Month of Status Chasing</span>
                 </div>
               </div>
 
